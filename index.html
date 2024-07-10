@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+    .box-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+    .box-container-column.has-box {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 0;
+        flex-grow: 4;
+        width: 40%;
+        height: fit-content;
+    }
+    .text-box {
+        background-color: #DDD;
+        font-size: 22px;
+    }
+    #conv-arrow {
+        flex-grow: 1;
+        min-height: calc(max(200px, 40vh) - 24px - 16px - 12px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    #output-box {
+        width: calc(100% - 24px);
+        min-height: calc(max(200px, 40vh) - 24px - 20px - 12px);
+        padding: 12px;
+    }
+    #input-box {
+        width: calc(100% - 24px);
+        min-height: calc(max(200px, 40vh) - 24px - 20px - 12px);
+        padding: 12px;
+    }
+    .ortho-box {
+        font-size: 16px;
+        color: #666;
+        margin-left: 12px;
+        margin-bottom: 12px;
+        min-height: 20px;
+    }
+    #conv-arrow {
+        text-align: center;
+        font-size: 36px;
+        flex-basis: 0;
+    }
+    ul.choose-lang {
+        display: inline;
+        list-style-type: none;
+        height: 225px;
+        width: fit-content;
+        overflow-y: scroll;
+    }
+
+    ul.choose-lang li {
+        width: 250px;
+        height: 24px;
+        font-size: 16px;
+        background: #EEEEEE;
+        line-height: 25px;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+    ul.choose-lang li:hover {
+        background: #CCCCCC;
+    }
+    ul.choose-lang li.active {
+        background: #AAAA99;
+    }
+    ul.choose-lang li.inactive {
+        display: none;
+    }
+    ul.choose-lang::-webkit-scrollbar {
+        width: 10px;
+    }
+    ul.choose-lang::-webkit-scrollbar-track {
+        background: #DDDDDD;
+    }
+    ul.choose-lang::-webkit-scrollbar-thumb {
+        background: #1E90FF;
+    }
+    ul.choose-lang::-webkit-scrollbar-thumb:hover {
+        background: #0E70EE;
+    }
+    ul.choose-lang::-webkit-scrollbar-thumb:active {
+        background: #2EC0FF;
+    }
+    </style>
+    <script src="orthography.js"></script>
+    <script src="words.js"></script>
+    <script src="convert.js"></script>
+</head>
+
+<body>
+
+<div class="box-container">
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <div contenteditable="true" id="input-box" spellcheck="false"></div>
+            <div class="ortho-box" id="orthography"></div>
+        </div>
+        <ul class="choose-lang" id="input-lang">
+            <li data-lang="la" class="active">Latin</li>
+            <li data-lang="sa" >Sanskrit</li>
+        </ul>
+    </div>
+
+    <div id="conv-arrow">→</div>
+
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <div id="output-box"></div>
+            <div class="ortho-box" id="out-orthography"></div>
+        </div>
+        <ul class="choose-lang" id="output-lang">
+        </ul>
+    </div>
+</div>
+
+
+<script>
+
+const inputBox = document.getElementById("input-box");
+const outputBox = document.getElementById("output-box");
+const outputChoices = document.getElementById("output-lang");
+const orthography = document.getElementById("orthography");
+const orthography2 = document.getElementById("out-orthography");
+
+function refreshOutput() {
+    let text = inputBox.innerHTML.replace(/<div><br><\/div>/g, ' \n ').replace(/<div>/g, ' \n ')
+        .replace(/<\/div>/g, ' \n ').replace(/<br>/g, ' \n ');
+    while (text.endsWith('&nbsp;')) {
+        text = text.substring(0, text.length - 6);
+    }
+    while (text.startsWith('&nbsp;')) {
+        text = text.substring(6);
+    }
+    const output = convertWords(text,
+        (w) => convertWord(w, inputLang, outputLang));
+    const output2 = convertWords(text,
+        (w) => convertWord(w, inputLang, outputLang, true));
+    orthography.innerHTML = convertWords(text,
+        (w) => displayOrthography(w, inputLang)).replaceAll('\n\n','<br>').replaceAll('\n','<br>');
+    outputBox.innerHTML = output.replaceAll('\n','<br>');
+    orthography2.innerHTML = output2.replaceAll('\n','<br>');
+}
+
+inputBox.addEventListener("input", refreshOutput);
+
+const inputButtons = document.querySelectorAll('ul#input-lang li');
+
+function setLangChoice(ulSub, callback) {
+    ulSub.forEach((b) => {
+        b.addEventListener('click', (event) => {
+            for (const b2 of ulSub) {
+                b2.classList.remove('active');
+            }
+            event.target.classList.add('active');
+            callback(event.target.dataset.lang);
+        });
+    });
+}
+const updateInputLang = (l) => {
+    inputLang = l;
+    outputChoices.innerHTML = '';
+    for (const lang of outputLangs[inputLang]) {
+        const li = document.createElement('li');
+        li.dataset.lang = lang;
+        li.innerHTML = langNames[lang];
+        if (lang === outputLang)
+            li.classList.add('active');
+        outputChoices.appendChild(li);
+    }
+    setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
+        outputLang = l;
+        refreshOutput();
+    });
+    refreshOutput();
+}
+setLangChoice(inputButtons, updateInputLang);
+updateInputLang(inputLang);
+
+setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
+    outputLang = l;
+    refreshOutput();
+});
+
+function showSample() {
+    const langSamples = samples[outputLang];
+    if (langSamples) {
+        inputBox.innerHTML = langSamples[Math.floor(Math.random() * langSamples.length)];
+        refreshOutput();
+    }
+}
+
+</script>
+
+</body>
+
+</html>
