@@ -31,15 +31,15 @@ function latin_to_lang(latinWord, lang) {
         word = romance_to_western_romance(word, lang);
         console.log("Western Romance: " + word);
     }
-    if (lang === 'fr') {
-        word = western_romance_to_old_french(word);
-        console.log("Old French: " + word);
-    } else if (lang === 'es') {
-        word = western_romance_to_old_spanish(word);
-        console.log("Old Spanish: " + word);
-    }
+    // if (lang === 'fr') {
+    //     word = western_romance_to_old_french(word);
+    //     console.log("Old French: " + word);
+    // } else if (lang === 'es') {
+    //     word = western_romance_to_old_spanish(word);
+    //     console.log("Old Spanish: " + word);
+    // }
     word = word.toString();
-    word = romanceOrthography(word, latinWord, lang);
+    // word = romanceOrthography(word, latinWord, lang);
     return word;
 }
 
@@ -81,53 +81,62 @@ function latin_to_proto_romance(word, finalLang='') {
         }
     }
     word.replaceAll(['dǐ', 'gǐ'], ['j','j']);
-    const w_set = new Set(['w']);
-    word.replaceAfter('o','O',w_set,1,true);
-    word.replaceAfter('ō','Ō',w_set,1,true);
-    word.replaceAfter('u','U',w_set,1,true);
-    word.replaceAfter('ū','Ū',w_set,1,true);
-    word.replaceAll(['wO','wU','wŌ'], ['o','u','ō','ū']);
+
+    // remove w before unstressed back vowels
+    word.replaceStressed('o','O'); word.replaceStressed('ō','Ō');
+    word.replaceStressed('u','U'); word.replaceStressed('ū','Ū')
+    word.replaceAll(['wo','wu','wō','wū'], ['o','u','ō','ū']);
+    word.replaceAll(['O','Ō','U','Ū'], ['o','ō','u','ū']);
+
+    // delabialize /k/ before back vowels; delete /w/ before /o/; delete /j/ before /e/; replace /kwj/ with /kj/
     word.replaceAll(['qwo','qwō','qwu','qwū','ǐē','wō','ǐe','wo','qwǐ'], ['co','cō','cu','cū','ē','ō','ē','ō','cj']);
-    word.replaceAll(['ttw','ccw','ppw'], ['tt','cc','pp']);
+    word.replaceAll(['ttw','ccw','ppw'], ['tt','cc','pp']); // delete w after geminate
     word.replaceAll(['pt','mn','mb'], ['tt','mn','mm']);
 
+    // raise /u/ before /i/ or /j/; vocalize /g/ before /m/ (/g/ becomes /j/ before front vowel)
     word.replaceAll(['ui','uj','uJ','gm'], ['ūi','ūj','ūJ', 'wm']);
     word.replaceAll(['uge','ugē','ugi','ugī'], ['ūge','ūgē','ūgi','ūgī']);
+    // raise /ē/ and /ō/ before /stj/
     word.replaceAll(['ōstj','ēstj','ōstǐ','ēstǐ'], ['ūstJ','īstJ','ūstǐ','īstǐ']);
+    // add supporting vowel to /sC/
+    if (word.at(0) === 's' && CONSONANTS.has(word.at(1))) {
+        word.replaceAt('s','is',0);
+    }
 
+    // vowel shift
     word.replaceAll(['ā','e','ē','i','ī','o','ō','u','ū'],
                     ['A','E','E','E','I','O','O','O','U']);
     word.lower();
+    // palatalization of cons + /j/ sequences from hiatus
     word.replaceAll(['ee','oo','ǐ'], ['e','o','J']);
 
 
     if (word.endsWith('m')) {
+        // remove final /m/, or replace with /n/ in monosyllables
         if (word.numVowels() === 1)
             word.w = word.sub(0, -1) + 'n';
         else
             word.w = word.sub(0, -1);
     }
-    if (word.numVowels() > 1 && (word.endsWith('er') || word.endsWith('or')) && CONSONANTS.has(word.at(-3))) {
+    if (word.numVowels() > 1 && (word.endsWith('er') || word.endsWith('or'))) {
+        // final /er/, /or/ become /re/, /ro/
         word.w = word.sub(0, -2) + 'r' + word.sub(-2, -1);
     }
-    if (word.startsWith('s') && word.at(1) !== '' && !VOWELS.has(word.at(1))) {
-        word.w = 'e'+word.w;
-        word.stress += 1;
-    }
-    if (word.endsWith('x')) {
-        word.w = word.sub(0,-1)+'s';
-    }
+    // replace /ks/ with /s/ finally and before/after a consonant
+    word.replaceAt('x', 's', word.length-1);
     word.replaceBefore('x', 's', CONSONANTS);
     word.replaceAfter('x', 's', CONSONANTS);
     if (word.numVowels() === 1 && CONSONANTS.has(word.at(-1))) {
-        word.w += 'e';
+        word.w += 'e'; // add final epenthetic /e/ for monosyllables
     }
 
+    // palatalization of /k/ and /g/ before front vowels
     word.replaceBefore('c', 'cJ', FRONT_VOWELS);
     word.replaceBefore('g', 'gJ', FRONT_VOWELS);
 
     const intertonic = word.getIntertonic();
     for (const i of intertonic) {
+        // lose intertonic vowels with l/r or sVt, except pretonic /a/
         let prev = word.at(i-1);
         let next = word.at(i+1);
         if ((prev === 'l' || prev === 'r' || next === 'l' || next === 'r' || (prev === 's' && next === 't'))
@@ -136,16 +145,20 @@ function latin_to_proto_romance(word, finalLang='') {
         }
     }
 
-    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r'])));
-    for (const i of intervocal) {
-        if (new Set(['v','b']).has(word.at(i))) {
-            if ((BACK_VOWELS.has(word.at(i-1)) || BACK_VOWELS.has(word.at(i+1))) && word.at(i+1) !== 'r') {
-                word.cutAt(i);
-            } else if (word.at(i) === 'b' && finalLang !== 'es') {
-                word.replaceAt('b', 'v', i);
-            }
-        }
+    // replace/remove /b/, /w/ with /β/
+    word.replace('rb','rB');
+    word.replaceIntervocal('b','B');
+    word.replaceIntervocal('v','W');
+    word.replaceAll(['oBo','uBu', 'oBu', 'uBo'], ['obo', 'ubu', 'obu', 'ubo']);
+    word.replaceAll(['oWo','uWu', 'oWu', 'uWo'], ['ovo', 'uvu', 'ovu', 'uvo']);
+    word.replaceAll(['òWo','òWu','òBo','òBu'], ['òvo','òvu','òbo','òbu']);
+    // maintain b for orthography in Spanish
+    if (finalLang !== 'es') {
+        word.replace('B', 'W');
     }
+    word.replaceAll(['Bo','Bu','Bò','Wo','Wu','Wò'], ['o','u','ò','o','u','ò']);
+    word.replace('W', 'v');
+    word.replace('B', 'b');
 
     word.replaceAll(['gj','dj','gJ','dJ'], ['j','j','j','j']);
 
@@ -154,13 +167,27 @@ function latin_to_proto_romance(word, finalLang='') {
 
 function romance_to_western_romance(word, finalLang='') {
     word.replace('ccJ','tç'); // ç = /ts/
-    word.replaceAll(['cJ','tJ', 'x'], ['ç','ç', 'cs']);
+    word.replaceAll(['cJ','tJ', 'x'], ['ç','ç', 'cs']); // merge /kʲ/ and /tʲ/
     word.replaceAll(['ct','cs'], ['jt','js']);
 
     // first diphthongization
     let didDiphthong = false;
     let i = word.stress;
-    if ((word.at(i) === 'è' || word.at(i) === 'ò') && openSyllable(word.w, i, false)) {
+    let openCriterion = openSyllable(word.w, i, false, false) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
+    if (finalLang === 'es') {
+        // vowel raising before /j/
+        word.replaceAll(['èj','òj'],['ej','oj']);
+        let next_j = word.getNextVowel(word.stress) - 1;
+        if (word.at(next_j) === 'j') {
+            word.replaceAt('e','i',word.stress);
+            word.replaceAt('è','e',word.stress);
+            word.replaceAt('ò','o',word.stress);
+        }
+        openCriterion = true; // always diphthongize remaining /è/ and /ò/
+    }
+    if ((word.at(i) === 'è' || word.at(i) === 'ò')
+    && (openCriterion)
+    && !((word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
         word.replaceAt(word.at(i), word.at(i).toUpperCase(), i);
         didDiphthong = true;
     }
@@ -173,7 +200,8 @@ function romance_to_western_romance(word, finalLang='') {
     const lenitionMap = {
         'b':'v',
         'd':'ð',
-        'g':'ɣ'
+        'g':'ɣ',
+        's':'z'
     };
     const lenitionMap2 = {
         'p':'b',
@@ -182,7 +210,6 @@ function romance_to_western_romance(word, finalLang='') {
         'f':'v',
         'ç':'ż'
     };
-
     
     if (VOWELS.has(word.at(word.length-2)))
         intervocal.push(word.length-1);
@@ -202,9 +229,15 @@ function romance_to_western_romance(word, finalLang='') {
                 word.replaceAt(word.at(i), lenitionMap2[word.at(i)], i);
         }
     }
-    word.replaceAll(['jn','nj','jl','lJ','y'], ['ñ','ñ','ł','ł','j']);
-    word.replaceAll(['pp','cc','tt'], ['p','c','t']);
+    if (VOWELS.has(word.at(-2))) {
+        // remove final -t and -d
+        word.replaceAt('t', '', word.length-1);
+        word.replaceAt('d', '', word.length-1);
+    }
+    word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
+    word.replaceAll(['jn','nj','jl','y'], ['nJ','nJ','lJ','j']);
 
+    // first unstressed vowel loss
     const intertonic = word.getIntertonic();
     for (const i of intertonic) {
         if (i > this.stress || word.at(i) !== 'a') {
