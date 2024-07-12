@@ -168,7 +168,10 @@ function latin_to_proto_romance(word, finalLang='') {
 function romance_to_western_romance(word, finalLang='') {
     word.replace('ccJ','tç'); // ç = /ts/
     word.replaceAll(['cJ','tJ', 'x'], ['ç','ç', 'cs']); // merge /kʲ/ and /tʲ/
-    word.replaceAll(['ct','cs'], ['jt','js']);
+    word.replaceAll(['ct','cs'], ['jt','js']); // syllable-final velars
+    word.replaceIntervocal('cl', 'lJ', VOWELS.union(SEMIVOWELS));
+    word.replaceIntervocal('gl', 'lJ', VOWELS.union(SEMIVOWELS));
+    word.replaceIntervocal('gn', 'nJ', VOWELS.union(SEMIVOWELS));
 
     // first diphthongization
     let didDiphthong = false;
@@ -196,7 +199,7 @@ function romance_to_western_romance(word, finalLang='') {
         word.stress += 1;
 
     // first lenition
-    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','l'])));
+    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w'])));
     const lenitionMap = {
         'b':'v',
         'd':'ð',
@@ -214,7 +217,9 @@ function romance_to_western_romance(word, finalLang='') {
     if (VOWELS.has(word.at(word.length-2)))
         intervocal.push(word.length-1);
     for (const i of intervocal) {
-        if (lenitionMap[word.at(i)] && (word.at(i) !== 'b' || finalLang !== 'es') && (word.at(i) === 'g' || finalLang !== 'fr' || i !== word.length-1)) {
+        if (lenitionMap[word.at(i)] && (word.at(i) !== 'b' || finalLang !== 'es') && (i !== word.length-1 || (word.at(i) !== 't' && word.at(i) !== 'd'))) {
+            // This if statement leaves /b/ unchanged for Spanish (because of the orthography). Leaves final consonants unchanged, except /g/.
+            // Final /t/ and /d/ after a vowel are handled later (but /t/ is kept for French, because of orthography and liaison.)
             word.replaceAt(word.at(i), lenitionMap[word.at(i)], i);
         }
     }
@@ -231,7 +236,8 @@ function romance_to_western_romance(word, finalLang='') {
     }
     if (VOWELS.has(word.at(-2))) {
         // remove final -t and -d
-        word.replaceAt('t', '', word.length-1);
+        if (finalLang !== 'fr')
+            word.replaceAt('t', '', word.length-1);
         word.replaceAt('d', '', word.length-1);
     }
     word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
