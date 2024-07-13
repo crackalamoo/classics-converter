@@ -31,13 +31,13 @@ function latin_to_lang(latinWord, lang) {
         word = romance_to_western_romance(word, lang);
         console.log("Western Romance: " + word);
     }
-    // if (lang === 'fr') {
-    //     word = western_romance_to_old_french(word);
-    //     console.log("Old French: " + word);
-    // } else if (lang === 'es') {
-    //     word = western_romance_to_old_spanish(word);
-    //     console.log("Old Spanish: " + word);
-    // }
+    if (lang === 'fr') {
+        word = western_romance_to_old_french(word);
+        console.log("Old French: " + word);
+    } else if (lang === 'es') {
+        word = western_romance_to_old_spanish(word);
+        console.log("Old Spanish: " + word);
+    }
     word = word.toString();
     // word = romanceOrthography(word, latinWord, lang);
     return word;
@@ -218,7 +218,7 @@ function romance_to_western_romance(word, finalLang='') {
         intervocal.push(word.length-1);
     for (const i of intervocal) {
         if (lenitionMap[word.at(i)] && (word.at(i) !== 'b' || finalLang !== 'es') && (i !== word.length-1 || (word.at(i) !== 't' && word.at(i) !== 'd'))) {
-            // This if statement leaves /b/ unchanged for Spanish (because of the orthography). Leaves final consonants unchanged, except /g/.
+            // This if statement leaves /b/ unchanged for Spanish (because of the orthography). Leaves final /t/ and /d/ unchanged.
             // Final /t/ and /d/ after a vowel are handled later (but /t/ is kept for French, because of orthography and liaison.)
             word.replaceAt(word.at(i), lenitionMap[word.at(i)], i);
         }
@@ -226,6 +226,7 @@ function romance_to_western_romance(word, finalLang='') {
     word.w = replaceIntervocal(word.w, 'ð', '');
     word.w = replaceIntervocal(word.w, 'ɣ', '');
     word.replace('ɣ', 'j');
+    word.replace('ð', 'd');
     for (const i of intervocal) {
         if (lenitionMap2[word.at(i)] && !(word.at(i) === 'c' && word.at(i+1) === 'l')) {
             if (word.at(i) === 't' && word.at(i+1) === 'l')
@@ -256,14 +257,16 @@ function romance_to_western_romance(word, finalLang='') {
 
 function western_romance_to_old_french(word) {
     // to early Old French
-    // for (let i = word.length-1; i >= 0; i--) {
-    //     if (word.at(i) === 'j' && !VOWELS.has(word.at(i-1))) {
-    //         word.replaceAt('j', 'ž', i);
-    //     } if (word.at(i) === 'j' && !VOWELS.has(word.at(i+1))) {
-    //         word.replaceAt(word.at(i+1), word.at(i+1)+'J', i+1);
-    //     }
-    // }
-    word.w = replaceIntervocal(word.w, 'j', 'ž');
+
+    // convert /j/ to /dʒ/ in some contexts
+    for (let i = word.length-1; i >= 0; i--) {
+        if (word.at(i) === 'j' && !VOWELS.has(word.at(i-1))) {
+            word.replaceAt('j', 'ž', i);
+        } if (word.at(i) === 'j' && !VOWELS.has(word.at(i+1))) {
+            word.replaceAt(word.at(i+1), word.at(i+1)+'J', i+1);
+        }
+    }
+    // word.w = replaceIntervocal(word.w, 'j', 'ž');
     if (word.at(0) === 'j' && (VOWELS.union(SEMIVOWELS)).has(word.at(1)))
         word.w = 'ž'+word.sub(1);
 
@@ -291,7 +294,7 @@ function western_romance_to_old_french(word) {
         }
     }
 
-    word.replaceAll(['ł', 'ç', 'č', 'ž', 'ż', 'ssJ','ñ'], ['lJ', 'çJ', 'čJ', 'žJ', 'żJ', 'ßJ','nJ']);
+    word.replaceAll(['ç', 'č', 'ž', 'ż', 'ssJ'], ['çJ', 'čJ', 'žJ', 'żJ', 'ßJ']);
     console.log(word);
     for (let i = word.length-1; i >= 0; i--) {
         if (word.at(i) === 'J' && CONSONANTS.has(word.at(i-1))) {
@@ -310,13 +313,12 @@ function western_romance_to_old_french(word) {
                 word.replaceAt(word.at(nextVowel), 'j'+word.at(nextVowel), nextVowel);
                 word.stress += 1;
             }
-            if (isOpen(prevVowel) && !contains(['č','ž','ł'], word.at(i))) {
+            if (isOpen(prevVowel) && !contains(['č','ž','l'], word.at(i))) {
                 // preceded by an open syllable
                 word.replaceAt(word.at(prevVowel), word.at(prevVowel)+'j', prevVowel);
             }
         }
     }
-    console.log(word);
 
     word.replaceAll(['nJJ','lJJ','ajrJ','jlJ'], ['ñJ','łJ','jerJ','lJ']);
     word.replaceAll(['nJ','lJ'], ['ñ','ł']);
@@ -324,38 +326,36 @@ function western_romance_to_old_french(word) {
     word.replaceAll(['aen','aem','aeñ'], ['ajn','ajm','ajñ']);
     word.replaceAll(['ae','aw','ÈÈ'], ['è','ò','è']);
 
-    // nasalization
-    word.replaceAll(['an','en','òn','won','èn'], ['ãn','ẽn','õn','õn','ẽn']);
-
     // second lenition
-    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['w','l','r'])));
-    console.log(word, intervocal);
+    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w'])));
     const lenitionMap = {
         'b':'v',
-        'd':'',
-        'g':''
+        'd':'ð',
+        'g':'ɣ',
+        's':'z'
     };
     const lenitionMap2 = {
         'p':'b',
         'c':'g',
         't':'d',
-        'f':'v'
+        'f':'v',
+        'ç':'ż'
     };
-
+    
+    if (VOWELS.has(word.at(word.length-2)))
+        intervocal.push(word.length-1);
     for (const i of intervocal) {
-        if (lenitionMap[word.at(i)] === '') {
-            word.cutAt(i);
-        } else if (!!lenitionMap[word.at(i)]) {
+        if (lenitionMap[word.at(i)] && (i !== word.length-1 || (word.at(i) !== 't' /*&& word.at(i) !== 'd'*/))) {
+            // Leaves final /t/ unchanged because of orthography and liaison.
             word.replaceAt(word.at(i), lenitionMap[word.at(i)], i);
         }
     }
     for (const i of intervocal) {
-        if (lenitionMap2[word.at(i)]) {
+        if (lenitionMap2[word.at(i)] && !(word.at(i) === 'c' && word.at(i+1) === 'l')) {
             word.replaceAt(word.at(i), lenitionMap2[word.at(i)], i);
         }
     }
-    if (word.endsWith('g'))
-        word.w = word.sub(0,-1);
+    word.replaceAll(['ð', 'ɣ'], ['', '']);
 
     // depalatalization
     word.replaceAfter('ñ','n',CONSONANTS.union(SEMIVOWELS),1,false);
@@ -369,7 +369,7 @@ function western_romance_to_old_french(word) {
     word.replace('ł','l');
     word.replace('J','');
 
-    console.log(word);
+    
     word.replaceAll(['jej','jei','woj','òjj'], ['iJ','iJ','uj','uj']);
     word.replace('J','');
     word.replace('jj','j');
@@ -380,6 +380,10 @@ function western_romance_to_old_french(word) {
     }
 
     // to Old French
+
+    // nasalization
+    word.replaceAll(['an','en','òn','won','èn'], ['ãn','ẽn','õn','õn','ẽn']);
+
     if (contains(['f','p','k'], word.at(-2) && contains(['s','t'], word.at(-1))))
         word.w = word.sub(0,-1);
 
@@ -392,9 +396,9 @@ function western_romance_to_old_french(word) {
     word.replace('ei','oi');
 
     // to Late Old French
-    // word.replace('ou','óu');
-    // word.replace('o','u');
-    // word.replace('ó','o');
+    word.replace('ou','óu');
+    word.replace('o','u');
+    word.replace('ó','o');
     word.replaceAt('rn','r',word.length-2);
     word.replaceAt('rm','r',word.length-2);
     for (cons of CONSONANTS) {
@@ -402,15 +406,19 @@ function western_romance_to_old_french(word) {
     }
 
     console.log(word);
-    const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS);
+    const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS.union(SEMIVOWELS));
     for (let i = word.length-2; i >= 0; i--) {
         if (CONSONANTS.has(word.at(i)) && !VOWELS.has(word.at(i+1)) && !isOpen2(word.getPrevVowel(i))
         && word.getPrevVowel(i) !== -1 && word.at(i) !== word.at(i+1)) {
+            // syllable-final consonant loss
+            // (non-geminate consonants, not followed by a vowel, where the previous vowel is in a closed syllable)
             if (word.at(i) === 's') {
+                // lose syllable-final /s/
                 if (i === 1) {
                     word.replaceAt('e','é',0);
                 } else {
                     word.replaceAt('e','ê',i-1);
+                    word.replaceAt('è','ê',i-1);
                 }
                 word.replaceAt('a','â',i-1);
                 word.replaceAt('i','î',i-1);
@@ -419,19 +427,18 @@ function western_romance_to_old_french(word) {
             }
             if (word.at(i) === 'l')
                 word.replaceAt('l','w',i);
-            else
-                word.cutAt(i);
+            // nasal vowels are kept as-is for orthography reasons
             console.log(word);
         }
     }
-    word.replaceAt('ë','ė',word.length-1); // not pronounced as a vowel
+    // word.replaceAt('ë','ė',word.length-1); // not pronounced as a vowel
     word.replaceAt('èr','er',word.length-2);
 
     return word;
 }
 
 function western_romance_to_old_spanish(word) {
-    word.replaceAll(['ɣ','ð','J'], ['','','']);
+    word.replace('J','');
     return word;
 }
 
