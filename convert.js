@@ -470,11 +470,9 @@ function western_romance_to_old_spanish(word) {
     return word;
 }
 
-// https://books.google.com/books?id=J3RSHWePhXwC&pg=PA1&source=gbs_selected_pages&cad=1#v=onepage&q&f=false
 function sanskrit_to_lang(sanskritWord, lang) {
     let word = sanskritOrthography(sanskritWord);
     word = new SanskritWord(word);
-    // console.log(word);
     const cons = SANSKRIT_CONS;
     const vow = VOWELS.union(new Set(['R']));
     const nasals = SANSKRIT_NASALS;
@@ -512,12 +510,12 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceAt('m','M',word.length-1);
     word.replaceAt('n','M',word.length-1);
     // lose final consonants
-    if (cons.has(word.at(-1)) && word.at(-1) !== 'H')
+    if (cons.has(word.at(-1)) && word.at(-1) !== 'H' && word.at(-1) !== 'M')
         word.cutAt(word.length-1);
 
     // reduce initial clusters
     word.replaceAt('kS','K',0);
-    word.replaceAt('ty','c',0);
+    word.replaceAt('ty','c',0); // dental + y becomes palatal
     word.replaceAt('dy','j',0);
     word.replaceAt('Țy','C',0);
     word.replaceAt('Ðy','J',0);
@@ -539,27 +537,36 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceIntervocal('Hz','ss');
     word.replaceAll(['Țy','Ðy','ty','dy','sȚ','ts','ps'], ['CC','JJ','cc','jj','ŤŤ','CC','CC']);
     for (let i = word.length-2; i >= 0; i--) {
-        if (stops.has(word.at(i)) && stops.has(word.at(i+1)))
+        if (stops.has(word.at(i)) && stops.has(word.at(i+1))) {
+            // stop + stop: C1C2 -> C2C2
             word.replaceAt(word.at(i), word.at(i+1), i);
-        else if (((stops.union(nasals).union(sibilants)).has(word.at(i))) && glides.has(word.at(i+1))) {
+        } else if (((stops.union(nasals).union(sibilants)).has(word.at(i))) && glides.has(word.at(i+1))) {
+            // stop, nasal, or sibilant + y, r, l, v: CL -> CC
             word.replaceAt(word.at(i+1), word.at(i), i+1);
-        } else if (((stops.union(nasals)).has(word.at(i+1))) && contains(['l','r'], word.at(i)))
+        } else if (contains(['l','r'], word.at(i)) && ((stops.union(nasals).union(sibilants)).has(word.at(i+1)))) {
+            // l, r + stop, nasal, or sibilant: LC -> CC
             word.replaceAt(word.at(i), word.at(i+1), i);
-        else if (stops.has(word.at(i)) && sibilants.has(word.at(i+1)))
+        } else if (stops.has(word.at(i)) && sibilants.has(word.at(i+1))) {
+            // stop + sibilant: CS -> CCh
             word.replaceAt(word.at(i+1), word.at(i)+'h', i+1);
-        else if (sibilants.has(word.at(i)) && stops.has(word.at(i+1))) {
+        } else if (sibilants.has(word.at(i)) && stops.has(word.at(i+1))) {
+            // sibilant + stop: SP -> PPh (sometimes SP -> PP)
             if (word.sub(i-2, i+1) !== 'niS')
                 word.replaceAt(word.at(i+1), word.at(i+1)+'h', i+1);
             word.replaceAt(word.at(i), word.at(i+1), i);
         } else if (sibilants.has(word.at(i)) && nasals.has(word.at(i+1))) {
+            // sibilant + nasal: SN -> Nh
             if (i > 0)
                 word.replaceAt(word.at(i)+word.at(i+1), word.at(i+1)+'h', i);
             else
-                word.cutAt(1);
-        } else if (stops.has(word.at(i)) && nasals.has(word.at(i+1)))
+                word.cutAt(1); // initially: SN -> S
+        } else if (stops.has(word.at(i)) && nasals.has(word.at(i+1))) {
+            // stop + nasal: PN -> PP
             word.replaceAt(word.at(i+1), word.at(i), i+1);
-        else if (nasals.has(word.at(i)) && nasals.has(word.at(i+1)))
+        } else if (nasals.has(word.at(i)) && nasals.has(word.at(i+1))) {
+            // nasal + nasal: N1N2 -> N2N2
             word.replaceAt(word.at(i), word.at(i+1), i);
+        }
     }
     word.replace('JJy','JJ');
     word.replaceIntervocal('ly','ll'); word.replaceIntervocal('yl','ll');
@@ -575,6 +582,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     word.replace('kš','kh');
     word.replaceAll(['z','S'], ['s','s']);
+    word.replaceAll(['āi','āu'], ['e','o']);
 
     // intervocal reduction
     word.joinAspirate();
@@ -582,6 +590,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceIntervocal('k','y');
     word.replaceIntervocal('c','y');
     word.replaceIntervocal('j','y');
+    word.replaceIntervocal('t','y');
     word.replaceIntervocal('d','y');
     word.replaceIntervocal('p','v');
     word.replaceIntervocal('b','v');
@@ -594,16 +603,19 @@ function sanskrit_to_lang(sanskritWord, lang) {
     // word.replaceIntervocal('s','h');
     word.replaceIntervocal('z','h');
     word.replaceIntervocal('S','h');
-    word.replaceIntervocal('Ť','Ď');
-    // word.replaceAt('ti','ťi',word.length-2);
-    // word.replaceAt('te','ťe',word.length-2);
-    // word.replaceAt('Tiya','țiya',word.length-4);
-    word.replaceIntervocal('t','y');
-    word.replaceIntervocal('T','D');
-    // word.replace('ť','t');
-    // word.replace('ț','T');
+    // modify retroflex only after short vowels (?)
+    for (const cons of ['a','i','u']) {
+        // word.replaceIntervocal('Ť','Ď');
+        // word.replaceIntervocal('T','D');
+        word.replaceBefore(cons+'T', cons+'D', vow);
+        word.replaceBefore(cons+'Ť', cons+'Ď', vow);
+    }
 
-    // shorten long vowels
+    word.replaceAll(['āya','ayā','aya'], ['āYa','aYā','aYa']);
+    word.replace('y', '');
+    word.replace('Y', 'y');
+
+    // shorten long vowels before two consonants
     const shorten = {'ā':'a', 'ī':'i', 'ū':'u'};
     for (let i = word.length-1; i >= 0; i--) {
         if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && shorten[word.at(i)]) {
@@ -611,7 +623,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         }
     }
 
-    
+    // shorten final long vowels
     const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'e':'i', 'o':'u','aM':'u'};
     for (const [key, val] of Object.entries(shorten2)) {
         word.replaceAt(key, val, word.length-key.length);

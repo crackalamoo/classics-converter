@@ -32,7 +32,7 @@ const SANSKRIT_CONS = new Set([
     't','d','n',
     'p','b','m',
     'y','r','l','v',
-    'S','š','s','h',
+    'S','š','z','s','h',
     'K','G','C','J','Ț','Ť','Ď','Ð','P','B','M','H'
 ]);
 const SANSKRIT_NASALS = new Set([
@@ -146,9 +146,9 @@ function romanceOrthography(input, latinWord, lang) {
 function sanskritOrthography(input) {
     let output = input;
     output = output.replaceAll('ṣ','S').replaceAll('ṅ','ń').replaceAll('ṭ','T').replaceAll('ḍ','D')
-    .replaceAll('ś','z').replaceAll('ṇ','N').replaceAll('aa','ā').replaceAll('ii','ī')
+    .replaceAll('ś','z').replaceAll('sh','z').replaceAll('ṇ','N').replaceAll('aa','ā').replaceAll('ii','ī')
     .replaceAll('uu','ū').replaceAll('w','v').replaceAll('ṛ','R').replaceAll('ḥ','H')
-    .replaceAll('ṁ','M');
+    .replaceAll('ṁ','M').replaceAll('nn','ñ').replaceAll('ng','ń').replaceAll("'", "");
     // output = output.replaceAll('ai','è').replaceAll('au','ò').replaceAll("'","")
     return output;
 }
@@ -181,7 +181,8 @@ const isRoman = (w) => (SANSKRIT_CONS.union(VOWELS)).intersection(new Set(w.spli
 function nativeOrthography(word, lang) {
     word = sanskritOrthography(word);
 
-    if (lang !== 'sa' && SANSKRIT_CONS.has(word.substring(word.length-1))) {
+    const last = word.substring(word.length-1);
+    if (lang !== 'sa' && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
     if (lang === 'hi' || lang === 'ur' || lang) {
