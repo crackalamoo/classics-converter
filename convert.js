@@ -636,10 +636,24 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // Middle Indo-Aryan to New Indo-Aryan
     console.log("MIA:", word);
-    word.replaceAll(['ava','aya','uyu','aā','āa','iī','ivā','īyi'], ['ò','è','ū','ā','ā','ī','iyā','ayi']);
-    word.replaceAll(['ai','āi','au','āu','aū','aī','ayu','ayi','ave'], ['è','è','ò','ò','o','e','ò','è','e']);
+    // coalescing vowels
+    word.replaceAll(['ava','aya','uyu','aā','āa','iī','īyi'], ['ò','è','ū','ā','ā','ī','ayi']);
+    word.replaceAll(['ai','āi','au','āu','aū','aī','ayu','ayi'], ['è','è','ò','ò','o','e','ò','è']);
     word.replaceAll(['aa','ayā','iy','īy','ii'], ['ā','ā','i','ī','ī']);
     word.replaceAll(['N','ñ','ń'], ['N','n','n']);
+    
+    if (lang === 'mr') {
+        word.replaceAll(['iā'], ['ivā']);
+    } else if (lang === 'hi' || lang === 'ur') {
+        word.replaceAll(['iā', 'ivā'], ['iyā', 'iyā']);
+    }
+    if (lang !== 'mr') {
+        word.replaceAll(['ave', 'ivā', 'èvu'], ['e', 'iā', 'ò']);
+    }
+    if (lang === 'pa') {
+        word.replaceAll(['iā'], ['īā']);
+    }
+
     if (lang === 'hi' || lang === 'ur') {
         word.replace('vv','b');
         word.replaceAt('v','b',0);
@@ -667,14 +681,24 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceIntervocal('l','L');
     }
 
+    // sibilant split
+    if (lang === 'mr') {
+        word.replace('siyā', 'za');
+        word.replaceAt('si', 'zi', 0);
+        word.replaceAt('sī', 'zī', 0);
+        word.replaceAt('se', 'ze', 0);
+    }
+
     // lose final vowels and geminates
+
     word.joinAspirate();
 
+    // compensatory lengthening
     const lengthen = {'a':'ā', 'i':'ī','u':'ū'};
     if (lang !== 'pa') {
-        // compensatory lengthening
         for (let i = word.length-1; i >= 0; i--) {
             if (lang !== 'mr' && !(i === word.getLastVowel() || numVowels(word.sub(0, -1)) === 1)) {
+                // do not lengthen the last vowel, unless there is only one vowel 
                 continue;
             }
             if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && lengthen[word.at(i)]) {
@@ -709,6 +733,12 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
     word.replaceAt('uy','ū',word.length-2);
     word.replace('Á','ā');
+
+
+    // vowel merger
+    if (lang === 'mr' && word.numVowels() === 1) {
+        word.replaceAll(['i', 'u'], ['ī', 'ū']);
+    }
 
     // lose final geminates
     if (lang !== 'pa') {

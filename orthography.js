@@ -146,9 +146,9 @@ function romanceOrthography(input, latinWord, lang) {
 function sanskritOrthography(input) {
     let output = input;
     output = output.replaceAll('ṣ','S').replaceAll('ṅ','ń').replaceAll('ṭ','T').replaceAll('ḍ','D')
-    .replaceAll('ś','z').replaceAll('sh','z').replaceAll('ṇ','N').replaceAll('aa','ā').replaceAll('ii','ī')
+    .replaceAll('ś','z').replaceAll('sh','z').replaceAll('aa','ā').replaceAll('ii','ī')
     .replaceAll('uu','ū').replaceAll('w','v').replaceAll('ṛ','R').replaceAll('ḥ','H')
-    .replaceAll('ṁ','M').replaceAll('nn','ñ').replaceAll('ng','ń').replaceAll("'", "");
+    .replaceAll('ṁ','M').replaceAll('NH','ñ').replaceAll('NG','ń').replaceAll('ṇ','N').replaceAll("'", "");
     // output = output.replaceAll('ai','è').replaceAll('au','ò').replaceAll("'","")
     return output;
 }
