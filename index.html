@@ -19,31 +19,31 @@
     }
     .text-box {
         background-color: #DDD;
-        font-size: 22px;
+        font-size: 24px;
     }
     #conv-arrow {
         flex-grow: 1;
-        min-height: calc(max(200px, 40vh) - 24px - 16px - 12px);
+        min-height: calc(max(200px, 35vh) - 24px - 16px - 12px);
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
     #output-box {
         width: calc(100% - 24px);
-        min-height: calc(max(200px, 40vh) - 24px - 20px - 12px);
+        min-height: calc(max(200px, 35vh) - 24px - 20px - 12px);
         padding: 12px;
     }
     #input-box {
         width: calc(100% - 24px);
-        min-height: calc(max(200px, 40vh) - 24px - 20px - 12px);
+        min-height: calc(max(200px, 35vh) - 24px - 20px - 12px);
         padding: 12px;
     }
     .ortho-box {
         font-size: 16px;
         color: #666;
         margin-left: 12px;
-        margin-bottom: 12px;
-        min-height: 20px;
+        margin-top: 12px;
+        min-height: 40px;
     }
     #conv-arrow {
         text-align: center;
@@ -103,7 +103,9 @@
     <div class="box-container-column has-box">
         <div class="text-box">
             <div contenteditable="true" id="input-box" spellcheck="false"></div>
-            <div class="ortho-box" id="orthography"></div>
+            <div class="ortho-box">
+                <span id="orthography"></span>
+            </div>
         </div>
         <ul class="choose-lang" id="input-lang">
             <li data-lang="la" class="active">Latin</li>
@@ -116,7 +118,9 @@
     <div class="box-container-column has-box">
         <div class="text-box">
             <div id="output-box"></div>
-            <div class="ortho-box" id="out-orthography"></div>
+            <div class="ortho-box">
+                <span id="out-orthography"></span>
+            </div>
         </div>
         <ul class="choose-lang" id="output-lang">
         </ul>

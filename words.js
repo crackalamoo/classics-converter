@@ -308,7 +308,7 @@ class LatinateWord extends Word {
     }
 }
 
-class SanskritWord extends Word {
+class SanskriticWord extends Word {
     constructor(word) {
         const w = word;
         super(word);

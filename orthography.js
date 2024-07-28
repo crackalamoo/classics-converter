@@ -84,6 +84,28 @@ const SANSKRIT_VOW_MAP_2 = {
     'R':'ऋ','H':'ः','M':'ं'
 };
 
+const URDU_CONS_MAP = {
+    'k': 'ک', 'g': 'گ',
+    'c': 'چ', 'j': 'ج',
+    'T': 'ٹ', 'D': 'ڈ',
+    't': 'ت', 'd': 'د', 'n': 'ن',
+    'p': 'پ', 'b': 'ب', 'm': 'م',
+    'y': 'ی', 'r': 'ر', 'l': 'ل', 'v': 'و',
+    's': 'س', 'h': 'ہ',
+    'ř': 'ڑ', 'M': 'ن'
+};
+const URDU_VOW_MAP = {
+    'a': 'َ', 'ā': 'َا', 'i': 'ِ', 'ī': 'ِی', 'u': 'ُ', 'ū': 'ُو',
+    'e': 'ی', 'è': 'َی', 'o': 'و', 'ò': 'َو',
+};
+const URDU_VOW_MAP_2 = {
+    'i': 'ئِ', 'ī': 'ئِی', 'ū': 'ؤُ',
+    'e': 'ئی', 'è': 'ئَی', 'o': 'ؤ', 'ò': 'ؤَ'
+};
+const URDU_MAP_F = {
+    'e': 'ے', 'è': 'ے', 'M': 'ں'
+}
+
 function matchCase(word, caseModel) {
     if (caseModel.toUpperCase() === caseModel) {
         return word.toUpperCase();
@@ -182,49 +204,119 @@ function nativeOrthography(word, lang) {
     word = sanskritOrthography(word);
 
     const last = word.substring(word.length-1);
-    if (lang !== 'sa' && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
+    if (lang !== 'sa' && lang !== 'ur' && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
-    if (lang === 'hi' || lang === 'ur' || lang) {
-        word = word.replaceAll('ia','iya').replaceAll('iā','iyā').replaceAll('ie','iye').replaceAll('io','iyo').replaceAll('iu','iyu');
-    }
     if (lang !== 'sa') {
+        for (const stop of ['k', 'g', 'T', 'D', 't', 'd', 'p', 'b'])
+            word = word.replaceAll('n'+stop, 'M'+stop);
+        for (const stop of ['p', 'b'])
+            word = word.replaceAll('m'+stop, 'M'+stop);
         word = word.replaceAll('R','ř');
     }
-
-    const getAt = (j) => word.substring(j, j+1);
-    const isCons = (a) => (Boolean(SANSKRIT_DOUBLE_MAP[a]) || Boolean(SANSKRIT_CONS_MAP[a])
-        || Object.values(SANSKRIT_CONS_MAP).indexOf(a) !== -1
-        || Object.values(SANSKRIT_DOUBLE_MAP).indexOf(a) !== -1);
-    for (const [key, val] of Object.entries(SANSKRIT_DOUBLE_MAP)) {
-        word = word.replaceAll(key, val);
-    }
-    for (const [key, val] of Object.entries(SANSKRIT_CONS_MAP)) {
-        word = word.replaceAll(key, val);
-    }
-    for (let i = word.length-1; i >= 0; i--) {
-        if (isCons(getAt(i)) && (isCons(getAt(i+1)) || (i === word.length-1 && lang === 'sa'))) {
-            word = word.substring(0, i+1) + '्' + word.substring(i+1);
+    if (lang === 'ur') {
+        // schwa deletion
+        const at = (i) => word.substring(i, i+1);
+        for (let i = word.length-1; i >= 0; i--) {
+            if (at(i) === 'a'
+            && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
+            && VOWELS.has(at(i+2)) && VOWELS.has(at(i-2))) {
+                word = word.substring(0, i) + word.substring(i+1);
+            }
         }
     }
 
-    for (let i = word.length-1; i >= 1; i--) {
-        if (isCons(getAt(i-1))) {
-            if (SANSKRIT_VOW_MAP_1[getAt(i)])
-                word = word.substring(0,i) + SANSKRIT_VOW_MAP_1[getAt(i)] + word.substring(i+1);
-            else if (getAt(i) === 'a')
-                word = word.substring(0,i) + word.substring(i+1);
+    if (lang !== 'ur') {
+        // Brahmic script
+        const doubleMap = SANSKRIT_DOUBLE_MAP;
+        const consMap = SANSKRIT_CONS_MAP;
+        const vowMap1 = SANSKRIT_VOW_MAP_1;
+        const vowMap2 = SANSKRIT_VOW_MAP_2;
+        const getAt = (j) => word.substring(j, j+1);
+        const isCons = (a) => (Boolean(doubleMap[a]) || Boolean(consMap[a])
+            || Object.values(consMap).indexOf(a) !== -1
+            || Object.values(doubleMap).indexOf(a) !== -1);
+        for (const [key, val] of Object.entries(doubleMap)) {
+            word = word.replaceAll(key, val);
         }
+        for (const [key, val] of Object.entries(consMap)) {
+            word = word.replaceAll(key, val);
+        }
+        for (let i = word.length-1; i >= 0; i--) {
+            if (isCons(getAt(i)) && (isCons(getAt(i+1)) || (i === word.length-1 && lang === 'sa'))) {
+                word = word.substring(0, i+1) + '्' + word.substring(i+1);
+            }
+        }
+
+        for (let i = word.length-1; i >= 1; i--) {
+            if (isCons(getAt(i-1))) {
+                if (vowMap1[getAt(i)])
+                    word = word.substring(0,i) + vowMap1[getAt(i)] + word.substring(i+1);
+                else if (getAt(i) === 'a')
+                    word = word.substring(0,i) + word.substring(i+1);
+            }
+        }
+        for (const [key, val] of Object.entries(vowMap2)) {
+            word = word.replaceAll(key, val);
+        }
+        word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
+    } else {
+        // Perso-Arabic script
+        let res = word;
+        res = res.replaceAll('āMv', 'āoM');
+        const getAt = (j) => res.substring(j, j+1);
+        for (let i = res.length-1; i > 0; i--) {
+            if (URDU_VOW_MAP_2[getAt(i)] && VOWELS.has(getAt(i-1))) {
+                let mapped = URDU_VOW_MAP_2[getAt(i)];
+                if (i === res.length-1 && URDU_MAP_F[getAt(i)])
+                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                res = res.substring(0, i) + mapped + res.substring(i+1);
+            }
+        }
+        for (let i = res.length-1; i > 0; i--) {
+            if (getAt(i) === 'h' && URDU_CONS_MAP[getAt(i-1)]) {
+                res = res.substring(0, i) + 'ھ' + res.substring(i+1);
+            } else if (URDU_CONS_MAP[getAt(i)] && getAt(i) === getAt(i-1)) {
+                res = res.substring(0, i) + 'ّ' + res.substring(i+1);
+            }
+        }
+        for (let i = res.length-1; i >= 0; i--) {
+            if (URDU_VOW_MAP[getAt(i)]) {
+                let mapped = URDU_VOW_MAP[getAt(i)];
+                if (i === res.length-1 && URDU_MAP_F[getAt(i)])
+                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                res = res.substring(0, i) + mapped + res.substring(i+1);
+            } else if (URDU_CONS_MAP[getAt(i)]) {
+                let mapped = URDU_CONS_MAP[getAt(i)];
+                if (i === res.length-1 && URDU_MAP_F[getAt(i)])
+                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                res = res.substring(0, i) + mapped + res.substring(i+1);
+            }
+        }
+        if (VOWELS.has(word.substring(0, 1))) {
+            res = 'ا' + res;
+            if (res.substring(0, 3) === 'اَا')
+                res = 'آ' + res.substring(3);
+        }
+        word = res;
     }
-    for (const [key, val] of Object.entries(SANSKRIT_VOW_MAP_2)) {
-        word = word.replaceAll(key, val);
-    }
-    word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
 
     return word;
 }
 
 function sanskritRomanOrthography(word, lang) {
     let res = sanskritDisplay(word);
+    if (lang !== 'sa') {
+        res = res.replaceAll('è','ai').replaceAll('ò','au');
+        // schwa deletion
+        const at = (i) => res.substring(i, i+1);
+        for (let i = res.length-1; i >= 0; i--) {
+            if (at(i) === 'a'
+            && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
+            && VOWELS.has(at(i+2)) && VOWELS.has(at(i-2))) {
+                res = res.substring(0, i) + res.substring(i+1);
+            }
+        }
+    }
     return res;
 }
