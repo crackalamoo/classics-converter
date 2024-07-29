@@ -637,9 +637,14 @@ function sanskrit_to_lang(sanskritWord, lang) {
     // Middle Indo-Aryan to New Indo-Aryan
     console.log("MIA:", word);
     // coalescing vowels
-    word.replaceAll(['ava','aya','uyu','aā','āa','iī','īyi'], ['ò','è','ū','ā','ā','ī','ayi']);
+    word.replaceAll(['uyu','aā','āa','iī','īyi'], ['ū','ā','ā','ī','ayi']);
+    word.replaceAt('aya','á',word.length-3);
+    word.replaceAll(['ava', 'aya'], ['ò', 'è']);
     word.replaceAll(['ai','āi','au','āu','aū','aī','ayu','ayi'], ['è','è','ò','ò','o','e','ò','è']);
     word.replaceAll(['aa','ayā','iy','īy','ii'], ['ā','ā','i','ī','ī']);
+    if (lang !== 'mr')
+        word.replaceAll(['oā','ovā','eā','eyā'], ['vā','vā','yā','yā']);
+
     word.replaceAll(['N','ñ','ń'], ['N','n','n']); // nasals merger
 
     if (lang === 'hi' || lang === 'ur') {
@@ -660,7 +665,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // sibilant split
     if (lang === 'mr') {
-        word.replace('siyā', 'za');
+        word.replace('siyā', 'zā');
         word.replaceAt('si', 'zi', 0);
         word.replaceAt('sī', 'zī', 0);
         word.replaceAt('se', 'ze', 0);
@@ -668,10 +673,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // lose final vowels and geminates
 
-    word.joinAspirate();
-
     // add final -ā stem
-    word.unjoinAspirate();
+    word.joinAspirate();
     if (word.endsWith('a')) {
         let hasCluster = false;
         let hasTripleCluster = false;
@@ -684,38 +687,47 @@ function sanskrit_to_lang(sanskritWord, lang) {
         }
         for (let i = 2; i < word.length; i++) {
             if (cons.has(word.at(i-2)) && cons.has(word.at(i-1)) && cons.has(word.at(i))
-                && !(nasals.has(word.at(i-1)) && word.at(i) === 'h')) {
+                && word.at(i-2) === word.at(i-1) && word.at(i-1) === word.at(i)) {
                     hasTripleCluster = true;
                     break;
             }
         }
-        if ((!hasCluster && contains(['è','e'], word.at(word.getPrevVowel(word.length-1))))
-        || (hasTripleCluster && lang !== 'mr')) {
+        if (
+        // (!hasCluster && contains(['è','e'], word.at(word.getPrevVowel(word.length-1)))) ||
+        (hasTripleCluster && lang !== 'mr') ||
+        (nasals.has(word.at(-3)) && word.at(-2) === 'h')) {
             word.w = word.sub(0, -1) + 'Á';
         }
     }
 
     // lose final vowel
-    if (vow.has(word.at(-1)) && word.numVowels() > 1) {
+    if (vow.has(word.at(-1)) && !(new Set(['á','ó']).has(word.at(-1))) && word.numVowels() > 1) {
         word.cutAt(word.length-1);
     }
 
     // compensatory lengthening before losing geminates
+    console.log("lengthening", word);
     const lengthen = {'a':'ā', 'i':'ī','u':'ū'};
     if (lang !== 'pa') {
         for (let i = word.length-1; i >= 0; i--) {
-            if (lang !== 'mr' && !(i === word.getLastVowel() && word.numVowels() === 1)) {
-                // do not lengthen the last vowel, unless there is only one vowel 
+            // do not lengthen the last vowel, unless there is only one vowel 
+            let noLengthen = (i === word.getLastVowel() && word.numVowels() !== 1)
+                || (new Set(['ā','e','è','ī','o','ò','ū']).has(word.at(word.getNextVowel(i))));
+            if (lang !== 'mr' && noLengthen) {
                 continue;
             }
-            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && !cons.has(word.at(i+3)) && lengthen[word.at(i)]) {
+            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2))
+                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+1) )  || lang === 'mr')
+                && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
-                if (lang === 'mr' && nasals.has(word.at(i+1))) {
-                    word.cutAt(i+1);
+                if (lang === 'mr') {
+                    if (nasals.has(word.at(i+1)))
+                        word.cutAt(i+1);
                 }
             }
         }
     }
+    word.unjoinAspirate();
 
     // lose ChC and CCC sequences
     for (let i = word.length-3; i >= 0; i--) {
@@ -725,13 +737,15 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.cutAt(i+2);
         } else if (cons.has(word.at(i)) && word.at(i) === word.at(i+2) && word.at(i+1) === word.at(i+2)) {
             word.cutAt(i+2);
+            if (lang === 'mr') {
+                word.cutAt(i+1);
+            }
         }
     }
 
     word.joinAspirate();
 
     word.replaceAt('uy','ū',word.length-2);
-    word.replace('Á','ā');
 
 
     // vowel merger
@@ -756,13 +770,14 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.replaceAt('p','b',word.length-1);
         }
     }
+    word.replaceAll(['Á','á'], ['ā','ā']);
     // lose initial geminates
     if (word.at(0) === word.at(1)) {
         word.cutAt(0);
     }
 
     // lose some more geminates
-    word.replaceAll(['pp','PP','mm'], ['p','P','m']);
+    word.replaceAll(['pp','PP','mm','BB'], ['p','P','m','B']);
     if (lang !== 'pa') {
         word.replaceAll(['jj','JJ','kk'], ['j','J','k']);
     } else {
@@ -788,6 +803,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceAll(['āe', 'āè'], ['āye', 'āyè']);
     }
+    for (const stop of ['p','b','k','g'])
+        word.replaceAt(stop+'iyā', stop+'yā', 0);
 
     // lose final aspirates
     word.replaceAt('mh','m',word.length-2);
@@ -808,8 +825,9 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.replaceAt('Dh','Rh',word.length-1);
         word.replaceAt('è','e',word.length-1);
     } else {
-        word.replace('ch','s');
-        word.replace('c','s');
+        word.replaceBefore('cch','s',VOWELS);
+        word.replaceBefore('ch','s', VOWELS);
+        word.replaceBefore('c','s', VOWELS);
         word.replaceAfter('n','?',new Set(['ā','o']));
         word.replaceBefore('?', 'N', VOWELS);
         word.replace('?', 'n');

@@ -31,6 +31,23 @@ function openSyllable(string, pos, useLiquids=true, removePalatal=false, vowels=
     return !closedSyllable(string, pos, useLiquids, removePalatal, vowels);
 }
 
+
+function getNextVowel(word, start, vowels=VOWELS) {
+    for (let i = start+1; i < word.length; i++) {
+        if (vowels.has(word.substring(i,i+1))) {
+            return i;
+        }
+    }
+    return -1;
+}
+function getPrevVowel(word, start, vowels=VOWELS) {
+    for (let i = start-1; i >= 0; i--) {
+        if (vowels.has(word.substring(i,i+1))) {
+            return i;
+        }
+    }
+    return -1;
+}
 class Word {
     constructor(word) {
         this.word = word;
@@ -158,20 +175,22 @@ class Word {
         return v2;
     }
     getNextVowel(start, vowels=VOWELS) {
-        for (let i = start+1; i < this.word.length; i++) {
-            if (vowels.has(this.word.substring(i,i+1))) {
-                return i;
-            }
-        }
-        return -1;
+        // for (let i = start+1; i < this.word.length; i++) {
+        //     if (vowels.has(this.word.substring(i,i+1))) {
+        //         return i;
+        //     }
+        // }
+        // return -1;
+        return getNextVowel(this.word, start, vowels);
     }
     getPrevVowel(start, vowels=VOWELS) {
-        for (let i = start-1; i >= 0; i--) {
-            if (vowels.has(this.word.substring(i,i+1))) {
-                return i;
-            }
-        }
-        return -1;
+        // for (let i = start-1; i >= 0; i--) {
+        //     if (vowels.has(this.word.substring(i,i+1))) {
+        //         return i;
+        //     }
+        // }
+        // return -1;
+        return getPrevVowel(this.word, start, vowels);
     }
     replaceIntervocal(prev, to, vowels=VOWELS) {
         this.word = replaceIntervocal(this.word, prev, to, vowels);
@@ -333,17 +352,30 @@ class SanskriticWord extends Word {
     }
 }
 
+function schwaDeletion(word) {
+    let res = word;
+    const at = (i) => res.substring(i, i+1);
+    for (let i = res.length-1; i >= 0; i--) {
+        if (at(i) === 'a'
+        && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
+        && getNextVowel(word, i) !== -1 && getPrevVowel(word, i) !== -1) {
+            res = res.substring(0, i) + res.substring(i+1);
+        }
+    }
+    return res;
+}
+
 function contains(set, item) {
     return (new Set(set).has(item));
 }
 
 const samples = {
     'sa': ['pañca sapta aSTa', 'adya dugdha niSkaalay'],
-    'hi': ['apara karpaasa','duura graama','saMdhya raatri','dina rajani vaarttaa karo param karma na karo',
-        'hasta karNa ziras paada', 'caurika zvazura'
+    'hi': ['apara karpaasa','duura graama','saMdhya raatri vaarttaa','tvam dina rajani caurika karo param karma na karo',
+        'hasta karNa shiras paada', 'shvashura parNa na khaad'
     ],
-    'pa': ['duura candra','hasta karNa akSa ziras pakSa paada','mrakSaNa'],
-    'hi-pa': ['kathay', 'deziiya zreSTin kRta saartha', 'yaH priyakaara'],
+    'pa': ['duura candra','hasta karNa akSa shiras pakSa paada','mrakSaNa'],
+    'hi-pa': ['kathay', 'deziiya shreSTin kRta saartha', 'yaH priyakaaraka pattra'],
     'mr': ['duura graama', 'hasta karNa paada',
         'SaSTi', 'saubhaagya'
     ]

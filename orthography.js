@@ -99,7 +99,7 @@ const URDU_VOW_MAP = {
     'e': 'ی', 'è': 'َی', 'o': 'و', 'ò': 'َو',
 };
 const URDU_VOW_MAP_2 = {
-    'i': 'ئِ', 'ī': 'ئِی', 'ū': 'ؤُ',
+    'a': 'ئَ', 'i': 'ئِ', 'ī': 'ئِی', 'u': 'ئُ', 'ū': 'ؤُ',
     'e': 'ئی', 'è': 'ئَی', 'o': 'ؤ', 'ò': 'ؤَ'
 };
 const URDU_MAP_F = {
@@ -178,7 +178,7 @@ function sanskritDisplay(input) {
     let output = sanskritOrthography(input);
     output = output.replaceAll('S','ṣ').replaceAll('ń','ṅ').replaceAll('z','ś')
     .replaceAll('T','ṭ').replaceAll('D','ḍ').replaceAll('R','ṛ').replaceAll('H','ḥ')
-    .replaceAll('M','ṁ').replaceAll('N','ṇ').replaceAll('L','ļ'); // TODO: fix
+    .replaceAll('M','ṁ').replaceAll('N','ṇ').replaceAll('L','ḷ');
     return output;
 }
 
@@ -204,29 +204,24 @@ function nativeOrthography(word, lang) {
     word = sanskritOrthography(word);
 
     const last = word.substring(word.length-1);
-    if (lang !== 'sa' && lang !== 'ur' && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
+    const isBrahmic = (lang === 'sa' || lang === 'hi' || lang === 'mr');
+    if (lang !== 'sa' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
     if (lang !== 'sa') {
-        for (const stop of ['k', 'g', 'T', 'D', 't', 'd', 'p', 'b'])
+        for (const stop of ['k', 'g', 'c', 'j', 'T', 'D', 't', 'd', 'p', 'b'])
             word = word.replaceAll('n'+stop, 'M'+stop);
         for (const stop of ['p', 'b'])
             word = word.replaceAll('m'+stop, 'M'+stop);
         word = word.replaceAll('R','ř');
+    } else {
+        word = word.replaceAll('au','ò').replaceAll('ai','è');
     }
-    if (lang === 'ur') {
-        // schwa deletion
-        const at = (i) => word.substring(i, i+1);
-        for (let i = word.length-1; i >= 0; i--) {
-            if (at(i) === 'a'
-            && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
-            && VOWELS.has(at(i+2)) && VOWELS.has(at(i-2))) {
-                word = word.substring(0, i) + word.substring(i+1);
-            }
-        }
+    if (!isBrahmic) {
+        word = schwaDeletion(word);
     }
 
-    if (lang !== 'ur') {
+    if (isBrahmic) {
         // Brahmic script
         const doubleMap = SANSKRIT_DOUBLE_MAP;
         const consMap = SANSKRIT_CONS_MAP;
@@ -263,13 +258,22 @@ function nativeOrthography(word, lang) {
     } else {
         // Perso-Arabic script
         let res = word;
-        res = res.replaceAll('āMv', 'āoM');
         const getAt = (j) => res.substring(j, j+1);
+        if (res.endsWith('āMv'))
+            res = res.substring(0, res.length-3) + 'āoM';
+        for (let i = res.length-2; i >= 0; i--) {
+            if (URDU_VOW_MAP[getAt(i+1)]) {
+                if (getAt(i) === 'i')
+                    res = res.substring(0, i) + 'ī' + res.substring(i+1);
+                else if (getAt(i) === 'u')
+                    res = res.substring(0, i) + 'ū' + res.substring(i+1);
+            }
+        }
         for (let i = res.length-1; i > 0; i--) {
             if (URDU_VOW_MAP_2[getAt(i)] && VOWELS.has(getAt(i-1))) {
                 let mapped = URDU_VOW_MAP_2[getAt(i)];
                 if (i === res.length-1 && URDU_MAP_F[getAt(i)])
-                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                    mapped = mapped.substring(0, mapped.length-1) + URDU_MAP_F[getAt(i)];
                 res = res.substring(0, i) + mapped + res.substring(i+1);
             }
         }
@@ -284,12 +288,12 @@ function nativeOrthography(word, lang) {
             if (URDU_VOW_MAP[getAt(i)]) {
                 let mapped = URDU_VOW_MAP[getAt(i)];
                 if (i === res.length-1 && URDU_MAP_F[getAt(i)])
-                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                    mapped = mapped.substring(0, mapped.length-1) + URDU_MAP_F[getAt(i)];
                 res = res.substring(0, i) + mapped + res.substring(i+1);
             } else if (URDU_CONS_MAP[getAt(i)]) {
                 let mapped = URDU_CONS_MAP[getAt(i)];
                 if (i === res.length-1 && URDU_MAP_F[getAt(i)])
-                    mapped = mapped.substring(1) + URDU_MAP_F[getAt(i)];
+                    mapped = mapped.substring(0, mapped.length-1) + URDU_MAP_F[getAt(i)];
                 res = res.substring(0, i) + mapped + res.substring(i+1);
             }
         }
@@ -307,16 +311,18 @@ function nativeOrthography(word, lang) {
 function sanskritRomanOrthography(word, lang) {
     let res = sanskritDisplay(word);
     if (lang !== 'sa') {
-        res = res.replaceAll('è','ai').replaceAll('ò','au');
-        // schwa deletion
-        const at = (i) => res.substring(i, i+1);
-        for (let i = res.length-1; i >= 0; i--) {
-            if (at(i) === 'a'
-            && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
-            && VOWELS.has(at(i+2)) && VOWELS.has(at(i-2))) {
-                res = res.substring(0, i) + res.substring(i+1);
-            }
+        const getAt = (j) => res.substring(j, j+1);
+        res = schwaDeletion(res);
+        if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
+            res = res.substring(0, res.length-1) + 'a';
+        res = res.replaceAll('ś','sh');
+        if (lang !== 'mr') {
+            if (res.endsWith('āṁv'))
+                res = res.substring(0, res.length-3) + 'āoṁ';
+            res = res.replaceAll('cch','CCH').replaceAll('c','ch').replaceAll('CCH','cch');
         }
+        res = res.replaceAll('è','ai').replaceAll('ò','au');
+        res = res.replaceAll('ṁ','n');
     }
     return res;
 }
