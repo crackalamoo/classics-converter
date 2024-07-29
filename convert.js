@@ -13,7 +13,8 @@ function convertWord(startWord, inLang, outLang, inOrthoBox=false) {
             return '';
         return latin_to_lang(startWord, outLang);
     } else if (inLang === 'sa') {
-        const res = sanskrit_to_lang(startWord, outLang);
+        let res = startWord;
+        res = sanskrit_to_lang(startWord, outLang);
         if (isRoman(startWord) != inOrthoBox)
             return sanskritRomanOrthography(res, outLang);
         else
@@ -579,7 +580,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     word.unjoinAspirate();
     word.replace('hh','h');
-
     word.replace('kš','kh');
     word.replaceAll(['z','S'], ['s','s']);
     word.replaceAll(['āi','āu'], ['e','o']);
@@ -706,7 +706,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     // compensatory lengthening before losing geminates
-    console.log("lengthening", word);
     const lengthen = {'a':'ā', 'i':'ī','u':'ū'};
     if (lang !== 'pa') {
         for (let i = word.length-1; i >= 0; i--) {
@@ -717,11 +716,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
                 continue;
             }
             if (cons.has(word.at(i+1)) && cons.has(word.at(i+2))
-                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+1) )  || lang === 'mr')
+                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) )  || lang === 'mr')
                 && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
                 if (lang === 'mr') {
-                    if (nasals.has(word.at(i+1)))
+                    if (nasals.has(word.at(i+1)) && word.at(i+2) !== 'h')
                         word.cutAt(i+1);
                 }
             }
@@ -783,6 +782,9 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceIntervocal(['jj','JJ'], ['j','J']);
     }
+    if (lang === 'mr') {
+        word.replaceAll(['ŤŤ'], ['Ť']);
+    }
 
     word.unjoinAspirate();
 
@@ -796,7 +798,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceAll(['ave', 'ivā', 'èvu'], ['e', 'iā', 'ò']);
     }
     if (lang === 'pa') {
-        word.replaceAll(['iā', 'ie', 'io', 'iu'], ['īā', 'īe']);
+        word.replaceAll(['iā', 'ie', 'io', 'iu'], ['īā', 'īe', 'īo', 'īu']);
     }
     if (lang === 'mr' || lang === 'pa') {
         word.replaceAll(['āe', 'āè'], ['āve', 'āvè']);
@@ -823,7 +825,10 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.replaceAt('D','R',word.length-1);
         if (!cons.has(word.at(-3)))
             word.replaceAt('Dh','Rh',word.length-1);
-        word.replaceAt('è','e',word.length-1);
+        // word.replaceAt('è','e',word.length-1);
+        word.replaceAt('aM','āM',word.length-2);
+        word.replaceAt('iM','īM',word.length-2);
+        word.replaceAt('uM','ūM',word.length-2);
     } else {
         word.replaceBefore('cch','s',VOWELS);
         word.replaceBefore('ch','s', VOWELS);
@@ -837,5 +842,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
     if (lengthen[word.at(-1)])
         word.replaceAt(word.at(-1), lengthen[word.at(-1)], word.length-1);
 
+    console.log("NIA:", word.w);
     return word.w;
 }

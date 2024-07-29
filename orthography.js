@@ -118,7 +118,8 @@ function matchCase(word, caseModel) {
 function latinOrthography(input, display=false) {
     let output = input.toLowerCase()
     output = output.replaceAll('aa','ā').replaceAll('ee','ē').replaceAll('ii','ī')
-    .replaceAll('oo','ō').replaceAll('uu','ū').replaceAll('ae','æ').replaceAll('oe','œ');
+    .replaceAll('oo','ō').replaceAll('uu','ū').replaceAll('yy','ȳ')
+    .replaceAll('ae','æ').replaceAll('oe','œ').replaceAll('k','c');
     output = output.replaceAll("'", "");
     output = replaceIntervocal(output, 'i', 'j');
     if (!display)
@@ -165,17 +166,25 @@ function romanceOrthography(input, latinWord, lang) {
     return output;
 }
 
-function sanskritOrthography(input) {
+function sanskritOrthography(input, doubles=true) {
     let output = input;
     output = output.replaceAll('ṣ','S').replaceAll('ṅ','ń').replaceAll('ṭ','T').replaceAll('ḍ','D')
     .replaceAll('ś','z').replaceAll('sh','z').replaceAll('aa','ā').replaceAll('ii','ī')
     .replaceAll('uu','ū').replaceAll('w','v').replaceAll('ṛ','R').replaceAll('ḥ','H')
-    .replaceAll('ṁ','M').replaceAll('NH','ñ').replaceAll('NG','ń').replaceAll('ṇ','N').replaceAll("'", "");
+    .replaceAll('ṁ','M').replaceAll('ṇ','N');
+    if (doubles) {
+        console.log("here", output);
+        output = output.replaceAll('ny','ñ')
+        .replaceAll('nk','ńk').replaceAll('nj','ñj').replaceAll('nc','ñc')
+        .replaceAll('ng','ń');
+        console.log("here", output);
+    }
+    output = output.replaceAll("'", "");
     // output = output.replaceAll('ai','è').replaceAll('au','ò').replaceAll("'","")
     return output;
 }
-function sanskritDisplay(input) {
-    let output = sanskritOrthography(input);
+function sanskritDisplay(input, doubles=true) {
+    let output = sanskritOrthography(input, doubles);
     output = output.replaceAll('S','ṣ').replaceAll('ń','ṅ').replaceAll('z','ś')
     .replaceAll('T','ṭ').replaceAll('D','ḍ').replaceAll('R','ṛ').replaceAll('H','ḥ')
     .replaceAll('M','ṁ').replaceAll('N','ṇ').replaceAll('L','ḷ');
@@ -201,10 +210,10 @@ function displayOrthography(input, lang) {
 const isRoman = (w) => (SANSKRIT_CONS.union(VOWELS)).intersection(new Set(w.split(''))).size > 0;
 
 function nativeOrthography(word, lang) {
-    word = sanskritOrthography(word);
+    word = sanskritOrthography(word, lang === 'sa');
 
     const last = word.substring(word.length-1);
-    const isBrahmic = (lang === 'sa' || lang === 'hi' || lang === 'mr');
+    const isBrahmic = !(lang === 'pa' || lang === 'ur');
     if (lang !== 'sa' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
@@ -309,14 +318,16 @@ function nativeOrthography(word, lang) {
 }
 
 function sanskritRomanOrthography(word, lang) {
-    let res = sanskritDisplay(word);
+    let res = sanskritDisplay(word, lang === 'sa');
     if (lang !== 'sa') {
         const getAt = (j) => res.substring(j, j+1);
         res = schwaDeletion(res);
         if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
             res = res.substring(0, res.length-1) + 'a';
         res = res.replaceAll('ś','sh');
-        if (lang !== 'mr') {
+        if (lang === 'mr') {
+            res = res.replaceAll('j','z');
+        } else {
             if (res.endsWith('āṁv'))
                 res = res.substring(0, res.length-3) + 'āoṁ';
             res = res.replaceAll('cch','CCH').replaceAll('c','ch').replaceAll('CCH','cch');

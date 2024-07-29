@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -41,9 +41,15 @@
     .ortho-box {
         font-size: 16px;
         color: #666;
-        margin-left: 12px;
-        margin-top: 12px;
         min-height: 40px;
+    }
+    .ortho-box > * {
+        width: 100%;
+        box-sizing: border-box;
+        padding-top: 12px;
+        padding-inline-start: 12px;
+        padding-bottom: 12px;
+        display: inline-block;
     }
     #conv-arrow {
         text-align: center;
@@ -91,6 +97,27 @@
     ul.choose-lang::-webkit-scrollbar-thumb:active {
         background: #2EC0FF;
     }
+    :lang(hi),:lang(sa) {
+        font-family: "ITF Devanagari", serif;
+    }
+    :lang(mr) {
+        font-family: "ITF Devanagari Marathi", "ITF Devanagari", serif;
+    }
+    :lang(ur),:lang(pa) {
+        direction: rtl;
+        font-family: "Noto Nastaliq Urdu", serif;
+        line-height: 1.5;
+    }
+    :lang(ur-Latn),:lang(pa-Latn),:lang(hi-Latn),:lang(mr-Latn),:lang(sa-Latn) {
+        direction: ltr;
+        font-family: inherit;
+        line-height: inherit;
+    }
+    .smallcaps {
+        font-variant: small-caps;
+        font-size: 120%;
+        line-height: 84%;
+    }
     </style>
     <script src="orthography.js"></script>
     <script src="words.js"></script>
@@ -109,8 +136,43 @@
         </div>
         <ul class="choose-lang" id="input-lang">
             <li data-lang="la" class="active">Latin</li>
-            <li data-lang="sa" >Sanskrit</li>
+            <li data-lang="sa">Sanskrit</li>
         </ul>
+        <aside id="input-instructions">
+            <div data-lang="la">
+                <p>
+                    Input:
+                    <ul>
+                        <li>Double to lengthen vowels: aa, ee, ii, oo, uu, yy -> <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
+                        <li>No need to input diphthong ligatures: ae, oe -> <span class="smallcaps">æ, œ</span></li>
+                        <li>Use an apostrophe to override a substitution. (radi'ii -> <span class="smallcaps">radiī</span>)</li>
+                        <li>Indicate all long vowels.</li>
+                        <li>U/V are distinct, but I may be used for J.</li>
+                    </ul>
+                </p>
+            </div>
+            <div data-lang="sa">
+                <p>
+                    Input:
+                    <ul>
+                        <li>Double to lengthen vowels: aa, ii, uu -> ā, ī, ū (आ, ई, ऊ)</li>
+                        <li>ai, au -> ऐ, औ</li>
+                        <li>Use capitals for retroflex: T, Th, D, Dh, N, S -> ट, ठ, ड, ढ, ण, ष</li>
+                        <li>sh, ny, ng, aM, aH -> श, ञ, ङ, अं, अः</li>
+                        <li>Nasals changed before stops: n(k), n(c/g) -> ङ, ञ</li>
+                        <li>Use an apostrophe to override a substitution. (an'ya -> अन्य)</li>
+                    </ul>
+                </p>
+            </div>
+            <p data-lang="la">Generally use the accusative case for nouns and adjectives.</p>
+            <p data-lang="la">Use the infinitive for verbs.
+                <span data-lang="es">(<span class="smallcaps">clamāre</span> -> llamar)</span>
+            </p>
+            <p data-lang="sa">Generally use the stem for nouns, verbs, and adjectives.
+                <span data-lang="hi">(<span lang="sa">दन्त</span> -> <span lang="hi">दांत</span>)</span>
+                <span data-lang="ur">(<span lang="sa">दन्त</span> -> <span lang="ur">دانت</span>)</span>
+            </p>
+        </aside>
     </div>
 
     <div id="conv-arrow">→</div>
@@ -124,6 +186,12 @@
         </div>
         <ul class="choose-lang" id="output-lang">
         </ul>
+        <aside id="output-settings">
+            <div data-lang="sa">
+                <div data-lang="ur pa">
+                </div>
+            </div>
+        </aside>
     </div>
 </div>
 
@@ -136,7 +204,7 @@ const outputChoices = document.getElementById("output-lang");
 const orthography = document.getElementById("orthography");
 const orthography2 = document.getElementById("out-orthography");
 
-function refreshOutput() {
+function getText() {
     let text = inputBox.innerHTML.replace(/<div><br><\/div>/g, ' \n ').replace(/<div>/g, ' \n ')
         .replace(/<\/div>/g, ' \n ').replace(/<br>/g, ' \n ');
     while (text.endsWith('&nbsp;')) {
@@ -145,14 +213,46 @@ function refreshOutput() {
     while (text.startsWith('&nbsp;')) {
         text = text.substring(6);
     }
+    return text;
+}
+function refreshOutput() {
+    const text = getText();
     const output = convertWords(text,
         (w) => convertWord(w, inputLang, outputLang));
     const output2 = convertWords(text,
         (w) => convertWord(w, inputLang, outputLang, true));
     orthography.innerHTML = convertWords(text,
-        (w) => displayOrthography(w, inputLang)).replaceAll('\n\n','<br>').replaceAll('\n','<br>');
-    outputBox.innerHTML = output.replaceAll('\n','<br>');
-    orthography2.innerHTML = output2.replaceAll('\n','<br>');
+        (w) => displayOrthography(w, inputLang)).replaceAll('\n\n',' <br>').replaceAll('\n',' <br>');
+    outputBox.innerHTML = output.replaceAll('\n',' <br>');
+    orthography2.innerHTML = output2.replaceAll('\n',' <br>');
+    if (inputLang === 'sa') {
+        if (isRoman(text)) {
+            orthography2.lang = outputLang;
+            outputBox.lang = outputLang+'-Latn';
+        } else {
+            orthography2.lang = outputLang+'-Latn';
+            outputBox.lang = outputLang;
+        }
+    }
+}
+function refreshAside(id) {
+    for (const child of document.querySelectorAll('#'+id+' > *')) {
+        if (child.dataset.lang.indexOf(inputLang) !== -1)
+            child.style.display = '';
+        else
+            child.style.display = 'none';
+    }
+    for (const grandchild of document.querySelectorAll('#'+id+' > * > *')) {
+        if (grandchild.dataset.lang === undefined || grandchild.dataset.lang.indexOf(outputLang) !== -1)
+            grandchild.style.display = '';
+        else
+            grandchild.style.display = 'none';
+    }
+}
+function refreshDisplay() {
+    refreshOutput();
+    refreshAside('input-instructions');
+    refreshAside('output-settings');
 }
 
 inputBox.addEventListener("input", refreshOutput);
@@ -183,16 +283,26 @@ const updateInputLang = (l) => {
     }
     setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
         outputLang = l;
-        refreshOutput();
+        refreshDisplay();
     });
-    refreshOutput();
+    if (inputLang === 'sa') {
+        const text = getText();
+        if (isRoman(text)) {
+            orthography.lang = 'sa';
+            inputBox.lang = 'sa-Latn';
+        } else {
+            orthography.lang = 'sa-Latn';
+            inputBox.lang = 'sa';
+        }
+    }
+    refreshDisplay();
 }
 setLangChoice(inputButtons, updateInputLang);
 updateInputLang(inputLang);
 
 setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
     outputLang = l;
-    refreshOutput();
+    refreshDisplay();
 });
 
 function showSample() {
