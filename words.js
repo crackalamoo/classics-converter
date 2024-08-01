@@ -211,7 +211,7 @@ function getLatinStress(string) {
     string = string.toLowerCase();
 
     
-    string = string.replaceAll('au','ó').replaceAll('qu','qw').replaceAll('y','i');
+    string = string.replaceAll('au','ó').replaceAll('qu','qw').replaceAll('y','i').replaceAll('ȳ','ī');
 
     let vowels = 0;
     let stress = -1;
@@ -301,6 +301,15 @@ class LatinateWord extends Word {
                 this.word = this.word.substring(0, i) + to + this.word.substring(i + prev.length);
                 if (i < this.stress)
                     this.stress += to.length - prev.length;
+            }
+        }
+    }
+    replaceIntervocal(prev, to, vowels=VOWELS) {
+        for (let i = this.w.length-1-prev.length; i >= 1; i--) {
+            if (vowels.has(this.w.substring(i-1,i)) && vowels.has(this.w.substring(i+prev.length,i+prev.length+1))
+                && this.w.substring(i,i+prev.length) === prev) {
+                    // this.w = word.substring(0,i) + to + word.substring(i+prev.length);
+                    this.replaceAt(prev, to, i);
             }
         }
     }
