@@ -248,9 +248,9 @@ function romance_to_western_romance(word, finalLang='') {
         word.replaceAt('d', '', word.length-1);
     }
     word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
-    word.replaceAll(['jn','nj','jl','y'], ['nJ','nJ','lJ','j']);
+    word.replaceAll(['jn','nj','jl'], ['nJ','nJ','lJ']);
     word.replaceAll(['aa','ee','ii','oo','uu'], ['a','e','i','o','u'])
-    word.replace('y','j');
+    // word.replace('y','j');
 
     // first unstressed vowel loss
     const intertonic = word.getIntertonic();
@@ -352,6 +352,9 @@ function western_romance_to_old_french(word) {
             }
             word.replaceAt('e','ei',word.stress);
             word.replaceAt('o','ou',word.stress);
+            // prevent diphthongization of existing Western Romance diphthongs
+            word.replaceAt('yei','ye',word.stress-1);
+            word.replaceAt('wou','wo',word.stress-1);
         } else {
         }
     }
@@ -505,7 +508,7 @@ function western_romance_to_old_french(word) {
 }
 
 function western_romance_to_old_spanish(word) {
-    word.replace('J','');
+    word.replaceAll(['J','y'], ['','j']);
     return word;
 }
 
