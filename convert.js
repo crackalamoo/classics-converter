@@ -712,6 +712,19 @@ function sanskrit_to_lang(sanskritWord, lang) {
     if (lang === 'pi') {
         word.replaceIntervocal('D','L');
         word.replaceIntervocal('Dh','Lh');
+
+        // lose ChC and CCC sequences
+        for (let i = word.length-3; i >= 0; i--) {
+            if (cons.has(word.at(i)) && word.at(i) === word.at(i+2) && word.at(i+1) === 'h') {
+                if (word.at(i+3) === 'h')
+                    word.cutAt(i+3);
+                word.cutAt(i+2);
+            } else if (cons.has(word.at(i)) && word.at(i) === word.at(i+2) && word.at(i+1) === word.at(i+2)) {
+                word.cutAt(i+2);
+            }
+        }
+
+        word.replaceAll(['āM','īM','ūM'], ['aM','iM','uM']);
     }
 
     word.replace('aH','o');
