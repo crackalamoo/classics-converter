@@ -113,9 +113,9 @@ function latin_to_proto_romance(word, finalLang='') {
 
 
     if (word.endsWith('m')) {
-        // remove final /m/, or replace with /n/ in monosyllables
+        // remove final /m/, or replace with /ne/ in monosyllables
         if (word.numVowels() === 1)
-            word.w = word.sub(0, -1) + 'n';
+            word.w = word.sub(0, -1) + 'ne';
         else
             word.w = word.sub(0, -1);
     }
@@ -174,10 +174,15 @@ function romance_to_western_romance(word, finalLang='') {
     word.replaceIntervocal('gl', 'lJ', VOWELS.union(SEMIVOWELS));
     word.replaceIntervocal('gn', 'nJ', VOWELS.union(SEMIVOWELS));
 
+    // remove final epenthetic -e
+    if (word.numVowels() === 2 && word.endsWith('e')) {
+        word.cutAt(word.length-1);
+    }
+
     // first diphthongization
     let didDiphthong = false;
     let i = word.stress;
-    let openCriterion = openSyllable(word.w, i, false, false, VOWELS.union(new Set(['r']))) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
+    let openCriterion = openSyllable(word.w, i, false, false, VOWELS) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
     if (finalLang === 'es') {
         // vowel raising before /j/
         word.replaceAll(['èj','òj'],['ej','oj']);
@@ -350,11 +355,11 @@ function western_romance_to_old_french(word) {
                 word.replaceAt('è', 'jè', word.stress);
                 word.stress += 1;
             }
-            word.replaceAt('e','ei',word.stress);
-            word.replaceAt('o','ou',word.stress);
             // prevent diphthongization of existing Western Romance diphthongs
-            word.replaceAt('yei','ye',word.stress-1);
-            word.replaceAt('wou','wo',word.stress-1);
+            if (word.at(word.stress-1) !== 'y')
+                word.replaceAt('e','ei',word.stress);
+            if (word.at(word.stress-1) !== 'w')
+                word.replaceAt('o','ou',word.stress);
         } else {
         }
     }
