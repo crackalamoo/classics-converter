@@ -38,6 +38,12 @@
         min-height: calc(max(200px, 35vh) - 24px - 20px - 12px);
         padding: 12px;
     }
+    textarea {
+        background: none;
+        border: none;
+        font: inherit;
+        resize: none;
+    }
     .ortho-box {
         font-size: 16px;
         color: #666;
@@ -129,7 +135,7 @@
 <div class="box-container">
     <div class="box-container-column has-box">
         <div class="text-box">
-            <div contenteditable="true" id="input-box" spellcheck="false"></div>
+            <textarea id="input-box" spellcheck="false"></textarea>
             <div class="ortho-box">
                 <span id="orthography"></span>
             </div>
@@ -205,14 +211,15 @@ const orthography = document.getElementById("orthography");
 const orthography2 = document.getElementById("out-orthography");
 
 function getText() {
-    let text = inputBox.innerHTML.replace(/<div><br><\/div>/g, ' \n ').replace(/<div>/g, ' \n ')
-        .replace(/<\/div>/g, ' \n ').replace(/<br>/g, ' \n ');
-    while (text.endsWith('&nbsp;')) {
-        text = text.substring(0, text.length - 6);
-    }
-    while (text.startsWith('&nbsp;')) {
-        text = text.substring(6);
-    }
+    // let text = inputBox.innerHTML.replace(/<div><br><\/div>/g, ' \n ').replace(/<div>/g, ' \n ')
+    //     .replace(/<\/div>/g, ' \n ').replace(/<br>/g, ' \n ');
+    // while (text.endsWith('&nbsp;')) {
+    //     text = text.substring(0, text.length - 6);
+    // }
+    // while (text.startsWith('&nbsp;')) {
+    //     text = text.substring(6);
+    // }
+    let text = inputBox.value;
     return text;
 }
 function refreshOutput() {
