@@ -530,12 +530,21 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // Proto Indo-Aryan to Middle Indo-Aryan
 
-    word.replaceAll(['ai','au','aya','ava'], ['è','ò','è','ò']);
+    word.replaceAll(['ai','au'], ['è','ò']);
+    if (lang === 'pi') {
+        word.replaceAt('aya','aYa',word.length-3);
+        word.replaceAt('ava','aVa',word.length-3);
+        word.replaceAll(['aya','ava'], ['è','ò']);
+        word.replaceAll(['Y','V'], ['y','v']);
+        word.replaceAll(['è','ò'], ['e','o']);
+    } else {
+        word.replaceAll(['aya','ava'], ['è','ò']);
+    }
     word.joinAspirate();
 
-    if (word.startsWith('R'))
+    if (word.startsWith('R') && lang !== 'pi')
         word.replaceAt('R', 'ri', 0);
-    for (let i = word.length-1; i > 0; i--) {
+    for (let i = word.length-1; i >= 0; i--) {
         if (word.at(i) === 'R') {
             const nextVowel = word.getNextVowel(i);
             let addVowel = 'i';
@@ -550,12 +559,20 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.replaceAt('R', addVowel, i);
         }
     }
-    word.replaceIntervocal('y', '');
-    word.replaceAll(['ry','yy'], ['jj','jj']);
-    // word.replaceAt('jñ','ñ',0);
-    // word.replace('jñ','ññ');
-    word.replaceAt('m','M',word.length-1);
-    word.replaceAt('n','M',word.length-1);
+    if (lang === 'pi') {
+        word.replaceAt('jñ','ñ',0);
+        word.replaceAt('ny','ñ',0);
+        word.replace('jñ','ññ');
+        word.replaceIntervocal('ny','ññ');
+        word.replaceIntervocal('Ny','ññ');
+        word.replaceAt('m','',word.length-1);
+        word.replaceAt('n','',word.length-1);
+    } else {
+        word.replaceIntervocal('y', '');
+        word.replaceAll(['ry','yy'], ['jj','jj']);
+        word.replaceAt('m','M',word.length-1);
+        word.replaceAt('n','M',word.length-1);
+    }
     // lose final consonants
     if (cons.has(word.at(-1)) && word.at(-1) !== 'H' && word.at(-1) !== 'M')
         word.cutAt(word.length-1);
@@ -566,8 +583,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceAt('dy','j',0);
     word.replaceAt('Țy','C',0);
     word.replaceAt('Ðy','J',0);
-    word.replaceAt('Sa','ca',0);
-    word.replaceAt('dvā','vvā',0);
+    word.replaceAt('Sa','cha',0);
+    if (lang === 'pi')
+        word.replaceAt('dvā','bā',0);
+    else
+        word.replaceAt('dvā','vvā',0);
     if (cons.has(word.at(0))) {
         if (contains(['r','v','y'], word.at(1))) {
             word.cutAt(1);
@@ -576,8 +596,13 @@ function sanskrit_to_lang(sanskritWord, lang) {
         }
     }
     // reduce remaining clusters
-    word.replaceBefore('Dv','vv',VOWELS);
-    word.replaceAfter('dv','vv',VOWELS);
+    if (lang === 'pi') {
+        word.replaceBefore('Dv','bb',VOWELS);
+        word.replaceAfter('dv','bb',VOWELS);
+    } else {
+        word.replaceBefore('Dv','vv',VOWELS);
+        word.replaceAfter('dv','vv',VOWELS);
+    }
     word.replaceIntervocal('nv','mm');
     word.replaceIntervocal('mr','mb');
     word.replaceIntervocal('ml','mb');
@@ -618,11 +643,24 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replace('JJy','JJ');
     word.replaceIntervocal('ly','ll'); word.replaceIntervocal('yl','ll');
     word.replaceIntervocal('lr','ll'); word.replaceIntervocal('rl','ll');
-    word.replaceIntervocal('rv','vv'); word.replaceIntervocal('yv','vv');
-    word.replaceIntervocal('vr','vv'); word.replaceIntervocal('vy','vv');
-    word.replaceIntervocal('yr','jj'); word.replaceIntervocal('ry','jj');
-    word.replaceAll(['hn','hN','hm','hl','hv','hy','yh','vh'],['nh','Nh','mh','lh','BB','JJ','JJ','BB']);
-    word.replace('y','j');
+    word.replaceIntervocal('lv','ll'); word.replaceIntervocal('vl','ll');
+    if (lang !== 'pi') {
+        word.replaceIntervocal('rv','vv'); word.replaceIntervocal('yv','vv');
+        word.replaceIntervocal('vr','vv'); word.replaceIntervocal('vy','vv');
+        word.replaceIntervocal('yr','jj'); word.replaceIntervocal('ry','jj');
+    } else {
+        word.replaceIntervocal('rv','bb'); word.replaceIntervocal('yv','bb');
+        word.replaceIntervocal('vr','bb'); word.replaceIntervocal('vy','bb');
+        word.replaceIntervocal('yr','yy');
+        word.replaceIntervocal('ry','yy');
+    }
+    word.replaceAll(['hn','hN','hm','hl','vh'],['nh','Nh','mh','lh','BB']);
+    if (lang !== 'pi') {
+        word.replace('y','j');
+        word.replaceAll(['hv', 'yh', 'hy'], ['BB', 'JJ', 'JJ']);
+    } else {
+        word.replaceAll(['hv', 'hy'], ['vh', 'yh']);
+    }
 
     word.unjoinAspirate();
     word.replace('hh','h');
@@ -630,36 +668,38 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceAll(['z','S'], ['s','s']);
     word.replaceAll(['āi','āu'], ['e','o']);
 
-    // intervocal reduction
-    word.joinAspirate();
-    word.replaceIntervocal('g','y');
-    word.replaceIntervocal('k','y');
-    word.replaceIntervocal('c','y');
-    word.replaceIntervocal('j','y');
-    word.replaceIntervocal('t','y');
-    word.replaceIntervocal('d','y');
-    word.replaceIntervocal('p','v');
-    word.replaceIntervocal('b','v');
-    word.replaceIntervocal('P','h');
-    word.replaceIntervocal('B','h');
-    word.replaceIntervocal('Ț','h');
-    word.replaceIntervocal('G','h');
-    word.replaceIntervocal('K','h');
-    word.replaceIntervocal('Ð','h');
-    // word.replaceIntervocal('s','h');
-    word.replaceIntervocal('z','h');
-    word.replaceIntervocal('S','h');
-    // modify retroflex only after short vowels (?)
-    for (const cons of ['a','i','u']) {
-        // word.replaceIntervocal('Ť','Ď');
-        // word.replaceIntervocal('T','D');
-        word.replaceBefore(cons+'T', cons+'D', vow);
-        word.replaceBefore(cons+'Ť', cons+'Ď', vow);
-    }
+    if (lang !== 'pi') {
+        // intervocal reduction
+        word.joinAspirate();
+        word.replaceIntervocal('g','y');
+        word.replaceIntervocal('k','y');
+        word.replaceIntervocal('c','y');
+        word.replaceIntervocal('j','y');
+        word.replaceIntervocal('t','y');
+        word.replaceIntervocal('d','y');
+        word.replaceIntervocal('p','v');
+        word.replaceIntervocal('b','v');
+        word.replaceIntervocal('P','h');
+        word.replaceIntervocal('B','h');
+        word.replaceIntervocal('Ț','h');
+        word.replaceIntervocal('G','h');
+        word.replaceIntervocal('K','h');
+        word.replaceIntervocal('Ð','h');
+        // word.replaceIntervocal('s','h');
+        word.replaceIntervocal('z','h');
+        word.replaceIntervocal('S','h');
+        // modify retroflex only after short vowels (?)
+        for (const cons of ['a','i','u']) {
+            // word.replaceIntervocal('Ť','Ď');
+            // word.replaceIntervocal('T','D');
+            word.replaceBefore(cons+'T', cons+'D', vow);
+            word.replaceBefore(cons+'Ť', cons+'Ď', vow);
+        }
 
-    word.replaceAll(['āya','ayā','aya'], ['āYa','aYā','aYa']);
-    word.replace('y', '');
-    word.replace('Y', 'y');
+        word.replaceAll(['āya','ayā','aya'], ['āYa','aYā','aYa']);
+        word.replace('y', '');
+        word.replace('Y', 'y');
+    }
 
     // shorten long vowels before two consonants
     const shorten = {'ā':'a', 'ī':'i', 'ū':'u'};
@@ -669,13 +709,23 @@ function sanskrit_to_lang(sanskritWord, lang) {
         }
     }
 
+    if (lang === 'pi') {
+        word.replaceIntervocal('D','L');
+        word.replaceIntervocal('Dh','Lh');
+    }
+
+    word.replace('aH','o');
+    word.replace('H','');
+
+    if (lang === 'pi') {
+        return word.w;
+    }
+
     // shorten final long vowels
     const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'e':'i', 'o':'u','aM':'u'};
     for (const [key, val] of Object.entries(shorten2)) {
         word.replaceAt(key, val, word.length-key.length);
     }
-    word.replace('aH','o'); // -e in the east
-    word.replace('H','');
     word.replaceAll(['è','ò'], ['e','o']);
 
     word.unjoinAspirate();
@@ -804,7 +854,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
             word.cutAt(word.length-1);
         }
     } else {
-        if (word.at(-1) === word.at(-2) && !contains(['t','g','K','G','Ț','Ð','n','N','j','l','c'], word.at(-1))) {
+        if (word.at(-1) === word.at(-2) && !contains(['t','g','K','G','Ț','Ð','n','N','m','j','l','c'], word.at(-1))) {
             word.cutAt(word.length-1);
         }
         if (nasals.has(word.at(-2)) && stops.has(word.at(-1))) {
@@ -822,9 +872,9 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     // lose some more geminates
-    word.replaceAll(['pp','PP','mm','BB'], ['p','P','m','B']);
+    word.replaceAll(['pp','PP','BB'], ['p','P','B']);
     if (lang !== 'pa') {
-        word.replaceAll(['jj','JJ','kk'], ['j','J','k']);
+        word.replaceAll(['jj','JJ','kk','mm'], ['j','J','k','m']);
     } else {
         word.replaceIntervocal(['jj','JJ'], ['j','J']);
     }

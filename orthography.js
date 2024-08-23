@@ -1,10 +1,11 @@
 const outputLangs = {
     'la': ['es','fr','it'],
-    'sa': ['hi','ur','pa','mr']
+    'sa': ['hi','ur','pa','mr','pi']
 };
 const langNames = {
     'es':'Spanish', 'fr':'French', 'it':'Italian',
-    'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi'
+    'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
+    'pi':'Pali'
 };
 
 const SHORT_VOWELS = new Set(['a','e','i','o','u']);
@@ -173,11 +174,9 @@ function sanskritOrthography(input, doubles=true) {
     .replaceAll('uu','ū').replaceAll('w','v').replaceAll('ṛ','R').replaceAll('ḥ','H')
     .replaceAll('ṁ','M').replaceAll('ṇ','N');
     if (doubles) {
-        console.log("here", output);
         output = output.replaceAll('ny','ñ')
         .replaceAll('nk','ńk').replaceAll('nj','ñj').replaceAll('nc','ñc')
         .replaceAll('ng','ń');
-        console.log("here", output);
     }
     output = output.replaceAll("'", "");
     // output = output.replaceAll('ai','è').replaceAll('au','ò').replaceAll("'","")
@@ -214,7 +213,7 @@ function nativeOrthography(word, lang) {
 
     const last = word.substring(word.length-1);
     const isBrahmic = !(lang === 'pa' || lang === 'ur');
-    if (lang !== 'sa' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
+    if (lang !== 'sa' && lang !== 'pi' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
     if (lang !== 'sa') {
@@ -319,7 +318,7 @@ function nativeOrthography(word, lang) {
 
 function sanskritRomanOrthography(word, lang) {
     let res = sanskritDisplay(word, lang === 'sa');
-    if (lang !== 'sa') {
+    if (lang !== 'sa' && lang !== 'pi') {
         const getAt = (j) => res.substring(j, j+1);
         res = schwaDeletion(res);
         if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
