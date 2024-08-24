@@ -12,7 +12,8 @@ const SHORT_VOWELS = new Set(['a','e','i','o','u']);
 const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ō','ū',
     'æ','œ','ó' /* au */, 'è' /* ɛ */, 'ò' /* ɔ */,
     'ã','ẽ','ĩ','õ','ũ','ë',
-    'á','é','í','ó','ú']);
+    'á','é','í','ó','ú',
+    'â','ê','î','ô','û']);
 const FRONT_VOWELS = new Set(['e','i','è','ē','ī']);
 const BACK_VOWELS = new Set(['u','o','ū','ō','ó','ò']);
 const LIQUIDS = new Set(['l', 'r']);
@@ -142,6 +143,7 @@ function romanceOrthography(input, latinWord, lang) {
             .replaceAll('am','amm').replaceAll('em','emm').replaceAll('om','omm');
         output = output.replaceAll('ě','e').replaceAll('ė','e').replaceAll('ẽ','e');
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
+        // õnë
     }
     if (lang === 'fr' || lang === 'it') {
         output = output.replaceAll('j','i');

@@ -33,7 +33,7 @@ function latin_to_lang(latinWord, lang) {
         console.log("Western Romance: " + word);
     }
     if (lang === 'fr') {
-        word = western_romance_to_old_french(word);
+        word = western_romance_to_french(word);
         console.log("Old French: " + word);
     } else if (lang === 'es') {
         word = western_romance_to_old_spanish(word);
@@ -174,11 +174,6 @@ function romance_to_western_romance(word, finalLang='') {
     word.replaceIntervocal('gl', 'lJ', VOWELS.union(SEMIVOWELS));
     word.replaceIntervocal('gn', 'nJ', VOWELS.union(SEMIVOWELS));
 
-    // remove final epenthetic -e
-    if (word.numVowels() === 2 && word.endsWith('e')) {
-        word.cutAt(word.length-1);
-    }
-
     // first diphthongization
     let didDiphthong = false;
     let i = word.stress;
@@ -268,7 +263,7 @@ function romance_to_western_romance(word, finalLang='') {
     return word;
 }
 
-function western_romance_to_old_french(word) {
+function western_romance_to_french(word) {
     // to early Old French
 
     // convert /j/ to /dʒ/ in some contexts
@@ -324,23 +319,17 @@ function western_romance_to_old_french(word) {
     if (new Set(['n','m']).has(word.at(word.stress+1))) {
         // vowels + /n/ or /m/
         if (isOpen(word.stress)) {
+            word.replaceAt('e','ei',word.stress);
             word.replaceAt('a', 'ae', word.stress);
         } else {
             word.replaceAt('a','á',word.stress);
+            word.replaceAt('è','ê',word.stress);
+            word.replaceAt('e','á',word.stress);
             // word.replaceAt('Ja', 'Jè', word.stress-1);
             // word.replaceAt('Je', 'Ji', word.stress-1);
             // word.replaceAt('e', 'a', word.stress);
         }
-    } /* else if (isOpen(word.stress) && word.at(word.stress+2) !== 'J') {
-        if (word.at(word.stress+1) !== 'w') {
-            word.replaceAt('a','ae',word.stress);
-            if (word.at(word.stress-1) !== 'w')
-                word.replaceAt('o','ou',word.stress);
-        }
-        if (word.at(word.stress+1) !== 'j') {
-            word.replaceAt('e','ei',word.stress);
-        }
-    } */ else {
+    } else {
         // all other vowels
         if (isOpen(word.stress)) {
             word.replaceAt('ao', 'ò', word.stress);
@@ -379,10 +368,15 @@ function western_romance_to_old_french(word) {
         if (isOpen(word.stress)) {
 
         } else {
+            word.replaceAt('è','jè',word.stress);
             word.replaceAt('a','è',word.stress);
+            if (word.atStress() === 'á' && contains(['j','J'], word.at(word.stress-1))) {
+                word.replaceAt('á','è',word.stress);
+                word.replaceAt('J','j',word.stress-1);
+            }
         }
     }
-    word.replaceAll(['á'], ['a']);
+    word.replaceAll(['á','ê'], ['a','è']);
 
     word.replaceAll(['nJJ','lJJ','ajrJ','jlJ'], ['nJ','lJ','jerJ','lJ']);
     word.replaceAll(['nJ','lJ'], ['ñ','ł']);
