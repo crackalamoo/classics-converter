@@ -35,8 +35,8 @@ function latin_to_lang(latinWord, lang) {
             word = western_romance_to_french(word);
             console.log("French: " + word);
         } else if (lang === 'es') {
-            word = western_romance_to_old_spanish(word);
-            console.log("Old Spanish: " + word);
+            word = western_romance_to_spanish(word);
+            console.log("Spanish: " + word);
         }
     } else if (lang === 'it') {
         word = romance_to_italian(word);
@@ -143,11 +143,12 @@ function latin_to_proto_romance(word, finalLang='') {
     if (finalLang !== 'it') {
         const intertonic = word.getIntertonic();
         for (const i of intertonic) {
-            // lose intertonic vowels with l/r or sVt, except pretonic /a/
+            // lose intertonic vowels with l/r or sVt, except /a/
             let prev = word.at(i-1);
             let next = word.at(i+1);
             if ((prev === 'l' || prev === 'r' || next === 'l' || next === 'r' || (prev === 's' && next === 't'))
-            && (i > word.stress || word.at(i) !== 'a')
+            // && (i > word.stress || word.at(i) !== 'a')
+            && (word.at(i) !== 'a')
             ) {
                 word.cutAt(i);
             }
@@ -170,6 +171,8 @@ function latin_to_proto_romance(word, finalLang='') {
     word.replace('B', 'b');
 
     if (finalLang === 'it')
+        word.replaceAll(['gj','dj','gJ','dJ'], ['gJ','gJ','gJ','gJ']);
+    else if (finalLang === 'es')
         word.replaceAll(['gj','dj','gJ','dJ'], ['gJ','gJ','gJ','gJ']);
     else
         word.replaceAll(['gj','dj','gJ','dJ'], ['j','j','j','j']);
@@ -575,8 +578,15 @@ function western_romance_to_french(word) {
     return word;
 }
 
-function western_romance_to_old_spanish(word) {
-    word.replaceAll(['J','y'], ['','j']);
+function western_romance_to_spanish(word) {
+    word.replaceAll(['wo','è','aw'], ['we','e','o']);
+    // apocope of final /e/
+    if (word.numVowels() > 1 && word.at(-1) === 'e' && VOWELS.has(word.at(-3))
+    && contains(['r','n','d','t','l','s','z'], word.at(-2))) {
+        word.cutAt(word.length-1);
+    }
+    word.replaceAll(['z','ż','x'], ['s','ç','j']); // devoicing of the sibilants
+    word.replaceAll(['lJ'], ['j']);
     return word;
 }
 
