@@ -24,7 +24,7 @@ const CONSONANTS = new Set(['b','c','d','f','g','h','k','l','m','n','p','q','r',
 const STOPS = new Set(['p','b','t','d','c','g']);
 
 let inputLang = 'la';
-let outputLang = 'fr';
+let outputLang = 'es';
 const WESTERN_ROMANCE = new Set(['es','fr']);
 
 const SANSKRIT_CONS = new Set([

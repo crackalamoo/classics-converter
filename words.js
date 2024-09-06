@@ -25,7 +25,7 @@ function closedSyllable(string, pos, useLiquids=true, removePalatal=false, vowel
     const p1 = string.substring(pos+1, pos+2);
     const p2 = string.substring(pos+2, pos+3);
     return (!vowels.has(p1) && !vowels.has(p2) && p1 !== ''
-        && !(useLiquids && LIQUIDS.has(p2)));
+        && !(useLiquids && STOPS.has(p1) && LIQUIDS.has(p2)));
 }
 function openSyllable(string, pos, useLiquids=true, removePalatal=false, vowels=VOWELS) {
     return !closedSyllable(string, pos, useLiquids, removePalatal, vowels);
