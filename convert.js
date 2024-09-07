@@ -132,10 +132,12 @@ function latin_to_proto_romance(word, finalLang='') {
         // final /er/, /or/ become /re/, /ro/
         word.w = word.sub(0, -2) + 'r' + word.sub(-2, -1);
     }
-    // replace /ks/ with /s/ finally and before/after a consonant
-    word.replaceAt('x', 's', word.length-1);
-    word.replaceBefore('x', 's', CONSONANTS);
-    word.replaceAfter('x', 's', CONSONANTS);
+    if (finalLang !== 'es') {
+        // replace /ks/ with /s/ finally and before/after a consonant
+        word.replaceAt('x', 's', word.length-1);
+        word.replaceBefore('x', 's', CONSONANTS);
+        word.replaceAfter('x', 's', CONSONANTS);
+    }
     if (word.numVowels() === 1 && CONSONANTS.has(word.at(-1))) {
         word.w += 'e'; // add final epenthetic /e/ for monosyllables
     }
@@ -244,7 +246,8 @@ function romance_to_western_romance(word, finalLang='') {
     let openCriterion = openSyllable(word.w, i, false, false, VOWELS) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
     if (finalLang === 'es') {
         // vowel raising in stressed syllables
-        word.replaceStressed('aj','ej');
+        if (CONSONANTS.has(word.at(word.stress+2)))
+            word.replaceStressed('aj','ej');
         word.replaceStressed('èj','ej');
         word.replaceStressed('òj','oj');
         let next_j = word.getNextVowel(word.stress) - 1;
@@ -255,23 +258,16 @@ function romance_to_western_romance(word, finalLang='') {
             word.replaceStressed('ò','o');
         }
         word.replaceStressed('asJ','esJ');
-        word.replaceStressed('ołt','ułt');
+        word.replace('ołt','ułt');
         word.replace('ł','j');
 
         openCriterion = true; // always diphthongize remaining /è/ and /ò/ for Spanish
     }
-    if ((word.at(i) === 'è' || word.at(i) === 'ò') && (openCriterion)
-    && !((word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
-        word.replaceAt(word.at(i), word.at(i).toUpperCase(), i);
-        didDiphthong = true;
-    }
-    word.replaceAll(['È','Ò'], ['ye','wo']);
-    word.replace('wy','y');
-    if (didDiphthong)
-        word.stress += 1;
+    // diphthongization was here
 
     // first lenition
-    const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','y'])));
+    // const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','y'])));
+    const intervocal = word.getIntervocal(VOWELS.union(new Set(['w','l'])), VOWELS.union(new Set(['r','w','y','l'])));
     const lenitionMap = {
         'b':'v',
         'd':'ð',
@@ -303,6 +299,7 @@ function romance_to_western_romance(word, finalLang='') {
         if (word.at(-2) === 'ð' && VOWELS.has(word.at(-1)) && word.at(-1) !== 'a')
             word.replaceAt('ð', 'd', word.length-2); // final -d kept in French with orthography/liaison
     }
+    word.replaceAll(['aðo','aɣo'], ['ado','ago']);
     word.replaceIntervocal('ð', '');
     word.replaceIntervocal('ɣ', '');
     word.replace('ɣ', 'j');
@@ -332,9 +329,24 @@ function romance_to_western_romance(word, finalLang='') {
     const intertonic = word.getIntertonic();
     for (const i of intertonic) {
         if (i > this.stress || word.at(i) !== 'a') {
-            word.cutAt(i);
+            if (finalLang === 'es' && word.at(i-1) == 'm') {
+                word.replaceAt('en','r',i);
+            } else {
+                word.cutAt(i);
+            }
         }
     }
+
+
+    if ((word.at(i) === 'è' || word.at(i) === 'ò') && (openCriterion)
+    && !((word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
+        word.replaceAt(word.at(i), word.at(i).toUpperCase(), i);
+        didDiphthong = true;
+    }
+    word.replaceAll(['È','Ò'], ['ye','wo']);
+    word.replace('wy','y');
+    if (didDiphthong)
+        word.stress += 1;
 
     return word;
 }
@@ -595,12 +607,16 @@ function western_romance_to_french(word) {
 }
 
 function western_romance_to_spanish(word) {
-    word.replaceAll(['wo','è','aw','ij'], ['we','e','o','i']);
+    word.replaceAll(['wo','è','ò','aw'], ['we','e','o','o']);
     // apocope of final /e/
-    if (word.numVowels() > 1 && word.at(-1) === 'e' && VOWELS.has(word.at(-3))
-    && contains(['r','n','d','t','l','s','z','ç','ż','x'], word.at(-2))) {
-        word.cutAt(word.length-1);
+    word.replaceAll(['ll','js'], ['L','X']);
+    if (word.numVowels() > 1 && word.at(-1) === 'e') {
+        if (VOWELS.has(word.at(-3)) && contains(['r','n','d','t','l','s','z','ç','ż','x','L','X'], word.at(-2))) {
+            word.cutAt(word.length-1);
+        }
     }
+    word.replaceAll(['L','X','x'], ['ll','js','js']);
+    word.replaceAt('ll','l',word.length-2);
     if (VOWELS.has(word.at(1))) {
         word.replaceAt('f','h',0);
     } else if (VOWELS.has(word.at(2))) {
@@ -633,9 +649,12 @@ function western_romance_to_spanish(word) {
 
     // vowel raising in unstressed syllables
     for (let i = word.length-3; i >= 0; i--) {
+        if (i === word.stress)
+            continue;
         let next_j = word.getNextVowel(i) - 1;
         if (contains(['J','y'], word.at(next_j))) {
             word.replaceAt('e','i',i);
+            word.replaceAt('o','u',i);
         }
     }
 
@@ -648,16 +667,42 @@ function western_romance_to_spanish(word) {
     word.replace('ɟ','');
     word.replace('clJ','cJ');
     word.replace('lJ','x');
+    word.replace('ijt','it');
+
+    // syllable-final vocalization
+    for (let i = word.length-1; i > 0; i--) {
+        if (STOPS.union(new Set(['s'])).has(word.at(i+1)) && VOWELS.has(word.at(i-1))) {
+            word.replaceAt('b','w',i);
+            word.replaceAt('v','w',i);
+            word.replaceAt('ow','o',i-1);
+            if (VOWELS.has(word.at(i+2))) {
+                word.replaceAt('jt','cJ',i);
+                word.replaceAt('js','x',i);
+            } else if (word.at(i) === 'j') {
+                word.replaceAt('j','y',i);
+                if (CONSONANTS.has(word.at(i+2)) && !LIQUIDS.has(word.at(i+2)))
+                    word.cutAt(i+1);
+            }
+        }
+    }
+    word.replace('j','');
 
     word.replaceAll(['qwi','qwe'], ['qi','qe']);
-    word.replaceAll(['mn','qw','tç','sç','dż','ct','dg'], ['nn','cw','ç','ç','ż','cJ','çg']); // simplifying clusters
+    word.replaceAll(['mn','qw','tç','sç','dż','ct','dg','pd','mr','nçg','nsg'],
+                    ['nn','cw','ç','ç','ż','cJ','çg','t','mbr','ng','ng']); // simplifying clusters
+    word.replaceAll(['iva','eya','aye'], ['ia','ea','ae']); // vowel-related clusters
+    if (word.stress !== 0)
+        word.replaceAt('u','o',0);
+    if (word.stress !== word.length-1)
+        word.replaceAt('i','e',word.length-1);
+
     word.replaceAll(['qi','qe','qy'], ['Qwi','Qwe','Qwy']);
     word.replace('q','c');
     word.replace('Q','q');
 
     word.replaceAll(['nn','mm'], ['nJ','m']); // geminate sonorants
     word.replaceAll(['z','ż'], ['s','ç']); // devoicing of the sibilants
-    word.replaceAll(['nJ','cJ'], ['ñ','č']);
+    word.replaceAll(['nJ','cJ','sJ','rJ'], ['ñ','č','s','r']);
     word.replaceBefore('ñ','n',CONSONANTS);
     word.replace('J','y');
     return word;
