@@ -228,7 +228,7 @@ function displayOrthography(input, lang) {
     if (lang === 'sa') {
         if (isRoman(input))
             return nativeOrthography(input, 'sa');
-        return sanskritDisplay(devanagariToRoman(input));
+        return sanskritDisplay(devanagari_to_roman(input));
     }
     return input;
 }
@@ -366,7 +366,7 @@ function sanskritRomanOrthography(word, lang) {
     return res;
 }
 
-function devanagariToRoman(word) {
+function devanagari_to_roman(word) {
     const cons_map = {};
     const vow_map_1 = {};
     const vow_map_2 = {};
