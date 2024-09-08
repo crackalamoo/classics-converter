@@ -381,7 +381,8 @@ function contains(set, item) {
 const samples = {
     'sa': ['pañca sapta aSTa', 'adya dugdha niSkaalay'],
     'hi': ['vaMsha apara karpaasa','duura graama','saMdhya raatri vaarttaa','tvam dina rajani caurika karo param karma na karo',
-        'hasta karNa shiras paada', 'shvashura parNa na khaad'
+        'hasta karNa shiras paada', 'shvashura parNa na khaad',
+        // 'alagna', 'puuraka'
     ],
     'pa': ['duura candra','hasta karNa akSa shiras pakSa paada','mrakSaNa'],
     'hi-pa': ['kathay', 'deziiya shreSTin kRta saartha', 'yaH priyakaaraka pattra'],

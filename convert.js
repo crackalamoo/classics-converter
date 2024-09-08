@@ -926,7 +926,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     // shorten final long vowels
-    const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'e':'i', 'o':'u','aM':'u'};
+    // const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'e':'i', 'o':'u','aM':'u'};
+    const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'aM':'u'};
     for (const [key, val] of Object.entries(shorten2)) {
         word.replaceAt(key, val, word.length-key.length);
     }
@@ -1016,7 +1017,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
                 continue;
             }
             if (cons.has(word.at(i+1)) && cons.has(word.at(i+2))
-                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) )  || lang === 'mr')
+                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || lang === 'mr')
                 && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
                 if (lang === 'mr') {
@@ -1045,7 +1046,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.joinAspirate();
 
     word.replaceAt('uy','ū',word.length-2);
-
 
     // vowel merger
     if (lang === 'mr' && word.numVowels() === 1) {
@@ -1078,7 +1078,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     // lose some more geminates
     word.replaceAll(['pp','PP','BB'], ['p','P','B']);
     if (lang !== 'pa') {
-        word.replaceAll(['jj','JJ','kk','mm'], ['j','J','k','m']);
+        word.replaceAll(['jj','JJ','kk','mm','gg'], ['j','J','k','m','g']);
     } else {
         word.replaceIntervocal(['jj','JJ'], ['j','J']);
     }

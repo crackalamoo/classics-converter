@@ -330,8 +330,10 @@ function sanskritRomanOrthography(word, lang) {
             res = res.replaceAll('j','z');
         } else {
             if (res.endsWith('āṁv'))
-                res = res.substring(0, res.length-3) + 'āoṁ';
+                res = res.substring(0, res.length-3) + 'āõṁ';
             res = res.replaceAll('cch','CCH').replaceAll('c','ch').replaceAll('CCH','cch');
+            res = res.replaceAll('āṁ','ãṁ').replaceAll('īṁ','ĩṁ').replaceAll('ūṁ','ũṁ')
+            .replaceAll('eṁ','ẽṁ').replaceAll('oṁ','õṁ');
         }
         res = res.replaceAll('è','ai').replaceAll('ò','au');
         res = res.replaceAll('ṁ','n');
