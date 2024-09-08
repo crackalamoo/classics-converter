@@ -14,7 +14,9 @@ function convertWord(startWord, inLang, outLang, inOrthoBox=false) {
         return latin_to_lang(startWord, outLang);
     } else if (inLang === 'sa') {
         let res = startWord;
-        res = sanskrit_to_lang(startWord, outLang);
+        if (!isRoman(startWord))
+            res = devanagariToRoman(res);
+        res = sanskrit_to_lang(res, outLang);
         if (isRoman(startWord) != inOrthoBox)
             return sanskritRomanOrthography(res, outLang);
         else

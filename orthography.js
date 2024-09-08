@@ -348,3 +348,46 @@ function sanskritRomanOrthography(word, lang) {
     }
     return res;
 }
+
+function devanagariToRoman(word) {
+    const cons_map = {};
+    const vow_map_1 = {};
+    const vow_map_2 = {};
+    for (const [rom, dev] of Object.entries(SANSKRIT_CONS_MAP)) {
+        cons_map[dev] = rom;
+    }
+    for (const [rom, dev] of Object.entries(SANSKRIT_DOUBLE_MAP)) {
+        cons_map[dev] = rom;
+    }
+    for (const [rom, dev] of Object.entries(SANSKRIT_VOW_MAP_1)) {
+        vow_map_1[dev] = rom;
+    }
+    for (const [rom, dev] of Object.entries(SANSKRIT_VOW_MAP_2)) {
+        vow_map_2[dev] = rom;
+    }
+    let res = '';
+    let i = 0;
+    while (i < word.length) {
+        let c = word.substring(i,i+1);
+        if (cons_map[c]) {
+            res += cons_map[c];
+            let next_c = word.substring(i+1,i+2);
+            if (vow_map_1[next_c]) {
+                if (contains(['ं','ः'], next_c))
+                    res += 'a';
+                res += vow_map_1[next_c];
+                i += 1;
+            } else if (next_c === '्') {
+                i += 1;
+            } else {
+                res += 'a';
+            }
+        } else if (vow_map_2[c]) {
+            res += vow_map_2[c];
+        } else {
+            res += c;
+        }
+        i++;
+    }
+    return res;
+}
