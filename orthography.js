@@ -135,7 +135,8 @@ function latinOrthography(input, display=false) {
 }
 
 function romanceOrthography(input, latinWord, lang) {
-    let output = input;
+    let output = input.w;
+    let stress = input.stress;
 
     if (lang === 'fr') {
         output = output.replaceAll('č','ch');
@@ -150,6 +151,10 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('w','u');
     }
     if (lang === 'es' || lang === 'fr') {
+        if (output.startsWith('w') || output.startsWith('y')) {
+            output = 'h'+output;
+            stress += 1;
+        }
         output = output.replaceAll('y','j');
         if (output.substring(0,1) === 'j')
             output = 'y'+output.substring(1);
@@ -169,8 +174,20 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('lJ','gl');
         output = output.replaceAll('cJi','ci').replaceAll('cJe','ce').replaceAll('cJè','cè').replaceAll('cJ','ci');
     }
+    if (lang === 'es') {
+        output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('ç','z');
+    }
     if ((lang === 'fr' || lang === 'es') && latinWord.startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
+    }
+    if (lang === 'es') {
+        // add accent marks
+        const accent_map = {'a':'á','e':'é','i':'í','o':'ó','u':'ú'};
+        let stress_c = output.substring(stress, stress+1);
+        if (stress !== getSpanishStress(output) && accent_map[stress_c]) {
+            output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
+        }
+        output = output.replaceAll('č','ch');
     }
 
     output = matchCase(output, latinWord);
@@ -211,7 +228,7 @@ function displayOrthography(input, lang) {
     if (lang === 'sa') {
         if (isRoman(input))
             return nativeOrthography(input, 'sa');
-        return sanskritDisplay(input);
+        return sanskritDisplay(devanagariToRoman(input));
     }
     return input;
 }
@@ -390,4 +407,36 @@ function devanagariToRoman(word) {
         i++;
     }
     return res;
+}
+
+function getSpanishStress(word) {
+    word = word.replaceAll('qu','kk').replaceAll('gue','gge').replaceAll('gui','ggi');
+    for (const vow of ['a','e','i','o','u']) {
+        word = word.replaceAll('i'+vow,'y'+vow);
+        word = word.replaceAll('u'+vow,'w'+vow);
+    }
+    let stress = getPrevVowel(word, word.length);
+    if (contains(['a','e','i','o','u','s','n'], word.substring(word.length-1))) {
+        let newStress = getPrevVowel(word, stress);
+        if (newStress !== -1)
+            stress = newStress;
+    }
+    return stress;
+}
+
+function getNextVowel(word, start, vowels=VOWELS) {
+    for (let i = start+1; i < word.length; i++) {
+        if (vowels.has(word.substring(i,i+1))) {
+            return i;
+        }
+    }
+    return -1;
+}
+function getPrevVowel(word, start, vowels=VOWELS) {
+    for (let i = start-1; i >= 0; i--) {
+        if (vowels.has(word.substring(i,i+1))) {
+            return i;
+        }
+    }
+    return -1;
 }

@@ -46,7 +46,7 @@ function latin_to_lang(latinWord, lang) {
     }
     // word = word.toString();
     // word = romanceOrthography(word, latinWord, lang);
-    word = word.toString() + ' ('+romanceOrthography(word.w,latinWord,lang)+')';
+    word = word.toString() + ' ('+romanceOrthography(word,latinWord,lang)+')';
     return word;
 }
 
@@ -630,7 +630,7 @@ function western_romance_to_spanish(word) {
     }
     word.replaceAll(['L','X','x'], ['ll','js','js']);
     word.replaceAt('ll','l',word.length-2);
-    if (VOWELS.has(word.at(1))) {
+    if (VOWELS.union(new Set(['y','w'])).has(word.at(1))) {
         word.replaceAt('f','h',0);
     } else if (VOWELS.has(word.at(2))) {
         word.replaceAt('fl','ll',0);
@@ -704,6 +704,7 @@ function western_romance_to_spanish(word) {
     word.replaceAll(['mn','qw','tç','sç','dż','ct','dg','pd','mr','nçg','nsg'],
                     ['nn','cw','ç','ç','ż','cJ','çg','t','mbr','ng','ng']); // simplifying clusters
     word.replaceAll(['iva','eya','aye'], ['ia','ea','ae']); // vowel-related clusters
+    word.replaceAll(['bb','pp','cc','gg','tt','dd'], ['b','p','c','g','t','d']); // removing geminates
     if (word.stress !== 0)
         word.replaceAt('u','o',0);
     if (word.stress !== word.length-1)

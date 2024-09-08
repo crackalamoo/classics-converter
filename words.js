@@ -32,22 +32,6 @@ function openSyllable(string, pos, useLiquids=true, removePalatal=false, vowels=
 }
 
 
-function getNextVowel(word, start, vowels=VOWELS) {
-    for (let i = start+1; i < word.length; i++) {
-        if (vowels.has(word.substring(i,i+1))) {
-            return i;
-        }
-    }
-    return -1;
-}
-function getPrevVowel(word, start, vowels=VOWELS) {
-    for (let i = start-1; i >= 0; i--) {
-        if (vowels.has(word.substring(i,i+1))) {
-            return i;
-        }
-    }
-    return -1;
-}
 class Word {
     constructor(word) {
         this.word = word;
