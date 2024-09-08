@@ -42,8 +42,9 @@ function latin_to_lang(latinWord, lang) {
         word = romance_to_italian(word);
         console.log("Italian: " + word);
     }
-    word = word.toString();
+    // word = word.toString();
     // word = romanceOrthography(word, latinWord, lang);
+    word = word.toString() + ' ('+romanceOrthography(word.w,latinWord,lang)+')';
     return word;
 }
 
@@ -138,7 +139,7 @@ function latin_to_proto_romance(word, finalLang='') {
         word.replaceBefore('x', 's', CONSONANTS);
         word.replaceAfter('x', 's', CONSONANTS);
     }
-    if (word.numVowels() === 1 && CONSONANTS.has(word.at(-1))) {
+    if (word.numVowels() === 1 && contains(['n','m'], word.at(-1))) {
         word.w += 'e'; // add final epenthetic /e/ for monosyllables
     }
 
@@ -219,7 +220,7 @@ function romance_to_italian(word) {
     word.replaceAll(['ct','x'], ['tt','ss']);
     word.replaceAll(['qwi','qwe','qwu'], ['chi','che','cu']);
 
-    word.replaceAll(['tJ','sJ'], ['z','cJ']);
+    word.replaceAll(['tJ','sJ'], ['zJ','cJ']);
     word.replaceBefore('cl','chj',VOWELS);
     word.replaceBefore('gl','ghj',VOWELS);
     for (var i = word.length-2; i > 0; i--) {
@@ -228,6 +229,7 @@ function romance_to_italian(word) {
             word.replaceAt('l','j',i);
         }
     }
+    word.replace('J','j');
 
     return word;
 }
@@ -246,8 +248,13 @@ function romance_to_western_romance(word, finalLang='') {
     let openCriterion = openSyllable(word.w, i, false, false, VOWELS) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
     if (finalLang === 'es') {
         // vowel raising in stressed syllables
-        if (CONSONANTS.has(word.at(word.stress+2)))
-            word.replaceStressed('aj','ej');
+        if (CONSONANTS.has(word.at(word.stress+2))) {
+            if (word.sub(word.stress,word.stress+2) === 'aj') {
+                word.replaceAt('ca','qwa',word.stress-1);
+                word.replaceAt('ga','gwa',word.stress-1);
+                word.replaceStressed('aj','ej');
+            }
+        }
         word.replaceStressed('èj','ej');
         word.replaceStressed('òj','oj');
         let next_j = word.getNextVowel(word.stress) - 1;
@@ -257,7 +264,11 @@ function romance_to_western_romance(word, finalLang='') {
             word.replaceStressed('è','e');
             word.replaceStressed('ò','o');
         }
-        word.replaceStressed('asJ','esJ');
+        if (word.sub(word.stress,word.stress+3) === 'asJ') {
+            word.replaceAt('ca','qwa',word.stress-1);
+            word.replaceAt('ga','gwa',word.stress-1);
+            word.replaceStressed('asJ','esJ');
+        }
         word.replace('ołt','ułt');
         word.replace('ł','j');
 

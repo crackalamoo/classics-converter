@@ -141,25 +141,32 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('č','ch');
         output = output.replaceAll('an','ann').replaceAll('en','enn').replaceAll('on','onn')
             .replaceAll('am','amm').replaceAll('em','emm').replaceAll('om','omm');
-        output = output.replaceAll('ě','e').replaceAll('ė','e').replaceAll('ẽ','e');
+        output = output.replaceAll('ě','e').replaceAll('ë','e').replaceAll('ẽ','e');
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
         // õnë
     }
-    if (lang === 'fr' || lang === 'it') {
+    if (lang === 'it') {
         output = output.replaceAll('j','i');
         output = output.replaceAll('w','u');
     }
+    if (lang === 'es' || lang === 'fr') {
+        if (output.substring(0,1) === 'j')
+            output = 'y'+output.substring(1);
+        output = replaceIntervocal(output, 'j', 'y');
+        output = output.replaceAll('j', 'i');
+        output = output.replaceAll('w','u');
+    }
     if (lang === 'fr') {
+        for (const vow of ['e','i','ê','î','è']) {
+            output = output.replaceAll('ž'+vow,'g'+vow);
+        }
         output = output.replaceAll('ž','j');
         output = replaceIntervocal(output, 's', 'ss');
         output = replaceIntervocal(output, 'ż', 's').replaceAll('ż','z');
     }
-    if (lang === 'es') {
-        output = replaceIntervocal(output, 'j', 'y');
-        output = output.replaceAll('j', 'i');
-    }
     if (lang === 'it') {
         output = output.replaceAll('lJ','gl');
+        output = output.replaceAll('cJi','ci').replaceAll('cJe','ce').replaceAll('cJè','cè').replaceAll('cJ','ci');
     }
     if ((lang === 'fr' || lang === 'es') && latinWord.startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
