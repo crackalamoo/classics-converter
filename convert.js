@@ -809,7 +809,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceIntervocal('mr','mb');
     word.replaceIntervocal('ml','mb');
     word.replaceIntervocal('Hz','ss');
-    word.replaceAll(['Țy','Ðy','ty','dy','sȚ','ts','ps'], ['CC','JJ','cc','jj','ŤŤ','CC','CC']);
+    // word.replaceAll(['Țy','Ðy','ty','dy','sȚ','ts','ps'], ['CC','JJ','cc','jj','ŤŤ','CC','CC']);
+    word.replaceAll(['Țy','Ðy','ty','dy','ts','ps'], ['CC','JJ','cc','jj','CC','CC']);
     for (let i = word.length-2; i >= 0; i--) {
         if (stops.has(word.at(i)) && stops.has(word.at(i+1))) {
             // stop + stop: C1C2 -> C2C2
@@ -915,6 +916,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceIntervocal('D','L');
         word.replaceIntervocal('Dh','Lh');
 
+        for (let i = word.length-2; i > 0; i--) {
+            if (word.at(i) === 'H' && SANSKRIT_STOP_CONS.union(new Set(['s'])).has(word.at(i+1)))
+                word.replaceAt('H',word.at(i+1),i);
+        }
+
         // lose ChC and CCC sequences
         for (let i = word.length-3; i >= 0; i--) {
             if (cons.has(word.at(i)) && word.at(i) === word.at(i+2) && word.at(i+1) === 'h') {
@@ -927,6 +933,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
         }
 
         word.replaceAll(['āM','īM','ūM'], ['aM','iM','uM']);
+
+        word.joinAspirate();
+        if (SANSKRIT_CONS.has(word.at(0)) && word.at(0) === word.at(1))
+            word.cutAt(0);
+        word.unjoinAspirate();
     }
 
     word.replace('aH','o');

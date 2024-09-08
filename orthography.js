@@ -150,6 +150,7 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('w','u');
     }
     if (lang === 'es' || lang === 'fr') {
+        output = output.replaceAll('y','j');
         if (output.substring(0,1) === 'j')
             output = 'y'+output.substring(1);
         output = replaceIntervocal(output, 'j', 'y');
