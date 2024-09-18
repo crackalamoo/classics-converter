@@ -157,7 +157,7 @@ function latin_to_proto_romance(word, finalLang='') {
             let next = word.at(i+1);
             if ((prev === 'l' || prev === 'r' || next === 'l' || next === 'r' || (prev === 's' && next === 't'))
             // && (i > word.stress || word.at(i) !== 'a')
-            && (word.at(i) !== 'a')
+            && (word.at(i) !== 'a') && (finalLang === 'fr' || !noLostIntertonic(word, i))
             ) {
                 word.cutAt(i);
             }
@@ -165,7 +165,7 @@ function latin_to_proto_romance(word, finalLang='') {
     }
 
     // replace/remove /b/, /w/ with /β/
-    word.replace('rb','rB');
+    // word.replace('rb','rB');
     word.replaceIntervocal('b','B');
     word.replaceIntervocal('v','W');
     word.replaceAll(['oBo','uBu', 'oBu', 'uBo'], ['obo', 'ubu', 'obu', 'ubo']);
@@ -266,15 +266,16 @@ function romance_to_western_romance(word, finalLang='') {
             word.replaceStressed('è','e');
             word.replaceStressed('ò','o');
         }
-        if (word.sub(word.stress,word.stress+3) === 'asJ') {
+        if (contains(['asJ','arJ'], word.sub(word.stress,word.stress+3))) {
             word.replaceAt('ca','qwa',word.stress-1);
             word.replaceAt('ga','gwa',word.stress-1);
             word.replaceStressed('asJ','esJ');
+            word.replaceStressed('arJ','erJ');
         }
         word.replace('ołt','ułt');
         word.replace('ł','j');
 
-        openCriterion = true; // always diphthongize remaining /è/ and /ò/ for Spanish
+        openCriterion = openCriterion || word.numVowels() > 1; // always diphthongize remaining /è/ and /ò/ for Spanish, except 1-syllable closed syllables
     }
     // diphthongization was here
 
@@ -344,7 +345,7 @@ function romance_to_western_romance(word, finalLang='') {
         if (i > this.stress || word.at(i) !== 'a') {
             if (finalLang === 'es' && word.at(i-1) == 'm') {
                 word.replaceAt('en','r',i);
-            } else {
+            } else if (!noLostIntertonic(word, i)) {
                 word.cutAt(i);
             }
         }
@@ -360,6 +361,11 @@ function romance_to_western_romance(word, finalLang='') {
     word.replace('wy','y');
     if (didDiphthong)
         word.stress += 1;
+
+    // loss of final consonants
+    if (finalLang !== 'fr' && CONSONANTS.has(word.at(-1)) && !contains(['l','s','n','z','r'], word.at(-1))) {
+        word.cutAt(word.length-1);
+    }
 
     return word;
 }
@@ -517,7 +523,8 @@ function western_romance_to_french(word) {
         }
     }
     for (const i of intervocal) {
-        if (lenitionMap2[word.at(i)] && !(word.at(i) === 'c' && word.at(i+1) === 'l')) {
+        if (lenitionMap2[word.at(i)] && !(word.at(i) === 'c' && word.at(i+1) === 'l')
+        && (i !== word.length-1 || (word.at(i) !== 't' && word.at(i) !== 'd'))) {
             word.replaceAt(word.at(i), lenitionMap2[word.at(i)], i);
         }
     }
@@ -810,6 +817,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceBefore('Dv','vv',VOWELS);
         word.replaceAfter('dv','vv',VOWELS);
+        word.replaceIntervocal('tm','pp');
     }
     word.replaceIntervocal('nv','mm');
     word.replaceIntervocal('mr','mb');
@@ -865,8 +873,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
     word.replaceAll(['hn','hN','hm','hl','vh'],['nh','Nh','mh','lh','BB']);
     if (lang !== 'pi') {
-        word.replace('y','j');
         word.replaceAll(['hv', 'yh', 'hy'], ['BB', 'JJ', 'JJ']);
+        word.replace('y','j');
     } else {
         word.replaceAll(['hv', 'hy'], ['vh', 'yh']);
     }

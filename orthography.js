@@ -177,6 +177,9 @@ function romanceOrthography(input, latinWord, lang) {
     if (lang === 'es') {
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('ç','z');
     }
+    if (lang === 'fr') {
+        output = output.replaceAll('çi','ci');
+    }
     if ((lang === 'fr' || lang === 'es') && latinWord.startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
     }
@@ -188,6 +191,10 @@ function romanceOrthography(input, latinWord, lang) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
         }
         output = output.replaceAll('č','ch');
+    }
+    if (lang === 'fr') {
+        output = output.replaceAll('õnë','õnnë').replaceAll('ãnë','ãnnë').replaceAll('ẽnë','ẽnnë');
+        output = output.replaceAll('ã','a').replaceAll('ẽ','e').replaceAll('õ','o');
     }
 
     output = matchCase(output, latinWord);

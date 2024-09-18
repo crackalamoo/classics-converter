@@ -358,8 +358,30 @@ function schwaDeletion(word) {
     return res;
 }
 
+function noLostIntertonic(word, i) {
+    // prevent loss of intertonic vowel due to an invalid cluster
+    const cons = CONSONANTS.union(SEMIVOWELS);
+    let prev2 = word.sub(i-2,i);
+    let prev1 = word.sub(i-1,i);
+    let next1 = word.sub(i+1,i+2);
+    let next2 = word.sub(i+1,i+3);
+    let res = (allContains(cons, prev2) && allContains(cons, next1)
+    || (allContains(cons, prev1) && allContains(cons, next2))
+    || (contains(STOPS, prev1) && contains(STOPS, next1))
+    );
+    return res;
+}
+
 function contains(set, item) {
     return (new Set(set).has(item));
+}
+
+function allContains(set, string) {
+    for (let i = 0; i < string.length; i++) {
+        if (!contains(set, string.substring(i,i+1)))
+            return false;
+    }
+    return true;
 }
 
 const samples = {
