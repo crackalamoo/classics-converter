@@ -85,6 +85,33 @@ const SANSKRIT_VOW_MAP_2 = {
     'e':'ए','è':'ऐ','o':'ओ','ò':'औ',
     'R':'ऋ','H':'ः','M':'ं'
 };
+const GURMUKHI_DOUBLE_MAP = {
+    'kh':'ਖ', 'gh':'ਘ',
+    'ch':'ਛ', 'jh':'ਝ',
+    'Th':'ਠ', 'Dh':'ਢ',
+    'th':'ਥ', 'dh':'ਧ',
+    'ph':'ਫ', 'bh':'ਭ'
+};
+const GURMUKHI_CONS_MAP = {
+    'k':'ਕ','g':'ਗ','ń':'ਙ',
+    'c':'ਚ','j':'ਜ','ñ':'ਞ',
+    'T':'ਟ','D':'ਡ','N':'ਣ',
+    't':'ਤ','d':'ਦ','n':'ਨ',
+    'p':'ਪ','b':'ਬ','m':'ਮ',
+    'y':'ਯ','r':'ਰ','l':'ਲ','v':'ਵ','L':'ਲ਼',
+    'z':'ਸ਼','S':'ਸ਼','s':'ਸ','h':'ਹ',
+    'ř':'ੜ'
+};
+const GURMUKHI_VOW_MAP_1 = {
+    'ā':'ਾ','i':'ਿ','ī':'ੀ','u':'ੁ','ū':'ੂ',
+    'e':'ੇ','è':'ੈ','o':'ੋ','ò':'ੌ',
+    'M':'ੰ'
+};
+const GURMUKHI_VOW_MAP_2 = {
+    'a':'ਅ','ā':'ਆ','i':'ਇ','ī':'ਈ','u':'ਉ','ū':'ਊ',
+    'e':'ਏ','è':'ਐ','o':'ਓ','ò':'ਔ',
+    'M':'ੰ'
+};
 
 const URDU_CONS_MAP = {
     'k': 'ک', 'g': 'گ',
@@ -246,7 +273,9 @@ function nativeOrthography(word, lang) {
     word = sanskritOrthography(word, lang === 'sa');
 
     const last = word.substring(word.length-1);
-    const isBrahmic = !(lang === 'pa' || lang === 'ur');
+    const isGurmukhi = (lang === 'pa' && document.pa_settings.pa_script.value === 'gurmukhi');
+    const vowelMarks = document.ur_pa_settings.vowel_marks.checked;
+    const isBrahmic = !(lang === 'ur' || (lang === 'pa' && !isGurmukhi));
     if (lang !== 'sa' && lang !== 'pi' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
@@ -265,10 +294,10 @@ function nativeOrthography(word, lang) {
 
     if (isBrahmic) {
         // Brahmic script
-        const doubleMap = SANSKRIT_DOUBLE_MAP;
-        const consMap = SANSKRIT_CONS_MAP;
-        const vowMap1 = SANSKRIT_VOW_MAP_1;
-        const vowMap2 = SANSKRIT_VOW_MAP_2;
+        const doubleMap = isGurmukhi ? GURMUKHI_DOUBLE_MAP : SANSKRIT_DOUBLE_MAP;
+        const consMap = isGurmukhi ? GURMUKHI_CONS_MAP : SANSKRIT_CONS_MAP;
+        const vowMap1 = isGurmukhi ? GURMUKHI_VOW_MAP_1 : SANSKRIT_VOW_MAP_1;
+        const vowMap2 = isGurmukhi ? GURMUKHI_VOW_MAP_2 : SANSKRIT_VOW_MAP_2;
         const getAt = (j) => word.substring(j, j+1);
         const isCons = (a) => (Boolean(doubleMap[a]) || Boolean(consMap[a])
             || Object.values(consMap).indexOf(a) !== -1
@@ -296,7 +325,29 @@ function nativeOrthography(word, lang) {
         for (const [key, val] of Object.entries(vowMap2)) {
             word = word.replaceAll(key, val);
         }
-        word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
+        
+        if (isGurmukhi) {
+            const ADDAK = 'ੱ';
+            for (const cons of Object.keys(consMap)) {
+                word = word.replaceAll(consMap[cons]+'्'+consMap[cons], ADDAK+consMap[cons]);
+                if (doubleMap[cons+"h"]) {
+                    word = word.replaceAll(consMap[cons]+'्'+doubleMap[cons+"h"], ADDAK+doubleMap[cons+"h"]);
+                }
+            }
+            for (const vow of ['ā','ē','è','o']) {
+                const TIPPI = 'ੰ';
+                const BINDI = 'ਂ';
+                word = word.replaceAll(vowMap1[vow]+TIPPI, vowMap1[vow]+BINDI);
+                word = word.replaceAll(vowMap2[vow]+TIPPI, vowMap2[vow]+BINDI);
+            }
+            word = word.replaceAll('्'+consMap['r'], '੍'+consMap['r']);
+            word = word.replaceAll('्'+consMap['v'], vowMap1['u']);
+            word = word.replaceAll('्'+consMap['y'], vowMap1['i']);
+            word = word.replaceAll('्'+consMap['h'], '੍'+consMap['h']);
+            word = word.replaceAll('्','');
+        } else {
+            word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
+        }
     } else {
         // Perso-Arabic script
         let res = word;
@@ -343,6 +394,11 @@ function nativeOrthography(word, lang) {
             res = 'ا' + res;
             if (res.substring(0, 3) === 'اَا')
                 res = 'آ' + res.substring(3);
+        }
+        if (!vowelMarks) {
+            for (const mark of ['ِ','َ','ُ','ّ']) {
+                res = res.replaceAll(mark, '')
+            }
         }
         word = res;
     }

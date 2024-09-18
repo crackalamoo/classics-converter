@@ -222,16 +222,17 @@ function romance_to_italian(word) {
     word.replaceAll(['ct','x'], ['tt','ss']);
     word.replaceAll(['qwi','qwe','qwu'], ['chi','che','cu']);
 
-    word.replaceAll(['tJ','sJ'], ['zJ','cJ']);
+    word.replaceAll(['tJ','sJ','vJ'], ['zJ','cJ','ggJ']);
     word.replaceBefore('cl','chj',VOWELS);
     word.replaceBefore('gl','ghj',VOWELS);
     for (var i = word.length-2; i > 0; i--) {
         if (CONSONANTS.has(word.at(i-1)) && word.at(i-1) !== 'l'
-        && word.at(i) === 'l' && VOWELS.has(word.at(i+1))) {
+        && word.at(i) === 'l' && VOWELS.union(SEMIVOWELS).has(word.at(i+1))) {
             word.replaceAt('l','j',i);
         }
     }
     word.replace('J','j');
+    word.replace('jw','j');
 
     return word;
 }
@@ -1151,6 +1152,9 @@ function sanskrit_to_lang(sanskritWord, lang) {
         if (contains(['t'], word.at(-2)) && word.at(-1) === 'h')
             word.cutAt(word.length-1);
         word.replaceAll(['Mv'], ['v']);
+    }
+    if (lang === 'pa') {
+        word.replaceAll(['Mv'], ['M']);
     }
 
     word.replace('N','n');

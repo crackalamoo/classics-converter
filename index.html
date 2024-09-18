@@ -3,11 +3,17 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://harysdalvi.com/main.css">
     <style>
+    body {
+        min-width: 800px;
+    }
     .box-container {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
+        margin: 8px;
     }
     .box-container-column.has-box {
         display: flex;
@@ -68,6 +74,7 @@
         height: 225px;
         width: fit-content;
         overflow-y: scroll;
+        color: #050505;
     }
 
     ul.choose-lang li {
@@ -120,8 +127,9 @@
         line-height: inherit;
     }
     .smallcaps {
-        font-variant: small-caps;
-        font-size: 120%;
+        /* font-variant: small-caps; */
+        text-transform: uppercase;
+        font-size: 80%;
         line-height: 84%;
     }
     </style>
@@ -131,7 +139,6 @@
 </head>
 
 <body>
-
 <div class="box-container">
     <div class="box-container-column has-box">
         <div class="text-box">
@@ -195,11 +202,25 @@
         </ul>
         <aside id="output-settings">
             <div data-lang="sa">
+                <div data-lang="pa">
+                    <form name="pa_settings" action="javascript:void(0)">
+                        <input type="radio" name="pa_script" value="gurmukhi" id="gurmukhi" checked>
+                        <label for="gurmukhi">Gurmukhi</label>
+                        <input type="radio" name="pa_script" value="shahmukhi" id="shahmukhi">
+                        <label for="shahmukhi">Shahmukhi</label>
+                    </form>
+                </div>
                 <div data-lang="ur pa">
+                    <form name="ur_pa_settings" action="javascript:void(0)">
+                        <input type="checkbox" name="vowel_marks" id="vowel_marks" checked>
+                        <label for="vowel_marks">Vowel marks <span lang="ur">(زیر، زَبَر، پیش، تَشدِید)</span></label>
+                    </form>
                 </div>
             </div>
         </aside>
     </div>
+</div>
+<div class="main">
 </div>
 
 
@@ -264,6 +285,9 @@ function refreshDisplay() {
 }
 
 inputBox.addEventListener("input", refreshOutput);
+for (const radioButton of document.pa_settings.pa_script)
+    radioButton.addEventListener("change", refreshOutput);
+document.ur_pa_settings.vowel_marks.addEventListener("change", refreshOutput);
 
 const inputButtons = document.querySelectorAll('ul#input-lang li');
 
