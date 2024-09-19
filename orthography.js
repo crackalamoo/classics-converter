@@ -165,13 +165,16 @@ function romanceOrthography(input, latinWord, lang) {
     let output = input.w;
     let stress = input.stress;
 
+    const charAt = (j) => output.substring(j,j+1);
     if (lang === 'fr') {
         output = output.replaceAll('č','ch');
         output = output.replaceAll('an','ann').replaceAll('en','enn').replaceAll('on','onn')
             .replaceAll('am','amm').replaceAll('em','emm').replaceAll('om','omm');
         output = output.replaceAll('ě','e').replaceAll('ë','e').replaceAll('ẽ','e');
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
-        // õnë
+        if (output.substring(output.length-2) === 'qw') {
+            output = output.substring(0, output.length-1);
+        }
     }
     if (lang === 'it') {
         output = output.replaceAll('j','i');
@@ -183,8 +186,10 @@ function romanceOrthography(input, latinWord, lang) {
             stress += 1;
         }
         output = output.replaceAll('y','j');
-        if (output.substring(0,1) === 'j')
+        if (output.startsWith('j'))
             output = 'y'+output.substring(1);
+        if (output.endsWith('j'))
+            output = output.substring(0,output.length-1)+'y';
         output = replaceIntervocal(output, 'j', 'y');
         output = output.replaceAll('j', 'i');
         output = output.replaceAll('w','u');
@@ -195,6 +200,7 @@ function romanceOrthography(input, latinWord, lang) {
         }
         output = output.replaceAll('ž','j');
         output = replaceIntervocal(output, 's', 'ss');
+        output = output.replaceAll('z','s');
         output = replaceIntervocal(output, 'ż', 's').replaceAll('ż','z');
     }
     if (lang === 'it') {
@@ -217,10 +223,14 @@ function romanceOrthography(input, latinWord, lang) {
         if (stress !== getSpanishStress(output) && accent_map[stress_c]) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
         }
-        output = output.replaceAll('č','ch');
+        output = output.replaceAll('č','ch').replaceAll('x','j');
     }
     if (lang === 'fr') {
-        output = output.replaceAll('õnë','õnnë').replaceAll('ãnë','ãnnë').replaceAll('ẽnë','ẽnnë');
+        output = output.replaceAll('õne','õnne').replaceAll('ãne','ãnne').replaceAll('ẽne','ẽnne');
+        if (stress === output.length-3 && charAt(output.length-3) === 'è' && CONSONANTS.has(charAt(output.length-2)) && charAt(output.length-1) === 'e') {
+            output = output.substring(0, output.length-3) + 'È' + output.substring(output.length-2);
+        }
+        output = output.replaceAll('è','e').replaceAll('È','è');
         output = output.replaceAll('ã','a').replaceAll('ẽ','e').replaceAll('õ','o');
     }
 
@@ -410,7 +420,9 @@ function sanskritRomanOrthography(word, lang) {
     let res = sanskritDisplay(word, lang === 'sa');
     if (lang !== 'sa' && lang !== 'pi') {
         const getAt = (j) => res.substring(j, j+1);
+        res = res.replaceAll('aṁ','áṁ');
         res = schwaDeletion(res);
+        res = res.replaceAll('á','a');
         if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
             res = res.substring(0, res.length-1) + 'a';
         res = res.replaceAll('ś','sh');
@@ -477,6 +489,8 @@ function getSpanishStress(word) {
     for (const vow of ['a','e','i','o','u']) {
         word = word.replaceAll('i'+vow,'y'+vow);
         word = word.replaceAll('u'+vow,'w'+vow);
+        word = word.replaceAll(vow+'i',vow+'y');
+        word = word.replaceAll(vow+'u',vow+'w');
     }
     let stress = getPrevVowel(word, word.length);
     if (contains(['a','e','i','o','u','s','n'], word.substring(word.length-1))) {

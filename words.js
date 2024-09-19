@@ -360,14 +360,17 @@ function schwaDeletion(word) {
 
 function noLostIntertonic(word, i) {
     // prevent loss of intertonic vowel due to an invalid cluster
-    const cons = CONSONANTS.union(SEMIVOWELS);
+    const cons = CONSONANTS;
+    const cons2 = CONSONANTS.union(SEMIVOWELS);
     let prev2 = word.sub(i-2,i);
     let prev1 = word.sub(i-1,i);
     let next1 = word.sub(i+1,i+2);
     let next2 = word.sub(i+1,i+3);
     let res = (allContains(cons, prev2) && allContains(cons, next1)
     || (allContains(cons, prev1) && allContains(cons, next2))
-    || (contains(STOPS, prev1) && contains(STOPS, next1))
+    || (allContains(cons2, prev1) && allContains(cons, next2) && contains(SEMIVOWELS, next1) && !allContains(SEMIVOWELS, next2))
+    || (allContains(cons2, prev2) && allContains(cons, next1) && contains(SEMIVOWELS, prev1) && !allContains(SEMIVOWELS, prev2))
+    // || (contains(STOPS, prev1) && contains(STOPS, next1))
     );
     return res;
 }

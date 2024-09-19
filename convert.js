@@ -568,6 +568,7 @@ function western_romance_to_french(word) {
         word.w = word.sub(0,-1);
 
     word.replaceAll(['oub','oup','oum','ouf','ouv'], ['oúb','oúp','oúm','oúf','oúv']);
+    word.replaceAll(['cou','cue','cwo'], ['cœu','cœu','cœu']);
     word.replaceAll(['ou','ue','wo'], ['eu','eu','eu']);
     word.replaceBefore('að','ë',VOWELS);
     word.replaceBefore('aɣ','ë',VOWELS);
@@ -631,14 +632,16 @@ function western_romance_to_spanish(word) {
     word.replaceAll(['wo','è','ò','aw'], ['we','e','o','o']);
     // apocope of final /e/
     word.replaceAll(['ll','js'], ['L','X']);
+    if (word.stress !== word.length-1)
+        word.replaceAt('i','e',word.length-1);
     if (word.numVowels() > 1 && word.at(-1) === 'e') {
-        if (VOWELS.has(word.at(-3)) && contains(['r','n','d','t','l','s','z','ç','ż','x','L','X'], word.at(-2))) {
+        if (VOWELS.has(word.at(-3)) && contains(['r','n','d','l','s','z','ç','ż','x','L','X'], word.at(-2))) {
             word.cutAt(word.length-1);
         }
     }
     word.replaceAll(['L','X','x'], ['ll','js','js']);
     word.replaceAt('ll','l',word.length-2);
-    if (VOWELS.union(new Set(['y','w'])).has(word.at(1))) {
+    if (VOWELS.union(new Set(['y'])).has(word.at(1))) {
         word.replaceAt('f','h',0);
     } else if (VOWELS.has(word.at(2))) {
         word.replaceAt('fl','ll',0);
@@ -711,11 +714,9 @@ function western_romance_to_spanish(word) {
     word.replaceAll(['qwi','qwe'], ['qi','qe']);
     word.replaceAll(['mn','qw','tç','sç','dż','ct','dg','pd','mr','nçg','nsg'],
                     ['nn','cw','ç','ç','ż','cJ','çg','t','mbr','ng','ng']); // simplifying clusters
-    word.replaceAll(['iva','eya','aye'], ['ia','ea','ae']); // vowel-related clusters
+    word.replaceAll(['iva','eya','aye','eye','iy','eyo'], ['ia','ea','ae','ey','i','eo']); // vowel-related clusters
     if (word.stress !== 0)
         word.replaceAt('u','o',0);
-    if (word.stress !== word.length-1)
-        word.replaceAt('i','e',word.length-1);
 
     word.replaceAll(['qi','qe','qy'], ['Qwi','Qwe','Qwy']);
     word.replace('q','c');
@@ -1013,27 +1014,36 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // add final -ā stem
     word.joinAspirate();
-    if (word.endsWith('a')) {
-        let hasCluster = false;
-        let hasTripleCluster = false;
-        for (let i = 1; i < word.length; i++) {
-            if (cons.has(word.at(i-1)) && cons.has(word.at(i))
-            && !(nasals.has(word.at(i-1)) && word.at(i) === 'h')) {
-                hasCluster = true;
+    let noTripleGeminates = ['p','P','B','Ð'];
+    if (lang !== 'pa') {
+        noTripleGeminates = noTripleGeminates.concat(['j','J','k','K','m','g','G']);
+    }
+    
+    let hasCluster = false;
+    let tripleCluster = null;
+    for (let i = 1; i < word.length; i++) {
+        if (cons.has(word.at(i-1)) && cons.has(word.at(i))
+        && !(nasals.has(word.at(i-1)) && word.at(i) === 'h')) {
+            hasCluster = true;
+            break;
+        }
+    }
+    for (let i = 2; i < word.length; i++) {
+        if (cons.has(word.at(i-2)) && cons.has(word.at(i-1)) && cons.has(word.at(i))
+            && word.at(i-2) === word.at(i-1) && word.at(i-1) === word.at(i)) {
+                tripleCluster = word.at(i-1);
                 break;
-            }
         }
-        for (let i = 2; i < word.length; i++) {
-            if (cons.has(word.at(i-2)) && cons.has(word.at(i-1)) && cons.has(word.at(i))
-                && word.at(i-2) === word.at(i-1) && word.at(i-1) === word.at(i)) {
-                    hasTripleCluster = true;
-                    break;
-            }
-        }
+    }
+    if (word.endsWith('a')) {
         if (
-        (hasTripleCluster && lang !== 'mr') ||
+        (tripleCluster !== null && lang !== 'mr' && !contains(noTripleGeminates, tripleCluster)) ||
         (nasals.has(word.at(-3)) && word.at(-2) === 'h')) {
             word.w = word.sub(0, -1) + 'Á';
+        }
+    } else {
+        if (tripleCluster !== null) {
+            word.replace(tripleCluster+tripleCluster+tripleCluster, tripleCluster+tripleCluster);
         }
     }
 
@@ -1043,7 +1053,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     // compensatory lengthening before losing geminates
-    const no_lengthen_geminates = ['d','Ð','s'];
+    const noLengthenGeminates = ['Ð'];
     const lengthen = {'a':'ā', 'i':'ī','u':'ū'};
     if (lang !== 'pa') {
         for (let i = word.length-1; i >= 0; i--) {
@@ -1055,7 +1065,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
             }
             if (cons.has(word.at(i+1)) && cons.has(word.at(i+2))
                 && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || lang === 'mr')
-                && lengthen[word.at(i)] && !contains(no_lengthen_geminates, word.at(i+1))) {
+                && lengthen[word.at(i)] && !contains(noLengthenGeminates, word.at(i+1))) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
                 if (lang === 'mr') {
                     if (nasals.has(word.at(i+1)) && word.at(i+2) !== 'h')
@@ -1142,6 +1152,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceAll(['āe', 'āè'], ['āye', 'āyè']);
     }
+    word.replaceAll(['āā', 'īī', 'ūū', 'ee', 'oo'], ['ā', 'ī', 'ūū', 'e', 'o']);
     for (const stop of ['p','b','k','g'])
         word.replaceAt(stop+'iyā', stop+'yā', 0);
 
