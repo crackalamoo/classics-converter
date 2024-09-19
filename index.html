@@ -9,11 +9,14 @@
     body {
         min-width: 800px;
     }
+    .before-main {
+        margin: 8px;
+    }
     .box-container {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        margin: 8px;
+        font-family: "Times New Roman", serif;
     }
     .box-container-column.has-box {
         display: flex;
@@ -139,6 +142,8 @@
 </head>
 
 <body>
+<div class="before-main">
+<h1>Classics Converter</h1>
 <div class="box-container">
     <div class="box-container-column has-box">
         <div class="text-box">
@@ -216,10 +221,22 @@
                         <label for="vowel_marks">Vowel marks <span lang="ur">(زیر، زَبَر، پیش، تَشدِید)</span></label>
                     </form>
                 </div>
+                <div data-lang="pi">
+                    <form name="pi_settings" action="javascript:void(0)">
+                        <input type="radio" name="pi_script" value="sa" id="devanagari" checked>
+                        <label for="devanagari">Devanagari</label>
+                        <input type="radio"name="pi_script" value="th" id="thai">
+                        <label for="thai">Thai</label>
+                        <input type="radio"name="pi_script" value="km" id="khmer">
+                        <label for="khmer">Khmer</label>
+                    </form>
+                </div>
             </div>
         </aside>
     </div>
 </div>
+</div>
+
 <div class="main">
 </div>
 
@@ -285,7 +302,7 @@ function refreshDisplay() {
 }
 
 inputBox.addEventListener("input", refreshOutput);
-for (const radioButton of document.pa_settings.pa_script)
+for (const radioButton of document.querySelectorAll('input[type=radio]'))
     radioButton.addEventListener("change", refreshOutput);
 document.ur_pa_settings.vowel_marks.addEventListener("change", refreshOutput);
 

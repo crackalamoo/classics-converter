@@ -112,6 +112,64 @@ const GURMUKHI_VOW_MAP_2 = {
     'e':'ਏ','è':'ਐ','o':'ਓ','ò':'ਔ',
     'M':'ੰ'
 };
+const THAI_DOUBLE_MAP = {
+    'kh':'ข', 'gh':'ฆ',
+    'ch':'ฉ', 'jh':'ฌ',
+    'Th':'ฐ', 'Dh':'ฒ',
+    'th':'ถ', 'dh':'ธ',
+    'ph':'ผ', 'bh':'ภ'
+};
+const THAI_CONS_MAP = {
+    'k':'ก','g':'ค','ń':'ง',
+    'c':'จ','j':'ช','ñ':'ญ',
+    'T':'ฏ','D':'ฑ','N':'ณ',
+    't':'ต','d':'ท','n':'น',
+    'p':'ป','b':'พ','m':'ม',
+    'y':'ย','r':'ร','l':'ล','v':'ว','L':'ฬ',
+    'z':'ศ','S':'ษ','s':'ส','h':'ห'
+};
+const THAI_VOW_MAP_1 = {
+    'ā':'า','i':'ิ','ī':'ี','u':'ุ','ū':'ู',
+    'e':'เ','è':'ไ','o':'โ','ò':'เา',
+    'R':'ฺฤ',
+    'H':'ะ','M':'ํ'
+};
+const THAI_VOW_MAP_2 = {
+    'a':'อ','ā':'อา','i':'อิ','ī':'อี','u':'อุ','ū':'อู',
+    'e':'เอ','è':'ไอ','o':'โอ','ò':'เอา',
+    'R':'ฤ','H':'ะ','M':'ํ'
+};
+const KHMER_DOUBLE_MAP = {
+    'kh':'ខ', 'gh':'ឃ',
+    'ch':'ឆ', 'jh':'ឈ',
+    'Th':'ឋ', 'Dh':'ឍ',
+    'th':'ថ', 'dh':'ធ',
+    'ph':'ផ', 'bh':'ភ'
+};
+const KHMER_CONS_MAP = {
+    'k':'ក','g':'គ','ń':'ង',
+    'c':'ច','j':'ជ','ñ':'ញ',
+    'T':'ដ','D':'ឌ','N':'ណ',
+    't':'ត','d':'ទ','n':'ន',
+    'p':'ប','b':'ព','m':'ម',
+    'y':'យ','r':'រ','l':'ល','v':'វ','L':'ឡ',
+    'z':'ឝ','S':'ឞ','s':'ស','h':'ហ'
+};
+const KHMER_VOW_MAP_1 = {
+    'ā':'ា','i':'ិ','ī':'ី','u':'ុ','ū':'ូ',
+    'e':'េ','è':'ៃ','o':'ោ','ò':'ៅ',
+    'R':'ឫ',
+    'H':'ះ','M':'ំ'
+};
+const KHMER_VOW_MAP_2 = {
+    'a':'អ','ā':'អា','i':'ឥ','ī':'ឦ','u':'ឧ','ū':'ឩ',
+    'e':'ឯ','è':'ឰ','o':'ឱ','ò':'ឳ',
+    'R':'ឫ','H':'ះ','M':'ំ'
+};
+const NON_DEVANAGARI_CONS_MAP = {'pa':GURMUKHI_CONS_MAP, 'th':THAI_CONS_MAP, 'km':KHMER_CONS_MAP};
+const NON_DEVANAGARI_DOUBLE_MAP = {'pa':GURMUKHI_DOUBLE_MAP, 'th':THAI_DOUBLE_MAP, 'km':KHMER_DOUBLE_MAP};
+const NON_DEVANAGARI_VOW_MAP_1 = {'pa':GURMUKHI_VOW_MAP_1, 'th':THAI_VOW_MAP_1, 'km':KHMER_VOW_MAP_1};
+const NON_DEVANAGARI_VOW_MAP_2 = {'pa':GURMUKHI_VOW_MAP_2, 'th':THAI_VOW_MAP_2, 'km':KHMER_VOW_MAP_2};
 
 const URDU_CONS_MAP = {
     'k': 'ک', 'g': 'گ',
@@ -167,10 +225,14 @@ function romanceOrthography(input, latinWord, lang) {
 
     const charAt = (j) => output.substring(j,j+1);
     if (lang === 'fr') {
+        if (stress === output.length-3 && charAt(output.length-3) === 'è' && CONSONANTS.has(charAt(output.length-2)) && charAt(output.length-1) === 'ë') {
+            output = output.substring(0, output.length-3) + 'È' + output.substring(output.length-2);
+        }
+        output = output.replaceAll('è','e').replaceAll('È','è');
         output = output.replaceAll('č','ch');
         output = output.replaceAll('an','ann').replaceAll('en','enn').replaceAll('on','onn')
             .replaceAll('am','amm').replaceAll('em','emm').replaceAll('om','omm');
-        output = output.replaceAll('ě','e').replaceAll('ë','e').replaceAll('ẽ','e');
+        output = output.replaceAll('ě','e').replaceAll('ë','e');
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
         if (output.substring(output.length-2) === 'qw') {
             output = output.substring(0, output.length-1);
@@ -240,10 +302,6 @@ function romanceOrthography(input, latinWord, lang) {
     }
     if (lang === 'fr') {
         output = output.replaceAll('õne','õnne').replaceAll('ãne','ãnne').replaceAll('ẽne','ẽnne');
-        if (stress === output.length-3 && charAt(output.length-3) === 'è' && CONSONANTS.has(charAt(output.length-2)) && charAt(output.length-1) === 'e') {
-            output = output.substring(0, output.length-3) + 'È' + output.substring(output.length-2);
-        }
-        output = output.replaceAll('è','e').replaceAll('È','è');
         output = output.replaceAll('ã','a').replaceAll('ẽ','e').replaceAll('õ','o');
     }
 
@@ -317,10 +375,13 @@ function nativeOrthography(word, lang) {
 
     if (isBrahmic) {
         // Brahmic script
-        const doubleMap = isGurmukhi ? GURMUKHI_DOUBLE_MAP : SANSKRIT_DOUBLE_MAP;
-        const consMap = isGurmukhi ? GURMUKHI_CONS_MAP : SANSKRIT_CONS_MAP;
-        const vowMap1 = isGurmukhi ? GURMUKHI_VOW_MAP_1 : SANSKRIT_VOW_MAP_1;
-        const vowMap2 = isGurmukhi ? GURMUKHI_VOW_MAP_2 : SANSKRIT_VOW_MAP_2;
+        let scriptLang = lang;
+        if (lang === 'pi')
+            scriptLang = document.pi_settings.pi_script.value;
+        const consMap = NON_DEVANAGARI_CONS_MAP[scriptLang] || SANSKRIT_CONS_MAP;
+        const doubleMap = NON_DEVANAGARI_DOUBLE_MAP[scriptLang] || SANSKRIT_DOUBLE_MAP;
+        const vowMap1 = NON_DEVANAGARI_VOW_MAP_1[scriptLang] || SANSKRIT_VOW_MAP_1;
+        const vowMap2 = NON_DEVANAGARI_VOW_MAP_2[scriptLang] || SANSKRIT_VOW_MAP_2;
         const getAt = (j) => word.substring(j, j+1);
         const isCons = (a) => (Boolean(doubleMap[a]) || Boolean(consMap[a])
             || Object.values(consMap).indexOf(a) !== -1
@@ -368,6 +429,17 @@ function nativeOrthography(word, lang) {
             word = word.replaceAll('्'+consMap['y'], vowMap1['i']);
             word = word.replaceAll('्'+consMap['h'], '੍'+consMap['h']);
             word = word.replaceAll('्','');
+        } else if (scriptLang === 'th') {
+            for (let i = word.length-1; i > 0; i--) {
+                let here = word.substring(i, i+1);
+                let prev = word.substring(i-1, i);
+                if (contains(['เ','ไ','โ'], here)) {
+                    word = word.substring(0, i-1) + here + prev + word.substring(i+1);
+                }
+            }
+            word = word.replaceAll('्', 'ฺ');
+        } else if (scriptLang === 'km') {
+            word = word.replaceAll('्', '្');
         } else {
             word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
         }
