@@ -179,7 +179,7 @@ const URDU_CONS_MAP = {
     'p': 'پ', 'b': 'ب', 'm': 'م',
     'y': 'ی', 'r': 'ر', 'l': 'ل', 'v': 'و',
     's': 'س', 'h': 'ہ',
-    'ř': 'ڑ', 'M': 'ن'
+    'ř': 'ڑ', 'M': 'ن', 'N': 'ن'
 };
 const URDU_VOW_MAP = {
     'a': 'َ', 'ā': 'َا', 'i': 'ِ', 'ī': 'ِی', 'u': 'ُ', 'ū': 'ُو',
@@ -516,7 +516,7 @@ function sanskritRomanOrthography(word, lang) {
         } else {
             if (res.endsWith('āṁv'))
                 res = res.substring(0, res.length-3) + 'āõṁ';
-            res = res.replaceAll('cch','CCH').replaceAll('c','ch').replaceAll('CCH','cch');
+            res = res.replaceAll('cch','CCH').replaceAll('cc','CCH').replaceAll('c','ch').replaceAll('CCH','cch');
             res = res.replaceAll('āṁ','ãṁ').replaceAll('īṁ','ĩṁ').replaceAll('ūṁ','ũṁ')
             .replaceAll('eṁ','ẽṁ').replaceAll('oṁ','õṁ');
         }

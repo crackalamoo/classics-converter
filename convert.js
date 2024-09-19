@@ -774,7 +774,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     if (lang === 'pi') {
         word.replaceAt('aya','aYa',word.length-3);
         word.replaceAt('ava','aVa',word.length-3);
-        word.replaceAll(['aya','ava'], ['è','ò']);
+        word.replaceAll(['aya','ava','āya','ayā','avā','avi','ayū'], ['e','o','ā','ā','ā','e','o']);
         word.replaceAll(['Y','V'], ['y','v']);
         word.replaceAll(['è','ò'], ['e','o']);
     } else {
@@ -805,6 +805,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replace('jñ','ññ');
         word.replaceIntervocal('ny','ññ');
         word.replaceIntervocal('Ny','ññ');
+        word.replaceIntervocal('zn','sñ');
         word.replaceAt('m','',word.length-1);
         word.replaceAt('n','',word.length-1);
     } else {
@@ -902,6 +903,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replace('y','j');
     } else {
         word.replaceAll(['hv', 'hy'], ['vh', 'yh']);
+        word.replaceBefore('ey','eyy',VOWELS);
     }
 
     word.unjoinAspirate();
@@ -946,8 +948,12 @@ function sanskrit_to_lang(sanskritWord, lang) {
     // shorten long vowels before two consonants
     const shorten = {'ā':'a', 'ī':'i', 'ū':'u'};
     for (let i = word.length-1; i >= 0; i--) {
-        if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && shorten[word.at(i)]) {
-            word.replaceAt(word.at(i), shorten[word.at(i)], i);
+        if (cons.has(word.at(i+1)) && cons.has(word.at(i+2))) {
+            if (shorten[word.at(i)]) {
+                word.replaceAt(word.at(i), shorten[word.at(i)], i);
+            } else if (lang === 'pi' && word.at(i+1) === word.at(i+2)) {
+                word.replaceAt('a', 'e', i);
+            }
         }
     }
 
@@ -1209,10 +1215,12 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceBefore('cch','s',VOWELS);
         word.replaceBefore('ch','s', VOWELS);
         // word.replaceBefore('c','s', VOWELS);
-        word.replaceAfter('n','?',new Set(['ā','o']));
+        word.replaceAt('on','oN',word.length-2);
+    }
+    if (lang === 'mr' || lang === 'pa') {
+        word.replaceAfter('n','?',new Set(['ā','o','a']));
         word.replaceBefore('?', 'N', VOWELS);
         word.replace('?', 'n');
-        word.replaceAt('on','oN',word.length-2);
     }
 
     if (lengthen[word.at(-1)])
