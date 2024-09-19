@@ -1,9 +1,9 @@
 const outputLangs = {
-    'la': ['es','fr','it'],
+    'la': ['es','fr','pt','it'],
     'sa': ['hi','ur','pa','mr','pi']
 };
 const langNames = {
-    'es':'Spanish', 'fr':'French', 'it':'Italian',
+    'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
     'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
     'pi':'Pali'
 };
@@ -25,7 +25,7 @@ const STOPS = new Set(['p','b','t','d','c','g']);
 
 let inputLang = 'la';
 let outputLang = 'es';
-const WESTERN_ROMANCE = new Set(['es','fr']);
+const WESTERN_ROMANCE = new Set(['es','fr','pt']);
 
 const SANSKRIT_CONS = new Set([
     'k','g','ń',
@@ -252,18 +252,32 @@ function romanceOrthography(input, latinWord, lang) {
         }
         output = output.replaceAll('è','e').replaceAll('ò','o');
         output = output.toLowerCase();
+        output = output.replaceAll('jy','j').replaceAll('y','j');
         output = output.replaceAll('j','i');
         output = output.replaceAll('w','u');
     }
-    if (lang === 'es' || lang === 'fr') {
-        if (output.startsWith('w') || output.startsWith('y')) {
+    if (lang === 'pt') {
+        // add accent marks
+        const accent_map = {'a':'á','e':'ê','è':'é','i':'í','o':'ô','ò':'ó','u':'ú'};
+        let stress_c = output.substring(stress, stress+1);
+        let last = output.substring(output.length-1);
+        let last2 = output.substring(output.length-2);
+        let useAccent = (stress !== getSpanishStress(output)
+            || (numVowels(output) === 1 && (contains(['a'], last) || contains(['as','es','ès','os','òs'], last2))));
+        if (useAccent && accent_map[stress_c]) {
+            output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
+        }
+        output = output.replaceAll('è','e').replaceAll('ò','o');
+    }
+    if (lang === 'es' || lang === 'fr' || lang === 'pt') {
+        if (output.startsWith('w') || (lang === 'fr' && output.startsWith('y'))) {
             output = 'h'+output;
             stress += 1;
         }
         output = output.replaceAll('y','j');
         if (output.startsWith('j'))
             output = 'y'+output.substring(1);
-        if (output.endsWith('j'))
+        if (output.endsWith('j') && lang === 'es')
             output = output.substring(0,output.length-1)+'y';
         output = replaceIntervocal(output, 'j', 'y');
         output = output.replaceAll('j', 'i');
@@ -278,6 +292,11 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('z','s');
         output = replaceIntervocal(output, 'ż', 's').replaceAll('ż','z');
     }
+    if (lang === 'pt') {
+        output = replaceIntervocal(output, 's', 'ss');
+        output = output.replaceAll('z','s');
+        output = output.replaceAll('ż','z');
+    }
     if (lang === 'it') {
         output = output.replaceAll('lJ','gl');
         output = output.replaceAll('cJi','ci').replaceAll('cJe','ce').replaceAll('cJè','cè').replaceAll('cJ','ci');
@@ -285,10 +304,15 @@ function romanceOrthography(input, latinWord, lang) {
     if (lang === 'es') {
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('ç','z');
     }
+    if (lang === 'pt') {
+        output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
+        if (output.startsWith('ç'))
+            output = 's' + output.substring(1);
+    }
     if (lang === 'fr') {
         output = output.replaceAll('çi','ci');
     }
-    if (lang === 'es' && latinWord.startsWith('h') && !output.startsWith('h')) {
+    if ((lang === 'es' || lang === 'pt') && latinWord.startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
     }
     if (lang === 'es') {
@@ -299,6 +323,9 @@ function romanceOrthography(input, latinWord, lang) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
         }
         output = output.replaceAll('č','ch').replaceAll('x','j');
+    }
+    if (lang === 'pt') {
+        output = output.replaceAll('č','ch').replaceAll('ʒ','j');
     }
     if (lang === 'fr') {
         output = output.replaceAll('õne','õnne').replaceAll('ãne','ãnne').replaceAll('ẽne','ẽnne');
