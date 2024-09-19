@@ -177,6 +177,19 @@ function romanceOrthography(input, latinWord, lang) {
         }
     }
     if (lang === 'it') {
+        if (stress === output.length-1 && numVowels(output) > 1) {
+            if (output.endsWith('è') || output.endsWith('ò')) {
+                output = output.substring(0,output.length-1)+output.substring(output.length-1).toUpperCase();
+            }
+            if (output.endsWith('e')) {
+                output = output.substring(0,output.length-1)+'é';
+            }
+            if (output.endsWith('a')) {
+                output = output.substring(0,output.length-1)+'à';
+            }
+        }
+        output = output.replaceAll('è','e').replaceAll('ò','o');
+        output = output.toLowerCase();
         output = output.replaceAll('j','i');
         output = output.replaceAll('w','u');
     }
@@ -213,7 +226,7 @@ function romanceOrthography(input, latinWord, lang) {
     if (lang === 'fr') {
         output = output.replaceAll('çi','ci');
     }
-    if ((lang === 'fr' || lang === 'es') && latinWord.startsWith('h') && !output.startsWith('h')) {
+    if (lang === 'es' && latinWord.startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
     }
     if (lang === 'es') {

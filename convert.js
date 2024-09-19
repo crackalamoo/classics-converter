@@ -222,7 +222,7 @@ function romance_to_italian(word) {
     word.replaceAll(['ct','x'], ['tt','ss']);
     word.replaceAll(['qwi','qwe','qwu'], ['chi','che','cu']);
 
-    word.replaceAll(['tJ','sJ','vJ'], ['zJ','cJ','ggJ']);
+    word.replaceAll(['tJ','sJ','vJ','nJ'], ['zJ','cJ','ggJ','gn']);
     word.replaceBefore('cl','chj',VOWELS);
     word.replaceBefore('gl','ghj',VOWELS);
     for (var i = word.length-2; i > 0; i--) {
@@ -233,6 +233,15 @@ function romance_to_italian(word) {
     }
     word.replace('J','j');
     word.replace('jw','j');
+
+    // prevent words ending in a consonant
+    if (STOPS.has(word.at(-1))) {
+        if (VOWELS.has(word.at(-2))) {
+            word.cutAt(word.length-1);
+        } else {
+            word.w += 'e';
+        }
+    }
 
     return word;
 }
@@ -568,7 +577,13 @@ function western_romance_to_french(word) {
         word.w = word.sub(0,-1);
 
     word.replaceAll(['oub','oup','oum','ouf','ouv'], ['oúb','oúp','oúm','oúf','oúv']);
-    word.replaceAll(['cou','cue','cwo'], ['cœu','cœu','cœu']);
+    for (const combo of ['ou','ue','wo']) {
+        if (contains(CONSONANTS, word.at(-1)) && word.numVowels() === 1) {
+            word.replaceAt('c'+combo, 'cœu', word.length-combo.length-2);
+            word.replaceAt(combo, 'œu', 0);
+        }
+    }
+    word.replaceAll(['cou','cue','cwo'], ['qweu','qweu','qweu']);
     word.replaceAll(['ou','ue','wo'], ['eu','eu','eu']);
     word.replaceBefore('að','ë',VOWELS);
     word.replaceBefore('aɣ','ë',VOWELS);
