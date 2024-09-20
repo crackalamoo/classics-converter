@@ -124,7 +124,7 @@
         font-family: "Noto Nastaliq Urdu", serif;
         line-height: 1.5;
     }
-    :lang(ur-Latn),:lang(pa-Latn),:lang(hi-Latn),:lang(mr-Latn),:lang(sa-Latn) {
+    :lang(ur-Latn),:lang(pa-Latn),:lang(hi-Latn),:lang(mr-Latn),:lang(sa-Latn),:lang(pa-Guru) {
         direction: ltr;
         font-family: inherit;
         line-height: inherit;
@@ -171,12 +171,12 @@
             </div>
             <div data-lang="sa">
                 <p>
-                    Input:
+                    Input may be in Devanagari, IAST romanization, or ASCII. For ASCII:
                     <ul>
                         <li>Double to lengthen vowels: aa, ii, uu -> ā, ī, ū (आ, ई, ऊ)</li>
                         <li>ai, au -> ऐ, औ</li>
                         <li>Use capitals for retroflex: T, Th, D, Dh, N, S -> ट, ठ, ड, ढ, ण, ष</li>
-                        <li>sh, ny, ng, aM, aH -> श, ञ, ङ, अं, अः</li>
+                        <li>sh, ny, ng, jn, aM, aH -> श, ञ, ङ, ज्ञ, अं, अः</li>
                         <li>Nasals changed before stops: n(k), n(c/g) -> ङ, ञ</li>
                         <li>Use an apostrophe to override a substitution. (an'ya -> अन्य)</li>
                     </ul>
@@ -185,6 +185,7 @@
             <p data-lang="la">Generally use the accusative case for nouns and adjectives.</p>
             <p data-lang="la">Use the infinitive for verbs.
                 <span data-lang="es">(<span class="smallcaps">clamāre</span> -> llamar)</span>
+                <span data-lang="pt">(<span class="smallcaps">clamāre</span> -> chamar)</span>
                 <span data-lang="it">(<span class="smallcaps">clamāre</span> -> chiamare)</span>
             </p>
             <p data-lang="sa">Generally use the stem for nouns, verbs, and adjectives.
@@ -272,12 +273,17 @@ function refreshOutput() {
     outputBox.innerHTML = output.replaceAll('\n',' <br>');
     orthography2.innerHTML = output2.replaceAll('\n',' <br>');
     if (inputLang === 'sa') {
+        const isGurmukhi = (outputLang === 'pa' && document.pa_settings.pa_script.value === 'gurmukhi');
         if (isRoman(text)) {
             orthography2.lang = outputLang;
+            if (isGurmukhi)
+                orthography2.lang += '-Guru';
             outputBox.lang = outputLang+'-Latn';
         } else {
             orthography2.lang = outputLang+'-Latn';
             outputBox.lang = outputLang;
+            if (isGurmukhi)
+                outputBox.lang += '-Guru';
         }
     }
 }

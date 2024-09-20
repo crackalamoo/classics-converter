@@ -78,12 +78,12 @@ const SANSKRIT_VOW_MAP_1 = {
     'ā':'ा','i':'ि','ī':'ी','u':'ु','ū':'ू',
     'e':'े','è':'ै','o':'ो','ò':'ौ',
     'R':'ृ',
-    'H':'ः','M':'ं'
+    'H':'ः','M':'ं','~':'ँ'
 };
 const SANSKRIT_VOW_MAP_2 = {
     'a':'अ','ā':'आ','i':'इ','ī':'ई','u':'उ','ū':'ऊ',
     'e':'ए','è':'ऐ','o':'ओ','ò':'औ',
-    'R':'ऋ','H':'ः','M':'ं'
+    'R':'ऋ','H':'ः','M':'ं','~':'ँ'
 };
 const GURMUKHI_DOUBLE_MAP = {
     'kh':'ਖ', 'gh':'ਘ',
@@ -105,12 +105,12 @@ const GURMUKHI_CONS_MAP = {
 const GURMUKHI_VOW_MAP_1 = {
     'ā':'ਾ','i':'ਿ','ī':'ੀ','u':'ੁ','ū':'ੂ',
     'e':'ੇ','è':'ੈ','o':'ੋ','ò':'ੌ',
-    'M':'ੰ'
+    'M':'ੰ','~':'ੰ'
 };
 const GURMUKHI_VOW_MAP_2 = {
     'a':'ਅ','ā':'ਆ','i':'ਇ','ī':'ਈ','u':'ਉ','ū':'ਊ',
     'e':'ਏ','è':'ਐ','o':'ਓ','ò':'ਔ',
-    'M':'ੰ'
+    'M':'ੰ','~':'ੰ'
 };
 const THAI_DOUBLE_MAP = {
     'kh':'ข', 'gh':'ฆ',
@@ -190,7 +190,7 @@ const URDU_VOW_MAP_2 = {
     'e': 'ئی', 'è': 'ئَی', 'o': 'ؤ', 'ò': 'ؤَ'
 };
 const URDU_MAP_F = {
-    'e': 'ے', 'è': 'ے', 'M': 'ں'
+    'e': 'ے', 'è': 'ے', 'M': 'ں', '~': 'ں'
 }
 
 function matchCase(word, caseModel) {
@@ -262,7 +262,7 @@ function romanceOrthography(input, latinWord, lang) {
         let stress_c = output.substring(stress, stress+1);
         let last = output.substring(output.length-1);
         let last2 = output.substring(output.length-2);
-        let useAccent = (stress !== getSpanishStress(output)
+        let useAccent = (stress !== getPortugueseStress(output)
             || (numVowels(output) === 1 && (contains(['a'], last) || contains(['as','es','ès','os','òs'], last2))));
         if (useAccent && accent_map[stress_c]) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
@@ -305,7 +305,7 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('ç','z');
     }
     if (lang === 'pt') {
-        output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çè','cè');
+        output = output.replaceAll('çe','ce').replaceAll('çi','ci').replaceAll('çé','cé').replaceAll('çê','cê').replaceAll('çí','cí');
         if (output.startsWith('ç'))
             output = 's' + output.substring(1);
     }
@@ -345,7 +345,7 @@ function sanskritOrthography(input, doubles=true) {
     if (doubles) {
         output = output.replaceAll('ny','ñ')
         .replaceAll('nk','ńk').replaceAll('nj','ñj').replaceAll('nc','ñc')
-        .replaceAll('ng','ń');
+        .replaceAll('ng','ń').replaceAll('jn','jñ');
     }
     output = output.replaceAll("'", "");
     // output = output.replaceAll('ai','è').replaceAll('au','ò').replaceAll("'","")
@@ -387,7 +387,10 @@ function nativeOrthography(word, lang) {
     if (lang !== 'sa' && lang !== 'pi' && isBrahmic && SANSKRIT_CONS.has(last) && last != 'M' && last != 'H') {
         word += 'a'; // no schwa deletion in writing
     }
-    if (lang !== 'sa') {
+    if (lang !== 'sa' && lang !== 'pi') {
+        if (lang !== 'mr' && isBrahmic) {
+            word = word.replaceAll('āM','ā~').replaceAll('aM','a~').replaceAll('uM','u~').replaceAll('ūM','ū~');
+        }
         for (const stop of ['k', 'g', 'c', 'j', 'T', 'D', 't', 'd', 'p', 'b'])
             word = word.replaceAll('n'+stop, 'M'+stop);
         for (const stop of ['p', 'b'])
@@ -548,6 +551,9 @@ function sanskritRomanOrthography(word, lang) {
             .replaceAll('eṁ','ẽṁ').replaceAll('oṁ','õṁ');
         }
         res = res.replaceAll('è','ai').replaceAll('ò','au');
+        if (res.endsWith('ṁ') && contains(['ã','ẽ','ĩ','õ','ũ'], res.substring(res.length-2,res.length-1))) {
+            res = res.substring(0, res.length-1);
+        }
         res = res.replaceAll('ṁ','n');
     }
     return res;
@@ -606,6 +612,24 @@ function getSpanishStress(word) {
     }
     let stress = getPrevVowel(word, word.length);
     if (contains(['a','e','i','o','u','s','n'], word.substring(word.length-1))) {
+        let newStress = getPrevVowel(word, stress);
+        if (newStress !== -1)
+            stress = newStress;
+    }
+    return stress;
+}
+function getPortugueseStress(word) {
+    word = word.replaceAll('qu','kk').replaceAll('gue','gge').replaceAll('gui','ggi');
+    for (const vow of ['a','e','i','o','u']) {
+        word = word.replaceAll('i'+vow,'y'+vow);
+        word = word.replaceAll('u'+vow,'w'+vow);
+        word = word.replaceAll(vow+'i',vow+'y');
+        word = word.replaceAll(vow+'u',vow+'w');
+    }
+    let stress = getPrevVowel(word, word.length);
+    if (contains(['a','e','o'], word.substring(word.length-1))
+        || contains(['as','es','os','am','em'], word.substring(word.length-2))
+        || word.endsWith('ens')) {
         let newStress = getPrevVowel(word, stress);
         if (newStress !== -1)
             stress = newStress;
