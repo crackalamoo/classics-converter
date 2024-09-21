@@ -256,19 +256,6 @@ function romanceOrthography(input, latinWord, lang) {
         output = output.replaceAll('j','i');
         output = output.replaceAll('w','u');
     }
-    if (lang === 'pt') {
-        // add accent marks
-        const accent_map = {'a':'á','e':'ê','è':'é','i':'í','o':'ô','ò':'ó','u':'ú'};
-        let stress_c = output.substring(stress, stress+1);
-        let last = output.substring(output.length-1);
-        let last2 = output.substring(output.length-2);
-        let useAccent = (stress !== getPortugueseStress(output)
-            || (numVowels(output) === 1 && (contains(['a'], last) || contains(['as','es','ès','os','òs'], last2))));
-        if (useAccent && accent_map[stress_c]) {
-            output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
-        }
-        output = output.replaceAll('è','e').replaceAll('ò','o');
-    }
     if (lang === 'es' || lang === 'fr' || lang === 'pt') {
         if (output.startsWith('w') || (lang === 'fr' && output.startsWith('y'))) {
             output = 'h'+output;
@@ -282,6 +269,19 @@ function romanceOrthography(input, latinWord, lang) {
         output = replaceIntervocal(output, 'j', 'y');
         output = output.replaceAll('j', 'i');
         output = output.replaceAll('w','u');
+    }
+    if (lang === 'pt') {
+        // add accent marks
+        const accent_map = {'a':'á','e':'ê','è':'é','i':'í','o':'ô','ò':'ó','u':'ú'};
+        let stress_c = output.substring(stress, stress+1);
+        let last = output.substring(output.length-1);
+        let last2 = output.substring(output.length-2);
+        let useAccent = (stress !== getPortugueseStress(output)
+            || (numVowels(output) === 1 && (contains(['a','e','è','o','ò'], last) || contains(['as','es','ès','os','òs'], last2))));
+        if (useAccent && accent_map[stress_c]) {
+            output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
+        }
+        output = output.replaceAll('è','e').replaceAll('ò','o');
     }
     if (lang === 'fr') {
         for (const vow of ['e','i','ê','î','è']) {
@@ -312,9 +312,6 @@ function romanceOrthography(input, latinWord, lang) {
     if (lang === 'fr') {
         output = output.replaceAll('çi','ci');
     }
-    if ((lang === 'es' || lang === 'pt') && latinWord.startsWith('h') && !output.startsWith('h')) {
-        output = 'h'+output;
-    }
     if (lang === 'es') {
         // add accent marks
         const accent_map = {'a':'á','e':'é','i':'í','o':'ó','u':'ú'};
@@ -323,6 +320,9 @@ function romanceOrthography(input, latinWord, lang) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
         }
         output = output.replaceAll('č','ch').replaceAll('x','j');
+    }
+    if ((lang === 'es' || lang === 'pt') && latinWord.startsWith('h') && !output.startsWith('h')) {
+        output = 'h'+output;
     }
     if (lang === 'pt') {
         output = output.replaceAll('č','ch').replaceAll('ʒ','j');
@@ -375,7 +375,7 @@ function displayOrthography(input, lang) {
     return input;
 }
 
-const isRoman = (w) => (SANSKRIT_CONS.union(VOWELS)).intersection(new Set(w.split(''))).size > 0;
+const isRoman = (w) => (SANSKRIT_CONS.union(VOWELS).union(new Set(['R']))).intersection(new Set(w.split(''))).size > 0;
 
 function nativeOrthography(word, lang) {
     word = sanskritOrthography(word, lang === 'sa');
@@ -620,9 +620,7 @@ function getSpanishStress(word) {
 }
 function getPortugueseStress(word) {
     word = word.replaceAll('qu','kk').replaceAll('gue','gge').replaceAll('gui','ggi');
-    for (const vow of ['a','e','i','o','u']) {
-        word = word.replaceAll('i'+vow,'y'+vow);
-        word = word.replaceAll('u'+vow,'w'+vow);
+    for (const vow of ['a','e','è','i','o','ò','u']) {
         word = word.replaceAll(vow+'i',vow+'y');
         word = word.replaceAll(vow+'u',vow+'w');
     }
