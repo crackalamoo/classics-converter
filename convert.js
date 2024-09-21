@@ -1113,7 +1113,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceIntervocal('Ð','h');
         // word.replaceIntervocal('s','h');
         // word.replaceIntervocal('z','h');
-        word.replaceIntervocal('S','h');
+        // word.replaceIntervocal('S','h');
         // modify retroflex only after short vowels (?)
         for (const cons of ['a','i','u']) {
             // word.replaceIntervocal('Ť','Ď');
@@ -1198,8 +1198,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     word.replaceAll(['N','ñ','ń'], ['N','n','n']); // nasals merger
 
+    word.replace('vv','b');
     if (lang === 'hi' || lang === 'ur') {
-        word.replace('vv','b');
         word.replaceAt('v','b',0);
         // word.replace('v','b');
     }
@@ -1220,6 +1220,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceAt('si', 'zi', 0);
         word.replaceAt('sī', 'zī', 0);
         word.replaceAt('se', 'ze', 0);
+        word.replaceAt('sè', 'ze', 0);
     }
 
     // lose final vowels and geminates
@@ -1265,7 +1266,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     // compensatory lengthening before losing geminates
-    const noLengthenGeminates = ['Ð'];
     const lengthen = {'a':'ā', 'i':'ī','u':'ū'};
     if (lang !== 'pa') {
         for (let i = word.length-1; i >= 0; i--) {
@@ -1275,9 +1275,10 @@ function sanskrit_to_lang(sanskritWord, lang) {
             if (lang !== 'mr' && noLengthen) {
                 continue;
             }
+            console.log(noLengthen);
             if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && (word.at(i+1) !== 'M' || lang === 'mr')
                 && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || lang === 'mr')
-                && lengthen[word.at(i)] && !contains(noLengthenGeminates, word.at(i+1))) {
+                && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
                 if (lang === 'mr') {
                     if (nasals.has(word.at(i+1)) && word.at(i+2) !== 'h')
@@ -1368,6 +1369,9 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.replaceAll(['āā', 'īī', 'ūū', 'ee', 'oo'], ['ā', 'ī', 'ūū', 'e', 'o']);
     for (const stop of ['p','b','k','g'])
         word.replaceAt(stop+'iyā', stop+'yā', 0);
+    if (lang === 'mr') {
+        word.replaceAll(['aha','āha','ahā','āhā'], ['ā','ā','ā','ā']);
+    }
 
     // lose final aspirates
     word.replaceAt('mh','m',word.length-2);
@@ -1400,6 +1404,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceBefore('ch','s', VOWELS);
         // word.replaceBefore('c','s', VOWELS);
         word.replaceAt('on','oN',word.length-2);
+        word.replaceAt('M','',word.length-1); // remove nasalization
     }
     if (lang === 'mr' || lang === 'pa') {
         word.replaceAfter('n','?',new Set(['ā','o','a']));

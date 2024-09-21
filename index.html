@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://harysdalvi.com/main.css">
     <style>
-    body {
+    .before-main {
+        padding: 8px;
+        background-color: #fff;
+        color: #123242;
         min-width: 800px;
     }
-    .before-main {
-        margin: 8px;
+    .before-main h1 {
+        color: #123242;
     }
     .box-container {
         display: flex;
@@ -98,21 +101,6 @@
     ul.choose-lang li.inactive {
         display: none;
     }
-    ul.choose-lang::-webkit-scrollbar {
-        width: 10px;
-    }
-    ul.choose-lang::-webkit-scrollbar-track {
-        background: #DDDDDD;
-    }
-    ul.choose-lang::-webkit-scrollbar-thumb {
-        background: #1E90FF;
-    }
-    ul.choose-lang::-webkit-scrollbar-thumb:hover {
-        background: #0E70EE;
-    }
-    ul.choose-lang::-webkit-scrollbar-thumb:active {
-        background: #2EC0FF;
-    }
     :lang(hi),:lang(sa) {
         font-family: "ITF Devanagari", serif;
     }
@@ -129,11 +117,13 @@
         font-family: inherit;
         line-height: inherit;
     }
-    .smallcaps {
-        /* font-variant: small-caps; */
+    .smallcaps,:lang(la) {
         text-transform: uppercase;
-        font-size: 80%;
-        line-height: 84%;
+        font-size: 85%;
+        line-height: 85%;
+    }
+    .smallcaps *,:lang(la) * {
+        font-size: inherit;
     }
     </style>
     <script src="orthography.js"></script>
@@ -239,10 +229,179 @@
 </div>
 
 <div class="main">
+    <h2 id="what-is-this">What is this?</h2>
+    <p>This is <strong>not a translator</strong> from Latin or Sanskrit to other languages.
+        Instead, this is a <em>predictive model</em>: it takes
+        words in Latin or Sanskrit (what I'll call <strong>&ldquo;classical&rdquo;</strong> languages)
+        and <strong>predicts their descendents, through the natural evolution
+        of language,</strong> in modern languages. (Plus Pali,
+        which we'll get to later.)
+    </p>
+    <p>Over time, languages change. These changes are sometimes unpredictable, but more often
+        than not, they actually follow well-defined rules. Rules that in theory can be
+        programmed into a computer, which is what you're seeing here. For example,
+        a stressed <span lang="la"><strong>o</strong></span> in Latin tends to become
+        <i lang="es"><strong>ue</strong></i> in Spanish, such as <span lang="la">i<u><b>o</b></u>cum</span>
+        becoming <i lang="es">j<u><b>ue</b></u>go</i>.[<a data-cite="7"></a>] There are many more such rules,
+        often much more complicated.
+    </p>
+    <p>There are at least five ways this tool could fail to predict a translation:[<a data-cite="1"></a>]
+        <ul>
+            <li>The descendent language <strong>borrowed a word directly from the classical one</strong>.
+                We might think <i lang="es">óculo</i>
+                in Spanish evolved from Latin <span lang="la">oculus</span> (eye).
+                In fact, the descendent of <span lang="la">oculus</span> in Spanish is <i lang="es">ojo</i> (eye).
+                <i lang="es">Óculo</i> is a specific architectural term,
+                and was not inherited but was consciously brought into Spanish by people who knew Latin.<a data-footnotes="1"></a></li>
+            <li>The descendent language <strong>borrowed a related word from another language</strong>.
+                We might expect the descendent of Sanskrit
+                <span lang="sa">प्रस्तर <i>prastara</i></span> (stone) in Hindi/Urdu to be
+                <span lang="hi">पाथर</span> <span lang="ur">پاتھر</span> <i>pāthar</i>.
+                Instead, the word is <span lang="hi">पत्थर</span> <span lang="ur">پتھر</span> <i>patthar</i>,
+                which is a loan from Punjabi or a related language. <i>Pāthar</i> is an obsolete term.</li>
+            <li>The <strong>meaning of a word has changed over time</strong>. The Portuguese word <i lang="pt">relha</i>,
+            descended from Latin <span lang="la">rēgula</span> (rule), actually means
+            plowshare.</li>
+            <li>The evolution is an <strong>exception to the rule</strong>. We would expect the descendent of
+                <span lang="sa">युष्मान् <i>yuṣmān</i></span> (you, formal) in Marathi to be something like
+                <span lang="mr">*जूम्हा <i>*zūmhā</i></span>. Instead, we see <span lang="mr">तुम्ही <i>tumhī</i></span>
+                with initial <i>t-</i>, indicating that <span lang="sa">युष्मान् <i>yuṣmān</i></span> took on
+                <i>tv-</i> in analogy to <span lang="sa">त्वम् <i>tvam</i></span> (you, informal) in the course of its evolution.</li>
+            <li>The descendent language uses a completely <strong>unrelated word</strong>.
+                Spanish <i lang="es">aceite</i> (oil) comes from Arabic
+                and is unrelated to the Latin <span lang="la">oleum</span>.</li>
+        </ul>
+        And of course, there is the fact that this tool is not perfect: there are many mistakes I've found with this tool,
+        and many more yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
+        the GitHub is at <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
+    </p>
+
+    <h2 id="historical-background">Historical Background</h2>
+    <p><strong>Sanskrit</strong> dates back to around 1500 BCE, the time of the Rigveda. While it was not written at this time,
+        it was preserved orally so that we know what this early stage of the language was like.
+        Sanskrit was standardized much later, around 500 BCE (give or take a few hundred years), by Pāṇini
+        in his <cite>Aṣṭādhyāyī</cite>. This standardized form is known as Classical Sanskrit.[<a data-cite="2"></a>]</p>
+    <p>While Sanskrit itself is a dead language, it evolved into various spoken Prakrits,[<a data-cite="5"></a>]
+        from which the modern <strong>Indo-Aryan languages</strong> descend. These include
+        languages such as Hindi/Urdu, Punjabi, and Marathi.
+        Sanskrit's descendents are mostly found in North India and nearby countries like Pakistan
+        and Bangladesh.[<a data-cite="3"></a>] There's also <strong>Pali</strong>, another dead language
+        which continues to be used as the sacred language of Theravada Buddhism. Pali
+        dates to around 200 BCE, the time of the Prakrits.[<a data-cite="4"></a>]
+    </p>
+    <p>The situation for <strong>Latin</strong> is similar.
+        Old Latin dates to around 753 BCE, while Classical Latin
+        dates to around 75 BCE. Classical Latin was not the creation of one person like
+        Classical Sanskrit, but was developed by various writers who wrote the classics of
+        Latin literature. In contrast to Classical Latin,
+        the Latin that was spoken by common people is known as Vulgar Latin.
+        Unfortunately, this form of Latin was rarely written, so we have limited
+        knowledge of what it was like.
+    </p>
+    <p>Like Sanskrit, Latin is now a dead language. However, over the centuries,
+        the various dialects of Vulgar Latin evolved differently and formed modern languages
+        such as Spanish, French, Portuguese, and Italian. The languages descended from
+        Vulgar Latin are known as the <strong>Romance languages</strong>.[<a data-cite="6"></a>]
+    </p>
+    <figure class="twoside">
+        <img src="img/Indo-Aryan_language_map.svg">
+        <img src="img/Romance_languages.jpg">
+        <p class="caption">Indo-Aryan languages in South Asia. Image source:
+            <a href="https://commons.wikimedia.org/wiki/File:Indo-Aryan_language_map.svg" target="_blank">Mikeanand, Wikimedia</a> (based on Uwe Dedering), <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" target="_blank">CC BY-SA 3.0</a>.
+            <br>
+            Romance languages in Europe. Image source:
+            <a href="https://commons.wikimedia.org/wiki/File:Romance_languages.png" target="_blank">Yuri B. Koryakov, <cite>Atlas of Romance languages</cite></a>,
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a>.
+    </figure>
+    <p>Thus we can make a rough analogy:
+        <table>
+            <tr>
+                <th>Latin</th>
+                <th>Sanskrit</th>
+            </tr>
+            <tr>
+                <td>Old Latin</td>
+                <td>Vedic Sanskrit</td>
+            </tr>
+            <tr>
+                <td>Classical Latin</td>
+                <td>Classical Sanskrit</td>
+            </tr>
+            <tr>
+                <td>Vulgar Latin (contemporaneous with Classical Latin)</td>
+                <td>Prakrits (much later than Sanskrit)</td>
+            </tr>
+            <tr>
+                <td>N/A<a data-footnotes="2"></a></td>
+                <td>Pali</td>
+            </tr>
+            <tr>
+                <td>Romance languages</td>
+                <td>Modern Indo-Aryan languages</td>
+            </tr>
+        </table>
+    </p>
+    <p>An interesting fact: Latin and Sanskrit are related, as both descend from Proto Indo-European.
+        An example cognate is <span lang="sa">पाद <i>pāda</i></span> in Sanskrit and <span lang="la">pedem</span>
+        in Latin, both meaning foot. This makes French <i lang="fr">pied</i> and Urdu <span lang="ur">پاؤں <i>pāõ</i></span> 
+        distantly related, along with English <i>foot</i> which had a <i>p-</i> to <i>f-</i> change.[<a data-cite="1"></a>]
+    </p>
+    <h3 id="why-latin-and-sanskrit">Why Latin and Sanskrit</h3>
+    <p>So why choose Latin and Sanskrit as the source languages for a &ldquo;classics converter&rdquo;?
+        To be honest, the main reason is simply that I am more familiar with these than other
+        ancient languages. But they have a number of really attractive qualities that make a &ldquo;classics converter&rdquo;
+        work well.
+        <ul>
+            <li>Both are millenia old, and have extensive literature we can use to source words.</li>
+            <li>Both evolved into not just one but many modern languages, and many of these are
+                widely spoken and have their own extensive literatures.</li>
+            <li>Both used some kind of phonetic writing,
+                so we have a good idea of what they sounded like. (Panini even described
+                the sound system of Sanskrit in linguistic terms.)</li>
+        </ul>
+    </p>
+    <p>As far as I can tell, these are among the only languages that fit these criteria.
+        <ul>
+            <li>The only widely-spoken descendent of Ancient Greek is Modern Greek.
+                Likewise for Old English, Persian, and Malay.
+            </li>
+            <li>Classical Chinese used Chinese characters, making it difficult to tell
+                how it was pronounced.</li>
+            <li>Modern Arabic dialects are widely spoken, but not widely written,
+                as people write in <i>Fus'ha</i> instead.</li>
+        </ul>
+        Maybe Tamil, Ge'ez, and Tibetan would be good candidates to add, but they may suffer from a lack
+        of resources: Latin and Sanskrit, and their relations to modern languages,
+        have been studied extensively.
+    </p>
+
+    <h2 id="ref">References</span></h2>
+    <ol id="reflist">
+        <li><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Sanskrit" target="_blank">Sanskrit</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Indo-Aryan_languages" target="_blank">Indo-Aryan languages</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Pali" target="_blank">Pali</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Prakrit" target="_blank">Prakrit</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Latin" target="_blank">Latin</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li><a href="https://www.staff.ncl.ac.uk/i.e.mackenzie/intro.htm" target="_blank">History of Spanish</a> (Ian Mackenzie, 1999&ndash;2022) <a data-cite="up">^</a></li>
+    </ol>
+    <h2>Footnotes</h2>
+    <ul id="footnotes">
+        <li>This type of borrowing has a special name in Sanskrit: <span lang="sa">तत्सम <i>tatsama</i></span>.
+            Inherited terms are called <span lang="sa">तद्भव <i>tadbhava</i></span>. <a data-footnotes="up">^</a></li>
+        <li>Pali is a standardized form related to the Prakrits, corresponding to Vulgar Latin in our analogy.
+            This would be like if Vulgar Latin had a standardized literary form separate from Classical Latin. <a data-footnotes="up">^</a></li>
+    </ul>
 </div>
 
 
+<div id="footer"></div>
+<script src="http://harysdalvi.com/services.js"></script>
 <script>
+setAnchors();
+orderCitations();
+orderCitations('footnotes', ['*']);
+// const DARK = darkTheme();
 
 const inputBox = document.getElementById("input-box");
 const outputBox = document.getElementById("output-box");
@@ -251,14 +410,6 @@ const orthography = document.getElementById("orthography");
 const orthography2 = document.getElementById("out-orthography");
 
 function getText() {
-    // let text = inputBox.innerHTML.replace(/<div><br><\/div>/g, ' \n ').replace(/<div>/g, ' \n ')
-    //     .replace(/<\/div>/g, ' \n ').replace(/<br>/g, ' \n ');
-    // while (text.endsWith('&nbsp;')) {
-    //     text = text.substring(0, text.length - 6);
-    // }
-    // while (text.startsWith('&nbsp;')) {
-    //     text = text.substring(6);
-    // }
     let text = inputBox.value;
     return text;
 }
