@@ -57,9 +57,9 @@
         resize: none;
     }
     .ortho-box {
-        font-size: 16px;
+        font-size: 18px;
         color: #666;
-        min-height: 40px;
+        min-height: 50px;
     }
     .ortho-box > * {
         width: 100%;
@@ -151,9 +151,9 @@
                 <p>
                     Input:
                     <ul>
-                        <li>Double to lengthen vowels: aa, ee, ii, oo, uu, yy -> <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
-                        <li>No need to input diphthong ligatures: ae, oe -> <span class="smallcaps">æ, œ</span></li>
-                        <li>Use an apostrophe to override a substitution. (radi'ii -> <span class="smallcaps">radiī</span>)</li>
+                        <li>Double to lengthen vowels: aa, ee, ii, oo, uu, yy → <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
+                        <li>No need to input diphthong ligatures: ae, oe → <span class="smallcaps">æ, œ</span></li>
+                        <li>Use an apostrophe to override a substitution. (radi'ii → <span class="smallcaps">radiī</span>)</li>
                         <li>Indicate all long vowels.</li>
                         <li>U/V are distinct, but I may be used for J.</li>
                     </ul>
@@ -163,24 +163,32 @@
                 <p>
                     Input may be in Devanagari, IAST romanization, or ASCII. For ASCII:
                     <ul>
-                        <li>Double to lengthen vowels: aa, ii, uu -> ā, ī, ū (आ, ई, ऊ)</li>
-                        <li>ai, au -> ऐ, औ</li>
-                        <li>Use capitals for retroflex: T, Th, D, Dh, N, S -> ट, ठ, ड, ढ, ण, ष</li>
-                        <li>sh, ny, ng, jn, aM, aH -> श, ञ, ङ, ज्ञ, अं, अः</li>
-                        <li>Nasals changed before stops: n(k), n(c/g) -> ङ, ञ</li>
-                        <li>Use an apostrophe to override a substitution. (an'ya -> अन्य)</li>
+                        <li>Double to lengthen vowels: aa, ii, uu → ā, ī, ū (आ, ई, ऊ)</li>
+                        <li>Other vowels: ai, au, R, aM, aH → ऐ, औ, ऋ, अं, अः</li>
+                        <li>Use capitals for retroflex: T, Th, D, Dh, N, S → ट, ठ, ड, ढ, ण, ष</li>
+                        <li>Consonant digraphs: sh, ny, ng, jn → श, ञ, ङ, ज्ञ</li>
+                        <li>Nasals changed before stops: n(k/g), n(c/j) → ङ, ञ</li>
+                        <li>Use an apostrophe to override a substitution. (an'ya → अन्य)</li>
                     </ul>
                 </p>
             </div>
+            <p data-lang="la">For best results:</p>
+            <p data-lang="sa">For best results:</p>
             <p data-lang="la">Generally use the accusative case for nouns and adjectives.</p>
-            <p data-lang="la">Use the infinitive for verbs.
-                <span data-lang="es">(<span class="smallcaps">clamāre</span> -> llamar)</span>
-                <span data-lang="pt">(<span class="smallcaps">clamāre</span> -> chamar)</span>
-                <span data-lang="it">(<span class="smallcaps">clamāre</span> -> chiamare)</span>
+            <p data-lang="la">Generally use the infinitive for verbs.
+                <span data-lang="es">Sometimes other conjugations work too.</span>
+                <span data-lang="it">Sometimes other conjugations work too.</span>
+                <span data-lang="pt">Sometimes other conjugations work too.</span>
+                <span data-lang="es">(<span class="smallcaps">probāre</span> → probar, <span class="smallcaps">probō</span> → pruebo)</span>
+                <span data-lang="pt">(<span class="smallcaps">clamāre</span> → chamar)</span>
+                <span data-lang="it">(<span class="smallcaps">clamāre</span> → chiamare)</span>
             </p>
             <p data-lang="sa">Generally use the stem for nouns, verbs, and adjectives.
-                <span data-lang="hi">(<span lang="sa">दन्त</span> -> <span lang="hi">दांत</span>)</span>
-                <span data-lang="ur">(<span lang="sa">दन्त</span> -> <span lang="ur">دانت</span>)</span>
+                <span data-lang="hi">(<span lang="sa">दन्त</span> → <span lang="hi">दांत</span>)</span>
+                <span data-lang="ur">(<span lang="sa">दन्त</span> → <span lang="ur">دانت</span>)</span>
+                <span data-lang="pa">(danta → danda)</span>
+                <span data-lang="mr">(<span lang="sa">दन्त</span> → <span lang="mr">दात</span>)</span>
+                <span data-lang="pi">(<span lang="sa">भिक्षु</span> → <span lang="mr">bhikkhu</span>)</span>
             </p>
         </aside>
     </div>
@@ -242,7 +250,7 @@
         programmed into a computer, which is what you're seeing here. For example,
         a stressed <span lang="la"><strong>o</strong></span> in Latin tends to become
         <i lang="es"><strong>ue</strong></i> in Spanish, such as <span lang="la">i<u><b>o</b></u>cum</span>
-        becoming <i lang="es">j<u><b>ue</b></u>go</i>.[<a data-cite="7"></a>] There are many more such rules,
+        becoming <i lang="es">j<u><b>ue</b></u>go</i>.[<a data-cite="spanish"></a>] There are many more such rules,
         often much more complicated.
     </p>
     <p>There are at least five ways this tool could fail to predict a translation:[<a data-cite="1"></a>]
@@ -271,8 +279,8 @@
                 Spanish <i lang="es">aceite</i> (oil) comes from Arabic
                 and is unrelated to the Latin <span lang="la">oleum</span>.</li>
         </ul>
-        And of course, there is the fact that this tool is not perfect: there are many mistakes I've found with this tool,
-        and many more yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
+        And of course, there is the fact that this tool is not perfect: I know I've made many mistakes with this tool,
+        and there are many more mistakes yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
         the GitHub is at <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
     </p>
 
@@ -281,27 +289,29 @@
         it was preserved orally so that we know what this early stage of the language was like.
         Sanskrit was standardized much later, around 500 BCE (give or take a few hundred years), by Pāṇini
         in his <cite>Aṣṭādhyāyī</cite>. This standardized form is known as Classical Sanskrit.[<a data-cite="2"></a>]</p>
-    <p>While Sanskrit itself is a dead language, it evolved into various spoken Prakrits,[<a data-cite="5"></a>]
+    <p>While Sanskrit is a dead language, its spoken dialects evolved into various Prakrits,[<a data-cite="5"></a>]
         from which the modern <strong>Indo-Aryan languages</strong> descend. These include
         languages such as Hindi/Urdu, Punjabi, and Marathi.
         Sanskrit's descendents are mostly found in North India and nearby countries like Pakistan
-        and Bangladesh.[<a data-cite="3"></a>] There's also <strong>Pali</strong>, another dead language
+        and Bangladesh.[<a data-cite="3"></a>][<a data-cite="masica"></a>] There's also <strong>Pali</strong>, another dead language
         which continues to be used as the sacred language of Theravada Buddhism. Pali
         dates to around 200 BCE, the time of the Prakrits.[<a data-cite="4"></a>]
     </p>
     <p>The situation for <strong>Latin</strong> is similar.
-        Old Latin dates to around 753 BCE, while Classical Latin
+        Old Latin dates to around 753 BCE (the traditional founding date of Rome), while Classical Latin
         dates to around 75 BCE. Classical Latin was not the creation of one person like
         Classical Sanskrit, but was developed by various writers who wrote the classics of
         Latin literature. In contrast to Classical Latin,
         the Latin that was spoken by common people is known as Vulgar Latin.
         Unfortunately, this form of Latin was rarely written, so we have limited
-        knowledge of what it was like.
+        knowledge of what it was like.[<a data-cite="6"></a>]
     </p>
     <p>Like Sanskrit, Latin is now a dead language. However, over the centuries,
         the various dialects of Vulgar Latin evolved differently and formed modern languages
-        such as Spanish, French, Portuguese, and Italian. The languages descended from
-        Vulgar Latin are known as the <strong>Romance languages</strong>.[<a data-cite="6"></a>]
+        such as Spanish, French,
+        Portuguese, and Italian. The languages descended from
+        Vulgar Latin are known as the
+        <strong>Romance languages</strong>.[<a data-cite="spanish"></a>][<a data-cite="6"></a>]
     </p>
     <figure class="twoside">
         <img src="img/Indo-Aryan_language_map.svg">
@@ -346,7 +356,7 @@
         in Latin, both meaning foot. This makes French <i lang="fr">pied</i> and Urdu <span lang="ur">پاؤں <i>pāõ</i></span> 
         distantly related, along with English <i>foot</i> which had a <i>p-</i> to <i>f-</i> change.[<a data-cite="1"></a>]
     </p>
-    <h3 id="why-latin-and-sanskrit">Why Latin and Sanskrit</h3>
+    <h3 id="why-latin-and-sanskrit">Why Latin and Sanskrit?</h3>
     <p>So why choose Latin and Sanskrit as the source languages for a &ldquo;classics converter&rdquo;?
         To be honest, the main reason is simply that I am more familiar with these than other
         ancient languages. But they have a number of really attractive qualities that make a &ldquo;classics converter&rdquo;
@@ -372,10 +382,20 @@
         </ul>
         Maybe Tamil, Ge'ez, and Tibetan would be good candidates to add, but they may suffer from a lack
         of resources: Latin and Sanskrit, and their relations to modern languages,
-        have been studied extensively.
+        have been studied extensively. Still, it would be cool to see more languages in this tool,
+        both more source languages besides these two and more modern languages to convert into.
     </p>
 
     <h2 id="ref">References</span></h2>
+    <p>The rules applied in the converter code, while not necessarily referenced in the main article,
+        mostly came from:
+        <ul>
+            <li>For Latin: <a data-cite="spanish"></a>, <a data-cite="1"></a>, <a data-cite="french"></a>, <a data-cite="portuguese"></a>, <a data-cite="italian"></a>,
+                <a data-cite="proto-romance"></a>, <a data-cite="spanish-history"></a>.
+            </li>
+            <li>For Sanskrit: <a data-cite="1"></a>, <a data-cite="masica"></a>, <a data-cite="4"></a>.</li>
+        </ul>
+    </p>
     <ol id="reflist">
         <li><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Sanskrit" target="_blank">Sanskrit</a> (Wikipedia) <a data-cite="up">^</a></li>
@@ -383,14 +403,22 @@
         <li><a href="https://en.wikipedia.org/wiki/Pali" target="_blank">Pali</a> (Wikipedia) <a data-cite="up">^</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Prakrit" target="_blank">Prakrit</a> (Wikipedia) <a data-cite="up">^</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Latin" target="_blank">Latin</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li><a href="https://www.staff.ncl.ac.uk/i.e.mackenzie/intro.htm" target="_blank">History of Spanish</a> (Ian Mackenzie, 1999&ndash;2022) <a data-cite="up">^</a></li>
+        <li data-cite="spanish"><a href="https://www.staff.ncl.ac.uk/i.e.mackenzie/intro.htm" target="_blank">The Linguistics of Spanish</a>
+            (Ian Mackenzie, Newcastle University, 1999&ndash;2022) <a data-cite="up">^</a></li>
+        <li data-cite="masica"><a href="https://books.google.com/books?id=J3RSHWePhXwC&pg=PA1&source=gbs_selected_pages&cad=1#v=onepage&q&f=false" target="_blank">The Indo-Aryan Languages</a>
+            (Colin P. Masica, University of Chicago, 1991) <a data-cite="up">^</a></li>
+        <li data-cite="french"><a href="https://en.wikipedia.org/wiki/Phonological_history_of_French" target="_blank">Phonological history of French</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="portuguese"><a href="https://en.wikipedia.org/wiki/Comparison_of_Portuguese_and_Spanish" target="_blank">Comparison of Portuguese and Spanish</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="italian"><a href="https://damyanlissitchkov.wordpress.com/2013/03/23/how-latin-became-italian/" target="_blank">How Latin Became Italian</a> (Damyan Lissitchkov, 2013) <a data-cite="up">^</a></li>
+        <li data-cite="proto-romance"><a href="https://en.wikipedia.org/wiki/Phonological_changes_from_Classical_Latin_to_Proto-Romance" target="_blank">Phonological changes from Classical Latin to Proto-Romance</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="spanish-history"><a href="https://en.wikipedia.org/wiki/History_of_the_Spanish_language" target="_blank">History of the Spanish language</a> (Wikipedia) <a data-cite="up">^</a></li>
     </ol>
     <h2>Footnotes</h2>
     <ul id="footnotes">
         <li>This type of borrowing has a special name in Sanskrit: <span lang="sa">तत्सम <i>tatsama</i></span>.
             Inherited terms are called <span lang="sa">तद्भव <i>tadbhava</i></span>. <a data-footnotes="up">^</a></li>
-        <li>Pali is a standardized form related to the Prakrits, corresponding to Vulgar Latin in our analogy.
-            This would be like if Vulgar Latin had a standardized literary form separate from Classical Latin. <a data-footnotes="up">^</a></li>
+        <li>Pali is a standardized form related to Prakrit, corresponding to Vulgar Latin in our analogy.
+            This would be like if Vulgar Latin had a standardized written form separate from Classical Latin. <a data-footnotes="up">^</a></li>
     </ul>
 </div>
 
@@ -479,6 +507,9 @@ function setLangChoice(ulSub, callback) {
 const updateInputLang = (l) => {
     inputLang = l;
     outputChoices.innerHTML = '';
+    if (outputLangs[l].indexOf(outputLang) === -1) {
+        outputLang = outputLangs[l][0];
+    }
     for (const lang of outputLangs[inputLang]) {
         const li = document.createElement('li');
         li.dataset.lang = lang;

@@ -133,7 +133,7 @@ function latin_to_proto_romance(word, finalLang='') {
 
     // vowel shift
     word.replaceAll(['ā','e','ē','i','ī','o','ō','u','ū'],
-                    ['A','E','E','E','I','O','O','O','U']);
+                    ['A','E','E','Ì','I','O','O','O','U']);
     word.lower();
     // palatalization of cons + /j/ sequences from hiatus
     word.replaceAll(['ee','oo','ǐ'], ['e','o','J']);
@@ -145,6 +145,14 @@ function latin_to_proto_romance(word, finalLang='') {
             word.w = word.sub(0, -1) + 'ne';
         else
             word.w = word.sub(0, -1);
+    }
+    if (finalLang === 'it') {
+        if (word.numVowels() === 1)
+            word.replace('ì','e');
+        word.replaceAt('ì','e',word.length-1);
+        word.replace('ì','i');
+    } else {
+        word.replace('ì','e');
     }
     if (word.numVowels() > 1 && (word.endsWith('er') || word.endsWith('or'))) {
         // final /er/, /or/ become /re/, /ro/
@@ -247,6 +255,8 @@ function romance_to_italian(word) {
         word.cutAt(0);
     }
 
+    if (word.stress != 0)
+        word.replaceAt('aw','u',0);
     word.replace('aw','ò');
     word.replaceAll(['ct','x','bt'], ['tt','ss','tt']);
     word.replaceAll(['cJi','cJe','cJè','cJy'], ['ci','ce','cè','cy']);
@@ -347,11 +357,14 @@ function romance_to_western_romance(word, finalLang='') {
 
     // first lenition
     // const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','y'])));
-    const intervocal = word.getIntervocal(VOWELS.union(new Set(['w','l'])), VOWELS.union(new Set(['r','w','y','l'])));
+    word.replaceAll(['dJ','gJ'], ['D','G']);
+    const intervocal = word.getIntervocal(VOWELS.union(new Set(['l'])), VOWELS.union(new Set(['r','w','y','l']))); // w prevents lenition
     const lenitionMap = {
         'b':'v',
         'd':'ð',
         'g':'ɣ',
+        'D':'ð',
+        'G':'ɣ',
         's':'z'
     };
     const lenitionMap2 = {
@@ -359,7 +372,9 @@ function romance_to_western_romance(word, finalLang='') {
         'c':'g',
         'q':'g',
         't':'d',
+        'T':'d',
         'f':'v',
+        'F':'v',
         'ç':'ż'
     };
     if (finalLang === 'fr') {
@@ -386,8 +401,8 @@ function romance_to_western_romance(word, finalLang='') {
     if (finalLang === 'es' || finalLang === 'pt') {
         word.replaceAll(['ɣr', 'ðr'], ['gr', 'dr']);
     }
-    word.replaceIntervocal('ð', '');
-    word.replaceIntervocal('ɣ', '');
+    word.replaceIntervocal('ð', '='); // to be deleted
+    word.replaceIntervocal('ɣ', '=');
     word.replace('ɣ', 'j');
     word.replace('ð', 'd');
     for (const i of intervocal) {
@@ -406,6 +421,7 @@ function romance_to_western_romance(word, finalLang='') {
             word.replaceAt('t', '', word.length-1);
         word.replaceAt('d', '', word.length-1);
     }
+    word.replaceAll(['D','G','='], ['dJ','gJ','']);
     word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
     word.replaceAll(['jn','nj','jl'], ['nJ','nJ','lJ']);
     word.replaceAll(['aa','ee','èe','ii','oo','òo','uu'], ['a','e','è','i','o','ò','u']);
@@ -434,7 +450,7 @@ function romance_to_western_romance(word, finalLang='') {
         word.replaceAt(word.at(i), word.at(i).toUpperCase(), i);
         didDiphthong = true;
     }
-    word.replaceAll(['È','Ò'], ['ye','wo']);
+    word.replaceAll(['È','Ò'], ['yè','wò']);
     word.replace('wy','y');
     if (didDiphthong)
         word.stress += 1;
@@ -710,7 +726,7 @@ function western_romance_to_french(word) {
 }
 
 function western_romance_to_spanish(word) {
-    word.replaceAll(['wo','è','ò','aw'], ['we','e','o','o']);
+    word.replaceAll(['è','ò','aw'], ['e','o','o']);
     // apocope of final /e/
     word.replaceAll(['ll','js'], ['L','X']);
     word.replaceAll(['sç','tç','dż'], ['ç','ç','ż']);

@@ -11,7 +11,7 @@ const langNames = {
 const SHORT_VOWELS = new Set(['a','e','i','o','u']);
 const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ō','ū',
     'æ','œ','ó' /* au */, 'è' /* ɛ */, 'ò' /* ɔ */,
-    'ã','ẽ','ĩ','õ','ũ','ë',
+    'ã','ẽ','ĩ','õ','ũ','ë','ì',
     'á','é','í','ó','ú',
     'â','ê','î','ô','û']);
 const FRONT_VOWELS = new Set(['e','i','è','ē','ī']);
@@ -225,6 +225,7 @@ function romanceOrthography(input, latinWord, lang) {
 
     const charAt = (j) => output.substring(j,j+1);
     if (lang === 'fr') {
+        output = output.replaceAll('èlë','elle');
         if (stress === output.length-3 && charAt(output.length-3) === 'è' && CONSONANTS.has(charAt(output.length-2)) && charAt(output.length-1) === 'ë') {
             output = output.substring(0, output.length-3) + 'È' + output.substring(output.length-2);
         }
