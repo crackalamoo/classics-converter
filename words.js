@@ -358,19 +358,30 @@ function schwaDeletion(word) {
     return res;
 }
 
+function filterString(s, predicate) {
+    return s.split('').filter(predicate).join('');
+}
+
 function noLostIntertonic(word, i) {
     // prevent loss of intertonic vowel due to an invalid cluster
     const cons = CONSONANTS;
     const cons2 = CONSONANTS.union(SEMIVOWELS);
-    let prev2 = word.sub(i-2,i);
-    let prev1 = word.sub(i-1,i);
-    let next1 = word.sub(i+1,i+2);
-    let next2 = word.sub(i+1,i+3);
-    let res = (allContains(cons, prev2) && allContains(cons, next1)
-    || (allContains(cons, prev1) && allContains(cons, next2))
-    || (allContains(cons2, prev1) && allContains(cons, next2) && contains(SEMIVOWELS, next1) && !allContains(SEMIVOWELS, next2))
-    || (allContains(cons2, prev2) && allContains(cons, next1) && contains(SEMIVOWELS, prev1) && !allContains(SEMIVOWELS, prev2))
+    const sonorants = LIQUIDS.union(SEMIVOWELS).union(new Set(['s','z','n','m','v','f']));
+    // let prev2 = word.sub(i-2,i);
+    // let prev1 = word.sub(i-1,i);
+    // let next1 = word.sub(i+1,i+2);
+    // let next2 = word.sub(i+1,i+3);
+    const cluster = filterString(word.sub(i-2,i) + word.sub(i+1,i+3), (c) => cons2.has(c)).substring(0,3);
+    let res = (//allContains(cons, prev2) && allContains(cons, next1)
+    //|| (allContains(cons, prev1) && allContains(cons, next2))
+    // (allContains(cons2, prev1) && allContains(cons, next2) && contains(SEMIVOWELS, next1) && !allContains(SEMIVOWELS, next2))
+    // || (allContains(cons2, prev2) && allContains(cons, next1) && contains(SEMIVOWELS, prev1) && !allContains(SEMIVOWELS, prev2))
     // || (contains(STOPS, prev1) && contains(STOPS, next1))
+    contains(cons2, cluster.substring(0,1)) && contains(SEMIVOWELS, cluster.substring(1,2)) && contains(cons, cluster.substring(2,3))
+    || ((contains(STOPS, cluster.substring(0,1)) && contains(STOPS, cluster.substring(1,2))
+        || contains(STOPS, cluster.substring(1,2)) && contains(STOPS, cluster.substring(2,3)))
+        && !contains(sonorants, cluster.substring(0,1))
+    )
     );
     return res;
 }

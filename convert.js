@@ -92,7 +92,7 @@ function latin_to_proto_romance(word, finalLang='') {
     word.replaceBefore('o', 'w', VOWELS, 1, true);
     word.replaceBefore('u', 'w', VOWELS, 1, true);
     // if stressed antepenultimate, shift stress
-    const intertonic = word.getIntertonic();
+    let intertonic = word.getIntertonic();
     if (new Set(['e','i','u','o']).has(word.atStress()) && contains(intertonic, word.stress+1)) {
         if (word.atStress() === 'e' || word.atStress() === 'i') {
             word.replaceBefore('e', 'ǐ', VOWELS, 1, false);
@@ -164,18 +164,16 @@ function latin_to_proto_romance(word, finalLang='') {
     word.replaceBefore('c', 'cJ', FRONT_VOWELS);
     word.replaceBefore('g', 'gJ', FRONT_VOWELS);
 
-    if (finalLang !== 'it') {
-        const intertonic = word.getIntertonic();
-        for (const i of intertonic.reverse()) {
-            // lose intertonic vowels with l/r or sVt, except /a/
-            let prev = word.at(i-1);
-            let next = word.at(i+1);
-            if ((prev === 'l' || prev === 'r' || next === 'l' || next === 'r' || (prev === 's' && next === 't'))
-            // && (i > word.stress || word.at(i) !== 'a')
-            && (word.at(i) !== 'a') && (finalLang === 'fr' || !noLostIntertonic(word, i))
-            ) {
-                word.cutAt(i);
-            }
+    intertonic = word.getIntertonic();
+    for (const i of intertonic.reverse()) {
+        // lose intertonic vowels with l/r or sVt, except /a/
+        let prev = word.at(i-1);
+        let next = word.at(i+1);
+        if ((prev === 'l' || prev === 'r' || next === 'l' || next === 'r' || (prev === 's' && next === 't'))
+        // && (i > word.stress || word.at(i) !== 'a')
+        && (word.at(i) !== 'a') && (finalLang === 'fr' || !noLostIntertonic(word, i))
+        ) {
+            word.cutAt(i);
         }
     }
 
@@ -207,7 +205,6 @@ function latin_to_proto_romance(word, finalLang='') {
 }
 
 function romance_to_italian(word) {
-    word.replace('aw','ò');
 
     // vowel raising in stressed syllables
     // if (CONSONANTS.has(word.at(word.stress+2))) {
@@ -250,11 +247,14 @@ function romance_to_italian(word) {
         word.cutAt(0);
     }
 
-    word.replaceAll(['ct','x','ll','bt'], ['tt','ss','lJ','tt']);
+    word.replace('aw','ò');
+    word.replaceAll(['ct','x','bt'], ['tt','ss','tt']);
     word.replaceAll(['cJi','cJe','cJè','cJy'], ['ci','ce','cè','cy']);
     word.replaceAll(['qwi','qwe','qwu'], ['chi','che','cu']);
 
-    word.replaceAll(['tJ','sJ','vJ','nJ'], ['zJ','cJ','ggJ','gn']);
+    word.replaceAll(['nnJ','llJ'], ['nJ','lJ']);
+    word.replaceAll(['tJ','sJ','vJ','nJ'], ['z','cJ','ggJ','gn']);
+    word.replaceIntervocal('cl','cchj');
     word.replaceBefore('cl','chj',VOWELS);
     word.replaceBefore('gl','ghj',VOWELS);
     for (var i = word.length-2; i > 0; i--) {
@@ -362,6 +362,9 @@ function romance_to_western_romance(word, finalLang='') {
         'f':'v',
         'ç':'ż'
     };
+    if (finalLang === 'fr') {
+        word.replaceAll(['ph','pt'], ['F','T']);
+    }
     
     if (VOWELS.has(word.at(word.length-2)))
         intervocal.push(word.length-1);
@@ -418,6 +421,11 @@ function romance_to_western_romance(word, finalLang='') {
                 word.cutAt(i);
             }
         }
+    }
+    word.replaceAt('tm','m',word.stress-2);
+    word.replaceAt('Tm','m',word.stress-2);
+    if (finalLang === 'fr') {
+        word.replaceAll(['T','F'], ['pt','ph']);
     }
 
 
@@ -785,6 +793,7 @@ function western_romance_to_spanish(word) {
         }
     }
     word.replace('j','');
+    word.replace('uw','u');
 
     word.replaceAll(['qwi','qwe'], ['qi','qe']);
     word.replaceAll(['mn','qw','ct','dg','pd','mr','nçg','nsg','ml'],
@@ -899,7 +908,7 @@ function western_romance_to_portuguese(word) {
             word.replaceAt('o','õ',i-1);
             word.cutAt(i);
         } else if (word.at(i) === 'l') {
-            word.cutAt(i);
+            word.cutAt(i)
         }
     }
     word.replaceAll(['ãa','oe','ẽa'], ['ã','o','eja']);
@@ -914,7 +923,7 @@ function western_romance_to_portuguese(word) {
     word.replaceAll(['mme'], ['mem']);
     if (word.stress !== 0)
         word.replaceAt('u','o',0);
-    if (word.stress === word.length-2)
+    if (word.stress === word.length-2 && word.atStress() != 'ò')
         word.replaceAt('o','u',word.length-1);
 
     word.replaceAll(['nn','mm','nm'], ['n','m','lm']); // double nasals
