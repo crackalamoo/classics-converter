@@ -322,7 +322,7 @@ function romanceOrthography(input, latinWord, lang) {
         }
         output = output.replaceAll('č','ch').replaceAll('x','j');
     }
-    if ((lang === 'es' || lang === 'pt') && latinWord.startsWith('h') && !output.startsWith('h')) {
+    if ((lang === 'es' || lang === 'pt') && latinWord.toLowerCase().startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
     }
     if (lang === 'pt') {
