@@ -17,7 +17,7 @@ function closedSyllable(string, pos, useLiquids=true, removePalatal=false, vowel
         for (let i = string.length-1; i >= 0; i--) {
             if (string.substring(i,i+1) === 'J') {
                 string = string.substring(0,i) + string.substring(i+1);
-                if (i < pos)
+                if (i <= pos)
                     pos -= 1;
             }
         }
@@ -371,18 +371,21 @@ function noLostIntertonic(word, i) {
     // let prev1 = word.sub(i-1,i);
     // let next1 = word.sub(i+1,i+2);
     // let next2 = word.sub(i+1,i+3);
-    const cluster = filterString(word.sub(i-2,i) + word.sub(i+1,i+3), (c) => cons2.has(c)).substring(0,3);
-    let res = (//allContains(cons, prev2) && allContains(cons, next1)
+    let cluster = filterString(word.sub(i-2,i) + word.sub(i+1,i+3), (c) => cons2.has(c));
+    let cluster2 = cluster.substring(1,4);
+    cluster = cluster.substring(0,3);
+    let isBadCluster = (cl) => (//allContains(cons, prev2) && allContains(cons, next1)
     //|| (allContains(cons, prev1) && allContains(cons, next2))
     // (allContains(cons2, prev1) && allContains(cons, next2) && contains(SEMIVOWELS, next1) && !allContains(SEMIVOWELS, next2))
     // || (allContains(cons2, prev2) && allContains(cons, next1) && contains(SEMIVOWELS, prev1) && !allContains(SEMIVOWELS, prev2))
     // || (contains(STOPS, prev1) && contains(STOPS, next1))
-    contains(cons2, cluster.substring(0,1)) && contains(SEMIVOWELS, cluster.substring(1,2)) && contains(cons, cluster.substring(2,3))
-    || ((contains(STOPS, cluster.substring(0,1)) && contains(STOPS, cluster.substring(1,2))
-        || contains(STOPS, cluster.substring(1,2)) && contains(STOPS, cluster.substring(2,3)))
-        && !contains(sonorants, cluster.substring(0,1))
+    contains(cons2, cl.substring(0,1)) && contains(sonorants, cl.substring(1,2)) && contains(cons, cl.substring(2,3))
+    || (((contains(STOPS, cl.substring(0,1)) && contains(STOPS, cl.substring(1,2)))
+        || (contains(STOPS, cl.substring(1,2)) && contains(STOPS, cl.substring(2,3))))
+        && !contains(sonorants, cl.substring(0,1))
     )
     );
+    res = isBadCluster(cluster) || isBadCluster(cluster2);
     return res;
 }
 

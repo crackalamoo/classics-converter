@@ -16,7 +16,7 @@ const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ō','ū',
     'â','ê','î','ô','û']);
 const FRONT_VOWELS = new Set(['e','i','è','ē','ī']);
 const BACK_VOWELS = new Set(['u','o','ū','ō','ó','ò']);
-const LIQUIDS = new Set(['l', 'r']);
+const LIQUIDS = new Set(['l', 'r', 'ł']);
 const SEMIVOWELS = new Set(['j','w']);
 const CONSONANTS = new Set(['b','c','d','f','g','h','k','l','m','n','p','q','r','s','t','v','x','z',
     'č','ž','ç','ñ','ł','ß','ż'
@@ -229,7 +229,7 @@ function romanceOrthography(input, latinWord, lang) {
         if (stress === output.length-3 && charAt(output.length-3) === 'è' && CONSONANTS.has(charAt(output.length-2)) && charAt(output.length-1) === 'ë') {
             output = output.substring(0, output.length-3) + 'È' + output.substring(output.length-2);
         }
-        output = output.replaceAll('è','e').replaceAll('È','è');
+        output = output.replaceAll('è','e').replaceAll('È','è').replaceAll('ò','o');
         output = output.replaceAll('č','ch');
         output = output.replaceAll('an','ann').replaceAll('en','enn').replaceAll('on','onn')
             .replaceAll('am','amm').replaceAll('em','emm').replaceAll('om','omm');
@@ -277,16 +277,19 @@ function romanceOrthography(input, latinWord, lang) {
         let stress_c = output.substring(stress, stress+1);
         let last = output.substring(output.length-1);
         let last2 = output.substring(output.length-2);
-        let useAccent = (stress !== getPortugueseStress(output)
-            || (numVowels(output) === 1 && (contains(['a','e','è','o','ò'], last) || contains(['as','es','ès','os','òs'], last2))));
+        // let useAccent = (stress !== getPortugueseStress(output)
+        //     || (numVowels(output) === 1 && (contains(['a','e','è','o','ò'], last) || contains(['as','es','ès','os','òs'], last2))));
+        let useAccent = (stress !== getPortugueseStress(output));
         if (useAccent && accent_map[stress_c]) {
             output = output.substring(0,stress) + accent_map[stress_c] + output.substring(stress+1);
         }
         output = output.replaceAll('è','e').replaceAll('ò','o');
     }
     if (lang === 'fr') {
-        for (const vow of ['e','i','ê','î','è']) {
+        output = output.replaceAll('í','i');
+        for (const vow of ['e','i','ê','î','è','ẽ']) {
             output = output.replaceAll('ž'+vow,'g'+vow);
+            output = output.replaceAll('ç'+vow,'c'+vow);
         }
         output = output.replaceAll('ž','j');
         output = replaceIntervocal(output, 's', 'ss');
@@ -324,6 +327,9 @@ function romanceOrthography(input, latinWord, lang) {
     }
     if ((lang === 'es' || lang === 'pt') && latinWord.toLowerCase().startsWith('h') && !output.startsWith('h')) {
         output = 'h'+output;
+        if (output.startsWith('hy')) {
+            output = output.substring(1);
+        }
     }
     if (lang === 'pt') {
         output = output.replaceAll('č','ch').replaceAll('ʒ','j');
