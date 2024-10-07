@@ -13,7 +13,8 @@ const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ō','ū',
     'æ','œ','ó' /* au */, 'è' /* ɛ */, 'ò' /* ɔ */,
     'ã','ẽ','ĩ','õ','ũ','ë','ì',
     'á','é','í','ó','ú',
-    'â','ê','î','ô','û']);
+    'â','ê','î','ô','û',
+    'Ò' /* au */]);
 const FRONT_VOWELS = new Set(['e','i','è','ē','ī']);
 const BACK_VOWELS = new Set(['u','o','ū','ō','ó','ò']);
 const LIQUIDS = new Set(['l', 'r', 'ł']);
@@ -287,7 +288,7 @@ function romanceOrthography(input, latinWord, lang) {
     }
     if (lang === 'fr') {
         output = output.replaceAll('í','i');
-        for (const vow of ['e','i','ê','î','è','ẽ']) {
+        for (const vow of ['e','i','ê','î','è','ẽ','é']) {
             output = output.replaceAll('ž'+vow,'g'+vow);
             output = output.replaceAll('ç'+vow,'c'+vow);
         }
@@ -337,6 +338,7 @@ function romanceOrthography(input, latinWord, lang) {
     if (lang === 'fr') {
         output = output.replaceAll('õne','õnne').replaceAll('ãne','ãnne').replaceAll('ẽne','ẽnne');
         output = output.replaceAll('ã','a').replaceAll('ẽ','e').replaceAll('õ','o');
+        output = output.replaceAll('ee','ée');
     }
 
     output = matchCase(output, latinWord);
