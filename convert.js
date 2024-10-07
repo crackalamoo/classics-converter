@@ -875,7 +875,7 @@ function western_romance_to_spanish(word) {
     word.replaceIntervocal('dJ','y');
     word.replaceAll(['yell'], ['ill']);
     word.replaceAfter('lwe', 'le', CONSONANTS);
-    word.replaceAfter('rwe', 're', CONSONANTS);
+    // word.replaceAfter('rwe', 're', CONSONANTS);
 
     // initial Latin j
     word.replaceAt('ja','ya',0);

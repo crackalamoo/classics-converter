@@ -419,6 +419,10 @@ const samples = [
     {'name':'misc', 'in':'mrakSaNa prastara satya', 'langs':['pa']},
     {'name':'Maharashtra', 'in':'mahaaraaSTra mahaaraaSTriiya', 'langs':['mr']},
     {'name':'time', 'in':'adya kaalya kaala yaa', 'langs':['mr']},
+
+    {'name':'Eightfold Path', 'in':'dRSTi saMkalpa vaac karmaanta aajiiva vyaayaama smRti samaadhi', 'langs':['pi']},
+    {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya kSaanti satya adhiSThaana maitrii upekSaa', 'langs':['pi']},
+    {'name':'misc', 'in':'bhikSu shramaNa tathaagata dharma', 'langs':['pi']},
 ];
 for (const sample of samples) {
     sample['langs'] = new Set(sample['langs']);
