@@ -181,7 +181,8 @@ function latin_to_proto_romance(word, finalLang='') {
         // && (i > word.stress || word.at(i) !== 'a')
         && (word.at(i) !== 'a') && (finalLang === 'fr' || !noLostIntertonic(word, i))
         ) {
-            word.cutAt(i);
+            // word.cutAt(i);
+            word.replaceAt(word.at(i),'ë',i);
         }
     }
 
@@ -222,6 +223,7 @@ function romance_to_italian(word) {
     //         word.replaceStressed('aj','ej');
     //     }
     // }
+    word.replace('ë','');
     word.replaceStressed('èj','ej');
     word.replaceStressed('òj','oj');
     let next_j = word.getNextVowel(word.stress) - 1;
@@ -366,13 +368,14 @@ function romance_to_western_romance(word, finalLang='') {
     // first lenition
     // const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','y'])));
     word.replaceAll(['dJ','gJ'], ['D','G']);
-    let prevVowels = VOWELS.union(new Set(['r','l','w','y']));
+    // let prevVowels = VOWELS.union(new Set(['r','l','w','y']));
+    let prevVowels = VOWELS;
     const intervocal = word.getIntervocal(prevVowels, VOWELS.union(new Set(['r','w','y','l'])));
     const lenitionMap = {
         'b':'v',
         'd':'ð',
         'g':'ɣ',
-        'D':'ð',
+        'D':'j',
         'G':'Γ',
         's':'z'
     };
@@ -395,6 +398,12 @@ function romance_to_western_romance(word, finalLang='') {
     for (const i of intervocal) {
         if (finalLang === 'fr' && word.at(i) === 's' && !VOWELS.has(word.at(i-1)) && !SEMIVOWELS.has(word.at(i-1))) {
             // skip many lenitions
+            continue;
+        }
+        if (contains(['c','g'], word.at(i)) && word.at(i+1) === 'l') {
+            continue;
+        }
+        if (word.at(i-1) === 'ë') {
             continue;
         }
         if (lenitionMap[word.at(i)] && (finalLang !== 'es' || word.at(i) !== 'b')
@@ -450,6 +459,7 @@ function romance_to_western_romance(word, finalLang='') {
         word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
     word.replaceAll(['jn','nj','jl'], ['nJ','nJ','lJ']);
     word.replaceAll(['aa','ee','èe','ii','oo','òo','uu'], ['a','e','è','i','o','ò','u']);
+    word.replace('ë','');
     // word.replace('y','j');
 
     // first unstressed vowel loss
@@ -839,6 +849,8 @@ function western_romance_to_french(word) {
     word.replaceAll(['oj','òj','aj'],['oí','òí','aí']);
     word.replaceAt('è','é',word.length-1);
     word.replaceAt('èd','é',word.length-2);
+    word.replaceBefore('q','qw',CONSONANTS.union(new Set(['y','w','j'])));
+    word.replace('qww','qw');
 
     return word;
 }
@@ -955,6 +967,7 @@ function western_romance_to_spanish(word) {
         word.replace(cons+cons, cons);
     }
     word.replaceBefore('ñ','n',CONSONANTS);
+    word.replaceAll(['mt','md','nb','np'], ['nt','nd','mb','mp']); // simplifying clusters
     word.replace('J','y');
     return word;
 }
@@ -976,8 +989,9 @@ function western_romance_to_portuguese(word) {
         word.replaceAt('fl','cJ',0);
         word.replaceAt('pl','cJ',0);
         word.replaceAt('cl','cJ',0);
-        word.replaceAt('bl','br',0);
     }
+    word.replaceBefore('pl','pr',VOWELS);
+    word.replaceBefore('bl','br',VOWELS);
     for (const nas of ['n','m']) {
         word.replaceAll([nas+'fl',nas+'pl',nas+'cl'], ['ncJ','ncJ','ncJ']);
     }
@@ -1051,13 +1065,14 @@ function western_romance_to_portuguese(word) {
             word.replaceAt('e','ẽ',i-1);
             word.replaceAt('i','ĩ',i-1);
             word.replaceAt('o','õ',i-1);
+            word.replaceAt('u','ũ',i-1);
             word.cutAt(i);
         } else if (word.at(i) === 'l') {
             word.cutAt(i)
         }
     }
-    word.replaceAll(['ãa','oe','ẽa','ĩo'], ['ã','o','eja','inJo']);
-    word.replaceAll(['ẽ','ĩ'], ['e','i']);
+    word.replaceAll(['ãa','oe','ẽa','ĩo','ũa'], ['ã','o','eja','inJo','uma']);
+    word.replaceAll(['ẽ','ĩ','ũ'], ['e','i','u']);
     word.replaceAll(['aa','ee','èè','ii','oo','òò','uu'], ['a','e','è','i','o','ò','u']);
     if (word.stress === word.length-1)
         word.replaceAt('o','ow',word.length-1);
@@ -1079,6 +1094,7 @@ function western_romance_to_portuguese(word) {
         word.replace(cons+cons, cons);
     }
     word.replaceBefore('nh','n',CONSONANTS);
+    word.replaceAll(['mt','md','nb','np'], ['nt','nd','mb','mp']); // simplifying clusters
     word.replace('J','y');
     word.replace('ij','i');
 
