@@ -542,7 +542,7 @@ setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
     refreshDisplay();
 });
 
-function showSample() {
+function showSample(sample) {
     const langSamples = samples[outputLang];
     if (langSamples) {
         inputBox.innerHTML = langSamples[Math.floor(Math.random() * langSamples.length)];

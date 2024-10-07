@@ -49,8 +49,8 @@ function latin_to_lang(latinWord, lang) {
         console.log("Italian: " + word);
     }
     // word = word.toString();
-    // word = romanceOrthography(word, latinWord, lang);
-    word = word.toString() + ' ('+romanceOrthography(word,latinWord,lang)+')';
+    word = romanceOrthography(word, latinWord, lang);
+    // word = word.toString() + ' ('+romanceOrthography(word,latinWord,lang)+')';
     return word;
 }
 
@@ -366,9 +366,7 @@ function romance_to_western_romance(word, finalLang='') {
     // first lenition
     // const intervocal = word.getIntervocal(VOWELS, VOWELS.union(new Set(['r','w','y'])));
     word.replaceAll(['dJ','gJ'], ['D','G']);
-    let prevVowels = VOWELS.union(new Set(['l','w','y']));
-    if (finalLang !== 'fr')
-        prevVowels = prevVowels.union(new Set(['r','w','y','l']));
+    let prevVowels = VOWELS.union(new Set(['r','l','w','y']));
     const intervocal = word.getIntervocal(prevVowels, VOWELS.union(new Set(['r','w','y','l'])));
     const lenitionMap = {
         'b':'v',
@@ -428,7 +426,9 @@ function romance_to_western_romance(word, finalLang='') {
             continue;
         if (finalLang === 'fr' && !VOWELS.has(word.at(i-1)) && contains(['t','p','c','q','T','F','f','ç'], word.at(i))) {
             // skip many lenitions
-            continue;
+            if (!(word.at(i-1) === 'r' && contains(['c'], word.at(i)))) {
+                continue;
+            }
         }
         if (lenitionMap2[word.at(i)] && !(word.at(i) === 'c' && word.at(i+1) === 'l')) {
             if (word.at(i) === 't' && word.at(i+1) === 'l')
@@ -548,7 +548,6 @@ function western_romance_to_french(word) {
     // const isOpen = (i) => openSyllable(word.w, i, false, true, VOWELS.union(SEMIVOWELS));//.union(new Set(['r'])));
     console.log(word);
     if (word.sub(word.stress+1,word.stress+3) === 'nJ' || word.sub(word.stress+1,word.stress+4) === 'jnJ') {
-        console.log("HERE", word.w);
         word.replaceAt('j','',word.stress+1);
         if (isOpen(word.stress)) {
             word.replaceAt('e','eí',word.stress);
@@ -604,7 +603,7 @@ function western_romance_to_french(word) {
             if (word.at(word.stress-1) !== 'w')
                 word.replaceAt('o','ow',word.stress);
         } else {
-            // closed vowels stay the same for now
+            word.replaceAt('allJ','ajllJ',word.stress);
         }
     }
     word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
@@ -819,10 +818,12 @@ function western_romance_to_french(word) {
     word.replaceAll(['nm','mn'], ['mm','mm']);
     for (const cons of ['t','z'])
         word.replaceAt('v'+cons,cons,word.length-2);
-    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t'], word.at(-1)))
+    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t'], word.at(-1))) {
         word.w += 'ë';
-    else if (word.at(-2) == 'î' && contains(['n','m'], word.at(-1))) {
+    } else if (word.at(-2) === 'î' && contains(['n','m'], word.at(-1))) {
         word.w += 'ë';
+    } else if (word.at(-2) === 'õ' && word.at(-1) === 'm') {
+        word.w += 'më';
     }
 
     // To Middle French:
@@ -1067,7 +1068,7 @@ function western_romance_to_portuguese(word) {
     word.replaceAll(['mme'], ['mem']);
     if (word.stress !== 0)
         word.replaceAt('u','o',0);
-    if (word.stress === word.length-2 && word.atStress() != 'ò')
+    if (word.stress === word.length-2 && !contains(['ò','i'], word.atStress()))
         word.replaceAt('o','u',word.length-1);
 
     word.replaceAll(['nn','mm','nm'], ['n','m','lm']); // double nasals
@@ -1429,7 +1430,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
             if (lang !== 'mr' && noLengthen) {
                 continue;
             }
-            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && (word.at(i+1) !== 'M' || lang === 'mr')
+            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && (word.at(i+1) !== 'M' || lang === 'mr' || word.at(i) === 'a')
                 && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || lang === 'mr')
                 && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
@@ -1502,6 +1503,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.unjoinAspirate();
 
     // vowel hiatus
+    word.replaceAll(['eā'], ['iā']);
     if (lang === 'mr') {
         word.replaceAll(['iā', 'ia', 'ie', 'io','āvu', 'āya'], ['ivā', 'iva', 'ive', 'ivo','āū', 'āva']);
     } else if (lang === 'hi' || lang === 'ur') {
@@ -1555,6 +1557,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceBefore('cch','s',VOWELS);
         word.replaceBefore('ch','s', VOWELS);
+        word.replaceAt('ch','s',word.length-2);
         // word.replaceBefore('c','s', VOWELS);
         word.replaceAt('on','oN',word.length-2);
         word.replaceAt('M','',word.length-1); // remove nasalization

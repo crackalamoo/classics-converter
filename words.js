@@ -401,24 +401,27 @@ function allContains(set, string) {
     return true;
 }
 
-const samples = {
-    'sa': ['pañca sapta aSTa', 'adya dugdha niSkaalay'],
-    'hi': ['vaMsha apara karpaasa','duura graama','saMdhya raatri vaarttaa','tvam dina rajani caurika karo param karma na karo',
-        'hasta karNa shiras paada', 'shvashura parNa na khaad',
-        // 'alagna', 'puuraka'
-    ],
-    'pa': ['duura candra','hasta karNa akSa shiras pakSa paada','mrakSaNa'],
-    'hi-pa': ['kathay', 'deziiya shreSTin kRta saartha', 'yaH priyakaaraka pattra'],
-    'mr': ['duura graama', 'hasta karNa paada',
-        'SaSTi', 'saubhaagya'
-    ]
-};
-samples['hi'].concat(samples['hi-pa']);
-samples['pa'].concat(samples['hi-pa']);
-samples['ur'] = samples['hi'];
-for (const [key, val] of Object.entries(outputLangs)) {
-    for (const ol of val) {
-        if (samples[ol] && samples[key])
-            samples[ol].concat(samples[key]);
-    }
+const samples = [
+    {'name':'numbers', 'in':'dvau triiNi panca sapta aSTa dasha lakSa', 'langs':['hi']},
+    {'name':'numbers', 'in':'dvau panca sapta aSTa dasha lakSa', 'langs':['pa']},
+    {'name':'numbers', 'in':'panca sapta aSTa dasha lakSa', 'langs':['mr']},
+    {'name':'village', 'in':'duura graama', 'langs':['hi','pa','mr']},
+    {'name':'night', 'in':'dvau prahara saMdhya raatri alagna vaarttaa', 'langs':['hi']},
+    {'name':'thief', 'in':'tvam dina rajani caurika karo param karma na karo', 'langs':['hi']},
+    {'name':'body parts', 'in':'hasta karNa akSa shiras paada mukha', 'langs':['hi']},
+    {'name':'body parts', 'in':'hasta karNa akSa shiras', 'langs':['pa','mr']},
+    {'name':'father-in-law', 'in':'shvashura parNa na khaad', 'langs':['hi']},
+    {'name':'moon', 'in':'puuraka candra duura adya raatri', 'langs':['hi']},
+    {'name':'moon', 'in':'puuraka candra duura adya', 'langs':['pa']},
+    {'name':'merchant', 'in':'deshiiya shreSTi kRta saartha kapunar aagata pRccha', 'langs':['hi']},
+    {'name':'leaf', 'in':'yaH priyakaaraka pattra', 'langs':['hi','pa']},
+    {'name':'food', 'in':'ghRt jiiraka shatapuSpa dhaaneyaka roTika', 'langs':['hi']},
+    {'name':'misc', 'in':'mrakSaNa prastara satya', 'langs':['pa']},
+    {'name':'Maharashtra', 'in':'mahaaraaSTra mahaaraaSTriiya', 'langs':['mr']},
+    {'name':'time', 'in':'adya kaalya kaala yaa', 'langs':['mr']},
+];
+for (const sample of samples) {
+    sample['langs'] = new Set(sample['langs']);
+    if (sample['langs'].has('hi'))
+        sample['langs'].add('ur');
 }
