@@ -298,7 +298,11 @@ function romance_to_italian(word) {
     }
     word.replaceAt('os','oY',word.length-2);
     if (CONSONANTS.has(word.at(-1))) {
-        word.cutAt(word.length-1);
+        if (word.at(-1) === 'l') {
+            word.w += 'e';
+        } else {
+            word.cutAt(word.length-1);
+        }
     }
     word.replace('Y','y');
 
@@ -485,7 +489,8 @@ function romance_to_western_romance(word, finalLang='') {
 
     i = word.stress;
     if ((word.at(i) === 'è' || word.at(i) === 'ò') && (openCriterion)
-    && !((word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
+    // && !((word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))
+    ) {
         word.replaceAt(word.at(i), word.at(i).toUpperCase(), i);
         didDiphthong = true;
     }
@@ -619,6 +624,9 @@ function western_romance_to_french(word) {
                 word.replaceAt('o','ow',word.stress);
         } else {
             word.replaceAt('allJ','ajllJ',word.stress);
+            if (word.stress === word.length-2 && word.at(word.stress+1) === 'z') {
+                word.replaceAt('e','ej',word.stress);
+            }
         }
     }
     word.replaceAll(['pp','cc','tt','ss'], ['p','c','t','s']);
@@ -753,6 +761,7 @@ function western_romance_to_french(word) {
         word.stress -= 1;
     word.replaceBefore('að','ë',VOWELS);
     word.replaceBefore('aɣ','ë',VOWELS);
+    word.replaceBefore('ž','',CONSONANTS);
     word.replaceAll(['ɣ','ð','J'], ['','','']);
     word.replace('ú','u');
     word.replace('ej','ój');
@@ -1069,15 +1078,17 @@ function western_romance_to_portuguese(word) {
         if (word.at(i) === 'n') {
             word.replaceAt('a','ã',i-1);
             word.replaceAt('e','ẽ',i-1);
+            word.replaceAt('è','ẽ',i-1);
             word.replaceAt('i','ĩ',i-1);
             word.replaceAt('o','õ',i-1);
+            word.replaceAt('ò','õ',i-1);
             word.replaceAt('u','ũ',i-1);
             word.cutAt(i);
         } else if (word.at(i) === 'l') {
             word.cutAt(i)
         }
     }
-    word.replaceAll(['ãa','oe','ẽa','ĩo','ũa','ũo'], ['ã','o','eja','inJo','uma','umo']);
+    word.replaceAll(['ãa','oe','ẽa','ĩo','õo','ũa','ũo'], ['ã','o','eja','inJo','om','uma','umo']);
     word.replaceAll(['ẽ','ĩ','ũ'], ['e','i','u']);
     word.replaceAll(['aa','ee','èè','ii','oo','òò','uu'], ['a','e','è','i','o','ò','u']);
     if (word.stress === word.length-1)
@@ -1141,6 +1152,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
     } else {
         word.replaceAll(['aya','ava'], ['è','ò']);
     }
+    word.replaceAt('aH','o',word.length-2);
+    word.replace('H','');
     word.joinAspirate();
 
     if (word.startsWith('R') && lang !== 'pi')
@@ -1346,9 +1359,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.unjoinAspirate();
     }
 
-    word.replace('aH','o');
-    word.replace('H','');
-
     if (lang === 'pi') {
         return word.w;
     }
@@ -1549,6 +1559,8 @@ function sanskrit_to_lang(sanskritWord, lang) {
         word.replaceAt(stop+'iyā', stop+'yā', 0);
     if (lang === 'mr') {
         word.replaceAll(['aha','āha','ahā','āhā'], ['ā','ā','ā','ā']);
+    } else if (lang === 'pa') {
+        word.replaceAll(['aha'], ['ahi']);
     }
 
     // lose final aspirates

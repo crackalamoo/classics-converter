@@ -129,22 +129,22 @@
         margin: 0;
     }
     .examples-box {
-        display: none;
-        background-color: pink;
+        display: flex;
+        background-color: #DDF;
         border-radius: 8px;
         border-start-start-radius: 0;
         padding: min(8px, 1vw);
-        width: 80%;
+        width: 100%;
         max-width: 1200px;
         flex-direction: row;
         flex-wrap: wrap;
     }
     button.groupButton {
-        background-color: palevioletred;
+        background-color: rgb(152, 112, 216);
         color: white;
     }
     button.groupButton:hover {
-        background-color: rgb(219, 79, 125);
+        background-color: rgb(172, 79, 219);
         color: white;
     }
     </style>
@@ -169,7 +169,7 @@
             <li data-lang="sa">Sanskrit</li>
         </ul>
         <div class="examples-container">
-            <button class="groupButton" id="examples-button">Examples [+]</button>
+            <button class="groupButton" id="examples-button">Examples [-]</button>
             <div class="examples-box"></div>
         </div>
         <aside id="input-instructions">
@@ -202,11 +202,9 @@
             <p data-lang="sa">For best results:</p>
             <p data-lang="la">Generally use the accusative case for nouns and adjectives.
                 <span data-lang="fr">There are some exceptions: e.g. <span class="smallcaps">corpus</span> → corps</span></p>
-            <p data-lang="la">Generally use the infinitive for verbs.
-                <span data-lang="es">Sometimes other conjugations work too.</span>
-                <span data-lang="it">Sometimes other conjugations work too.</span>
-                <span data-lang="pt">Sometimes other conjugations work too.</span>
+            <p data-lang="la">Generally use the infinitive for verbs. Sometimes other conjugations work too.
                 <span data-lang="es">(<span class="smallcaps">probāre</span> → probar, <span class="smallcaps">probō</span> → pruebo)</span>
+                <span data-lang="fr">(<span class="smallcaps">clamāre</span> → clamer)</span>
                 <span data-lang="pt">(<span class="smallcaps">clamāre</span> → chamar)</span>
                 <span data-lang="it">(<span class="smallcaps">clamāre</span> → chiamare)</span>
             </p>
@@ -249,7 +247,7 @@
                         <label for="shahmukhi">Shahmukhi</label>
                     </form>
                 </div>
-                <div data-lang="ur pa">
+                <div data-lang="hi ur pa">
                     <form name="ur_pa_settings" action="javascript:void(0)">
                         <input type="checkbox" name="vowel_marks" id="vowel_marks" checked>
                         <label for="vowel_marks">Vowel marks <span lang="ur">(زیر، زَبَر، پیش، تَشدِید)</span></label>
@@ -611,7 +609,7 @@ function showSample(name) {
 function populateExamples() {
     const examplesBox = document.querySelector('.examples-box');
     const langSamples = getSampleNames(outputLang);
-    examplesBox.innerHTML = '';
+    examplesBox.innerHTML = '<div style="margin:5px;padding:5px 10px;">Click me!</div>';
     for (const sampleName of langSamples) {
         const button = document.createElement('button');
         button.innerHTML = sampleName;
@@ -624,12 +622,12 @@ function populateExamples() {
 const examplesButton = document.getElementById("examples-button");
 examplesButton.addEventListener("click", () => {
     const examplesBox = document.querySelector('.examples-box');
-    if (examplesBox.style.display === '') {
+    if (examplesBox.style.display === 'none') {
         examplesButton.innerHTML = 'Examples [-]';
-        examplesBox.style.display = 'flex';
+        examplesBox.style.display = '';
     } else {
         examplesButton.innerHTML = 'Examples [+]';
-        examplesBox.style.display = '';
+        examplesBox.style.display = 'none';
     }
 });
 
