@@ -125,6 +125,28 @@
     .smallcaps *,:lang(la) * {
         font-size: inherit;
     }
+    #examples-button {
+        margin: 0;
+    }
+    .examples-box {
+        display: none;
+        background-color: pink;
+        border-radius: 8px;
+        border-start-start-radius: 0;
+        padding: min(8px, 1vw);
+        width: 80%;
+        max-width: 1200px;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    button.groupButton {
+        background-color: palevioletred;
+        color: white;
+    }
+    button.groupButton:hover {
+        background-color: rgb(219, 79, 125);
+        color: white;
+    }
     </style>
     <script src="orthography.js"></script>
     <script src="words.js"></script>
@@ -146,6 +168,10 @@
             <li data-lang="la" class="active">Latin</li>
             <li data-lang="sa">Sanskrit</li>
         </ul>
+        <div class="examples-container">
+            <button class="groupButton" id="examples-button">Examples [+]</button>
+            <div class="examples-box"></div>
+        </div>
         <aside id="input-instructions">
             <div data-lang="la">
                 <p>
@@ -174,7 +200,8 @@
             </div>
             <p data-lang="la">For best results:</p>
             <p data-lang="sa">For best results:</p>
-            <p data-lang="la">Generally use the accusative case for nouns and adjectives.</p>
+            <p data-lang="la">Generally use the accusative case for nouns and adjectives.
+                <span data-lang="fr">There are some exceptions: e.g. <span class="smallcaps">corpus</span> → corps</span></p>
             <p data-lang="la">Generally use the infinitive for verbs.
                 <span data-lang="es">Sometimes other conjugations work too.</span>
                 <span data-lang="it">Sometimes other conjugations work too.</span>
@@ -206,6 +233,14 @@
         </ul>
         <aside id="output-settings">
             <div data-lang="sa">
+                <div data-lang="hi ur">
+                    <form name="hi_ur_settings" action="javascript:void(0)">
+                        <input type="radio" name="hi_ur_script" value="hindi" id="hindi" checked>
+                        <label for="hindi">Hindi</label>
+                        <input type="radio" name="hi_ur_script" value="urdu" id="urdu">
+                        <label for="urdu">Urdu</label>
+                    </form>
+                </div>
                 <div data-lang="pa">
                     <form name="pa_settings" action="javascript:void(0)">
                         <input type="radio" name="pa_script" value="gurmukhi" id="gurmukhi" checked>
@@ -234,6 +269,7 @@
         </aside>
     </div>
 </div>
+
 </div>
 
 <div class="main">
@@ -279,7 +315,7 @@
                 Spanish <i lang="es">aceite</i> (oil) comes from Arabic
                 and is unrelated to the Latin <span lang="la">oleum</span>.</li>
         </ul>
-        And of course, there is the fact that this tool is not perfect: I know I've made many mistakes with this tool,
+        And of course, there is the fact that <strong>this tool is not perfect</strong> I know I've made <em>many</em> mistakes with this tool,
         and there are many more mistakes yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
         the GitHub is at <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
     </p>
@@ -490,14 +526,20 @@ function refreshAside(id) {
     }
 }
 function refreshDisplay() {
+    if (outputLang === 'hi' && document.hi_ur_settings.hi_ur_script.value === 'urdu') {
+        outputLang = 'ur';
+    } else if (outputLang === 'ur' && document.hi_ur_settings.hi_ur_script.value === 'hindi') {
+        outputLang = 'hi';
+    }
     refreshOutput();
     refreshAside('input-instructions');
     refreshAside('output-settings');
+    populateExamples();
 }
 
 inputBox.addEventListener("input", refreshOutput);
 for (const radioButton of document.querySelectorAll('input[type=radio]'))
-    radioButton.addEventListener("change", refreshOutput);
+    radioButton.addEventListener("change", refreshDisplay);
 document.ur_pa_settings.vowel_marks.addEventListener("change", refreshOutput);
 
 const inputButtons = document.querySelectorAll('ul#input-lang li');
@@ -522,7 +564,10 @@ const updateInputLang = (l) => {
     for (const lang of outputLangs[inputLang]) {
         const li = document.createElement('li');
         li.dataset.lang = lang;
-        li.innerHTML = langNames[lang];
+        if (lang === 'hi')
+            li.innerHTML = 'Hindi/Urdu';
+        else
+            li.innerHTML = langNames[lang];
         if (lang === outputLang)
             li.classList.add('active');
         outputChoices.appendChild(li);
@@ -554,12 +599,39 @@ setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
 function showSample(name) {
     for (const sample of samples) {
         if (sample['name'] === name && sample['langs'].has(outputLang)) {
-            inputBox.innerHTML = sample['in'];
+            // inputBox.innerHTML = sample['in'];
+            inputBox.value = sample['in'];
             refreshOutput();
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             return;
         }
     }
 }
+
+function populateExamples() {
+    const examplesBox = document.querySelector('.examples-box');
+    const langSamples = getSampleNames(outputLang);
+    examplesBox.innerHTML = '';
+    for (const sampleName of langSamples) {
+        const button = document.createElement('button');
+        button.innerHTML = sampleName;
+        button.className = 'groupButton';
+        button.addEventListener('click', () => showSample(sampleName));
+        examplesBox.appendChild(button);
+    }
+}
+
+const examplesButton = document.getElementById("examples-button");
+examplesButton.addEventListener("click", () => {
+    const examplesBox = document.querySelector('.examples-box');
+    if (examplesBox.style.display === '') {
+        examplesButton.innerHTML = 'Examples [-]';
+        examplesBox.style.display = 'flex';
+    } else {
+        examplesButton.innerHTML = 'Examples [+]';
+        examplesBox.style.display = '';
+    }
+});
 
 </script>
 

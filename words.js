@@ -410,7 +410,7 @@ const samples = [
     {'name':'moon', 'in':'puuraka candra duura adya', 'langs':['pa']},
     {'name':'merchant', 'in':'deshiiya shreSTi kRta saartha kapunar aagata pRccha', 'langs':['hi']},
     {'name':'leaf', 'in':'yaH priyakaaraka pattra', 'langs':['hi','pa']},
-    {'name':'food', 'in':'ghRt jiiraka shatapuSpa dhaaneyaka roTika', 'langs':['hi']},
+    {'name':'food', 'in':'ghRt jiiraka shatapuSpa dhaaneyaka roTika daala dugdha pulaaka aamra caNaka phala phulla kadala gaarjara guDa pattra naarikela paalakyaa tila', 'langs':['hi']},
     {'name':'misc', 'in':'mrakSaNa prastara satya', 'langs':['pa']},
     {'name':'Maharashtra', 'in':'mahaaraaSTra mahaaraaSTriiya', 'langs':['mr']},
     {'name':'time', 'in':'adya kaalya kaala yaa', 'langs':['mr']},
@@ -418,9 +418,20 @@ const samples = [
     {'name':'Eightfold Path', 'in':'dRSTi saMkalpa vaac karmaanta aajiiva vyaayaama smRti samaadhi', 'langs':['pi']},
     {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya kSaanti satya adhiSThaana maitrii upekSaa', 'langs':['pi']},
     {'name':'misc', 'in':'bhikSu shramaNa tathaagata dharma', 'langs':['pi']},
+
+    {'name':'numbers', 'in':'uunum duoos trees quattuor sex septem octoo novem decem quiindecim', 'langs':['es']},
+    {'name':'numbers', 'in':'trees quattuor sex septem octoo novem decem quiindecim', 'langs':['pt']},
+    {'name':'numbers', 'in':'uunum septem octoo novem decem centum', 'langs':['fr']},
+    {'name':'numbers', 'in':'uunum trees quattuor septem octoo centum', 'langs':['it']},
+    {'name':'food', 'in':'paanem caaseum viinum ovum pira ceepullam ostream apium lactem gelaatum carnem pullum friictum saal', 'langs':['es']},
+    {'name':'misc', 'in':'muutaare metum nebulam baasium praemium regulam podium multum foliam pugnum cognaatum speculum portam iinsulam araaneam montaaneam corpum bonum bonam populum', 'langs':['es']},
 ];
 for (const sample of samples) {
     sample['langs'] = new Set(sample['langs']);
     if (sample['langs'].has('hi'))
         sample['langs'].add('ur');
+}
+
+function getSampleNames(lang) {
+    return samples.filter((s) => s['langs'].has(lang)).map((s) => s['name']);
 }

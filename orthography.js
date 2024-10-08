@@ -1,6 +1,6 @@
 const outputLangs = {
     'la': ['es','fr','pt','it'],
-    'sa': ['hi','ur','pa','mr','pi']
+    'sa': ['hi','pa','mr','pi']
 };
 const langNames = {
     'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
