@@ -1,7 +1,39 @@
-function convertWords(text, mapper) {
-    let words = text.split(' ').filter((w) => w.length > 0);
-    words = words.map((w) => w === '\n' ? w : mapper(w));
-    words = words.join(' ').replaceAll(' \n ','\n').replaceAll(' \n','\n').replaceAll('\n ','\n');
+function convertWords(text, mapper, inOrthoBox=false) {
+    // let words = text.split(' ').filter((w) => w.length > 0);
+    // words = words.map((w) => w === '\n' ? w : mapper(w));
+    // words = words.join(' ').replaceAll(' \n ','\n').replaceAll(' \n','\n').replaceAll('\n ','\n');
+    let chars = [];
+    let isWord = [];
+    for (let i = 0; i < text.length; i++) {
+        chars.push(text[i]);
+        if (contains([' ',',',';','.','!','?',';','-','\n'], text[i])) {
+            isWord.push(false);
+        } else {
+            isWord.push(true);
+        }
+    }
+    let words = [];
+    let word = '';
+    let nonWordMapper = (nw) => {
+        if (inputLang === 'la' && inOrthoBox)
+            return '';
+        return nw;
+    }
+    for (let i = 0; i < chars.length; i++) {
+        if (isWord[i]) {
+            word += chars[i];
+        } else {
+            if (word.length > 0) {
+                words.push(mapper(word));
+                word = '';
+            }
+            words.push(nonWordMapper(chars[i]));
+        }
+    }
+    if (word.length > 0) {
+        words.push(mapper(word));
+    }
+    words = words.join('');
     return words;
 }
 
@@ -234,7 +266,7 @@ function romance_to_italian(word) {
         word.replaceStressed('ò','o');
     }
 
-    if (word.at(0) === 'e' && word.at(1) === 's' && CONSONANTS.has(word.at(2))) {
+    if (contains(['e','i'], word.at(0)) && word.at(1) === 's' && CONSONANTS.has(word.at(2))) {
         word.cutAt(0);
     }
 
@@ -836,12 +868,16 @@ function western_romance_to_french(word) {
     word.replace('aW','ò');
     // word.replaceAt('ž','',word.length-1);
 
+    // final devoicing
+    word.replaceAt('b','p',word.length-1);
+    word.replaceAt('d','t',word.length-1);
+
     word.replaceAt('mn','mmë',word.length-2);
     word.replaceAt('nm','mmë',word.length-2);
     word.replaceAll(['nm','mn'], ['mm','mm']);
     for (const cons of ['t','z'])
         word.replaceAt('v'+cons,cons,word.length-2);
-    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t'], word.at(-1))) {
+    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t','r'], word.at(-1))) {
         word.w += 'ë';
     } else if (word.at(-2) === 'î' && contains(['n','m'], word.at(-1))) {
         word.w += 'ë';

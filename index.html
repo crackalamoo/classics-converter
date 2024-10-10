@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://harysdalvi.com/main.css">
+    <meta property="og:title" content="Classics Converter">
+    <meta property="og:image" content="https://harysdalvi.com/sub/projects/classics-converter/img/Romance_languages.jpg">
+    <link rel="stylesheet" href="https://harysdalvi.com/main.css">
     <style>
     .before-main {
         padding: 8px;
@@ -148,6 +150,7 @@
         color: white;
     }
     </style>
+    <!-- <base href="https://harysdalvi.com/sub/projects/classics-converter/"> -->
     <script src="orthography.js"></script>
     <script src="words.js"></script>
     <script src="convert.js"></script>
@@ -177,10 +180,10 @@
                 <p>
                     Input:
                     <ul>
+                        <li>Indicate all long vowels.</li>
                         <li>Double to lengthen vowels: aa, ee, ii, oo, uu, yy → <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
                         <li>No need to input diphthong ligatures: ae, oe → <span class="smallcaps">æ, œ</span></li>
                         <li>Use an apostrophe to override a substitution. (radi'ii → <span class="smallcaps">radiī</span>)</li>
-                        <li>Indicate all long vowels.</li>
                         <li>U/V are distinct, but I may be used for J.</li>
                     </ul>
                 </p>
@@ -297,10 +300,11 @@
                 and was not inherited but was consciously brought into Spanish by people who knew the Latin word.<a data-footnotes="1"></a></li>
             <li>The descendent language <strong>borrowed a related word from another language</strong>.
                 We might expect the descendent of Sanskrit
-                <span lang="sa">प्रस्तर <i>prastara</i></span> (stone) in Hindi/Urdu to be
-                <span lang="hi">पाथर</span> <span lang="ur">پاتھر</span> <i>pāthar</i>.
-                Instead, the word is <span lang="hi">पत्थर</span> <span lang="ur">پتھر</span> <i>patthar</i>,
-                which is a loan from Punjabi or a related language. <i>Pāthar</i> is an obsolete term.</li>
+                <span lang="sa">म्रक्षण <i>mrakṣaṇa</i></span> (butter) in Hindi/Urdu to be
+                <span lang="hi">माखन</span> <span lang="ur">ماکھن</span> <i>mākhan</i>.
+                Instead, the word is <span lang="hi">मक्खन</span> <span lang="ur">مکھن</span> <i>makkhan</i>,
+                which is a loan from Punjabi. <i>mākhan</i> is a mostly obsolete term
+                used in only a few contexts.</li>
             <li>The <strong>meaning of a word has changed over time</strong>. The Portuguese word <i lang="pt">relha</i>,
             descended from Latin <span lang="la">rēgula</span> (rule), actually means
             plowshare.</li>
@@ -313,7 +317,7 @@
                 Spanish <i lang="es">aceite</i> (oil) comes from Arabic
                 and is unrelated to the Latin <span lang="la">oleum</span>.</li>
         </ul>
-        And of course, there is the fact that <strong>this tool is not perfect</strong> I know I've made <em>many</em> mistakes with this tool,
+        And of course, there is the fact that <strong>this tool is not perfect</strong>. I know I've made <em>many</em> mistakes with this tool,
         and there are many more mistakes yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
         the GitHub is at <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
     </p>
@@ -489,7 +493,7 @@ function refreshOutput() {
     const output = convertWords(text,
         (w) => convertWord(w, inputLang, outputLang));
     const output2 = convertWords(text,
-        (w) => convertWord(w, inputLang, outputLang, true));
+        (w) => convertWord(w, inputLang, outputLang, true), true);
     orthography.innerHTML = convertWords(text,
         (w) => displayOrthography(w, inputLang)).replaceAll('\n\n',' <br>').replaceAll('\n',' <br>');
     outputBox.innerHTML = output.replaceAll('\n',' <br>');

@@ -402,8 +402,8 @@ const samples = [
     {'name':'numbers', 'in':'panca sapta aSTa dasha lakSa', 'langs':['mr']},
     {'name':'time', 'in':'adya raatri sthita param dina dvau prahara saMdhya alagna', 'langs':['hi']},
     {'name':'merchant', 'in':'deshiiya shreSTi kRta saartha yaH aagata sthaa pRccha dadiiya kaHpunar sthaa', 'langs':['hi']},
-    {'name':'body parts', 'in':'hasta karNa akSa shiras paada mukha', 'langs':['hi']},
-    {'name':'body parts', 'in':'hasta karNa akSa shiras', 'langs':['pa','mr']},
+    {'name':'body parts', 'in':'hasta karNa akSa shiras paada mukha danta', 'langs':['hi']},
+    {'name':'body parts', 'in':'hasta karNa akSa shiras danta', 'langs':['pa','mr']},
     {'name':'moon', 'in':'puuraka priyakaaraka candra duura sthaa adya raatri', 'langs':['hi']},
     {'name':'moon', 'in':'puuraka candra duura adya', 'langs':['pa']},
     {'name':'food', 'in':'ghRt jiiraka shatapuSpa dhaaneyaka roTika daala dugdha pulaaka aamra caNaka phala phulla kadala gaarjara guDa pattra naarikela paalakyaa tila parNa khaad', 'langs':['hi']},
@@ -429,9 +429,10 @@ const samples = [
     {'name':'pronouns', 'in':'tuu ille illa illoos illaas mee tee noos voos tuii suii nostrum', 'langs':['es']},
     {'name':'pronouns', 'in':'tuu illa illoos mee tee nostrum', 'langs':['fr']},
     {'name':'pronouns', 'in':'ego tuu ille illa illoos illaas mee tee noos voos nostrum', 'langs':['pt']},
-    {'name':'unlike', 'in':'tuu es passum quoomodo mee magis poor quid', 'langs':['fr']},
-    {'name':'misc', 'in':'faminem muutaare metum baasium praemium regulam podium multum foliam pugnum cognaatum speculum portam iinsulam montaaneam corpum bonum bonam benem populum', 'langs':['es']},
-    {'name':'misc', 'in':'liineam foliam portam iinsulam montaaneam corpus bonum bonam benem', 'langs':['fr']},
+    {'name':'unlike', 'in':'tuu es passum quoomodo mee magis poor-quid', 'langs':['fr']},
+    {'name':'misc', 'in':'faminem muutaare metum baasium praemium reegulam podium multum folia pugnum cognaatum speculum portam iinsulam super montaaneam corpum bonum bonam benem populum viridim sitim', 'langs':['es']},
+    {'name':'misc', 'in':'liineam folia portam iinsulam montaaneam corpus bonum bonam benem steela', 'langs':['fr']},
+    {'name':'misc', 'in':'fluumen folia portam montaaneam corpum bonum bonam steella viridim', 'langs':['it']},
 ];
 for (const sample of samples) {
     sample['langs'] = new Set(sample['langs']);
