@@ -352,7 +352,7 @@ function sanskritOrthography(input, doubles=true) {
     .replaceAll('uu','ū').replaceAll('w','v').replaceAll('ṛ','R').replaceAll('ḥ','H')
     .replaceAll('ṁ','M').replaceAll('ṇ','N');
     if (doubles) {
-        output = output.replaceAll('ny','ñ')
+        output = output.replaceAll('ny','ñ').replaceAll('ks','kS')
         .replaceAll('nk','ńk').replaceAll('nj','ñj').replaceAll('nc','ñc')
         .replaceAll('ng','ń').replaceAll('jn','jñ');
     }
