@@ -1560,12 +1560,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
 
     // lose some more geminates
     word.replaceAll(['pp','PP','BB','ÐÐ'], ['p','P','B','Ð']);
-    if (lang !== 'pa') {
-        word.replaceAll(['jj','JJ','kk','KK','mm','gg','GG'], ['j','J','k','K','m','g','G']);
-    } else {
+    if (lang === 'pa') {
         word.replaceIntervocal(['jj','JJ'], ['j','J']);
-    }
-    if (lang !== 'pa') {
+        word.replaceAll(['ll'], ['llh']);
+    } else {
+        word.replaceAll(['jj','JJ','kk','KK','mm','gg','GG'], ['j','J','k','K','m','g','G']);
         word.replaceAll(['ŤŤ','ȚȚ'], ['Ť','Ț']);
     }
 
