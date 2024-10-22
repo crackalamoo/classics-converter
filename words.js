@@ -159,21 +159,9 @@ class Word {
         return v2;
     }
     getNextVowel(start, vowels=VOWELS) {
-        // for (let i = start+1; i < this.word.length; i++) {
-        //     if (vowels.has(this.word.substring(i,i+1))) {
-        //         return i;
-        //     }
-        // }
-        // return -1;
         return getNextVowel(this.word, start, vowels);
     }
     getPrevVowel(start, vowels=VOWELS) {
-        // for (let i = start-1; i >= 0; i--) {
-        //     if (vowels.has(this.word.substring(i,i+1))) {
-        //         return i;
-        //     }
-        // }
-        // return -1;
         return getPrevVowel(this.word, start, vowels);
     }
     replaceIntervocal(prev, to, vowels=VOWELS) {
@@ -397,24 +385,25 @@ function allContains(set, string) {
 }
 
 const samples = [
-    {'name':'numbers', 'in':'dvau triiNi panca sapta aSTa dasha lakSa', 'langs':['hi']},
-    {'name':'numbers', 'in':'dvau panca sapta aSTa dasha lakSa', 'langs':['pa']},
-    {'name':'numbers', 'in':'panca sapta aSTa dasha lakSa', 'langs':['mr']},
+    {'name':'numbers', 'in':'dvau triiNi panca sapta aSTa dasha laksa', 'langs':['hi']},
+    {'name':'numbers', 'in':'dvau panca sapta aSTa dasha laksa', 'langs':['pa']},
+    {'name':'numbers', 'in':'panca sapta aSTa dasha laksa', 'langs':['mr']},
     {'name':'time', 'in':'adya raatri sthita param dina dvau-prahara saMdhya alagna', 'langs':['hi']},
     {'name':'merchant', 'in':'deshiiya shreSTi kRta saartha yaH aagata sthaa pRccha dadiiya kaHpunar sthaa', 'langs':['hi']},
-    {'name':'body parts', 'in':'hasta karNa akSa shiras paada mukha apara danta', 'langs':['hi']},
-    {'name':'body parts', 'in':'hasta karNa akSa shiras danta', 'langs':['pa','mr']},
+    {'name':'body parts', 'in':'hasta karNa aksa shiras paada mukha apara danta vaala', 'langs':['hi']},
+    {'name':'body parts', 'in':'hasta karNa aksa shiras danta', 'langs':['pa']},
+    {'name':'body parts', 'in':'hasta karNa shiras paada danta kesha', 'langs':['mr']},
     {'name':'moon', 'in':'puuraka priyakaaraka candra duura sthaa adya raatri', 'langs':['hi']},
     {'name':'moon', 'in':'puuraka candra duura adya', 'langs':['pa']},
     {'name':'food', 'in':'ghRt jiiraka shatapuSpa dhaaneyaka lashuna roTika daala dugdha pulaaka aamra caNaka phala phulla kadala gaarjara guDa pattra naarikela paalakyaa tila parNa parpaTa khaad', 'langs':['hi']},
     {'name':'Maharashtra', 'in':'mahaaraaSTra mahaaraaSTriiya', 'langs':['mr']},
     {'name':'time', 'in':'adya kaalya kaala divasa', 'langs':['mr']},
     {'name':'thief', 'in':'tvam dina rajani graama caurika karo param karma na karo', 'langs':['hi']},
-    {'name':'misc', 'in':'mrakSaNa prastara satya', 'langs':['pa']},
+    {'name':'misc', 'in':'mraksaNa prastara satya', 'langs':['pa']},
 
     {'name':'Eightfold Path', 'in':'dRSTi saMkalpa vaac karmaanta aajiiva vyaayaama smRti samaadhi', 'langs':['pi']},
-    {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya kSaanti satya adhiSThaana maitrii upekSaa', 'langs':['pi']},
-    {'name':'misc', 'in':'bhikSu shramaNa tathaagata dharma', 'langs':['pi']},
+    {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya ksaanti satya adhiSThaana maitrii upeksaa', 'langs':['pi']},
+    {'name':'misc', 'in':'bhiksu shramaNa tathaagata dharma', 'langs':['pi']},
 
     {'name':'numbers', 'in':'uunum duoos trees quattuor sex septem octoo novem decem quiindecim', 'langs':['es']},
     {'name':'numbers', 'in':'trees quattuor sex septem octoo novem decem quiindecim', 'langs':['pt']},
@@ -430,9 +419,10 @@ const samples = [
     {'name':'pronouns', 'in':'tuu illa illoos mee tee nostrum', 'langs':['fr']},
     {'name':'pronouns', 'in':'ego tuu ille illa illoos illaas mee tee noos voos nostrum', 'langs':['pt']},
     {'name':'unlike', 'in':'tuu es passum quoomodo mee magis poor-quid', 'langs':['fr']},
-    {'name':'misc', 'in':'faminem muutaare metum baasium praemium reegulam podium multum folia pugnum cognaatum speculum portam iinsulam super montaaneam corpum bonum bonam benem populum viridim sitim pacem', 'langs':['es']},
-    {'name':'misc', 'in':'liineam folia portam iinsulam montaaneam corpus bonum bonam benem steela pacem viridim gaudiam', 'langs':['fr']},
-    {'name':'misc', 'in':'fluumen folia portam montaaneam corpum bonum bonam steella viridim', 'langs':['it']},
+    {'name':'misc', 'in':'faminem muutaare metum baasium praemium reegulam podium multum folia pugnum cognaatum speculum portam iinsulam super montaaneam corpum bonum bonam benem populum viridim sitim pacem fiilium', 'langs':['es']},
+    {'name':'misc', 'in':'liineam folia portam iinsulam montaaneam corpus bonum bonam benem steela pacem viridim gaudiam corem fiilius', 'langs':['fr']},
+    {'name':'misc', 'in':'muutaare metum baasium praemium reegulam multum folia cognaatum speculum portam super montaaneam corpum bonum bonam benem viridim sitim pacem fiilium', 'langs':['pt']},
+    {'name':'misc', 'in':'fluumen folia portam montaaneam corpum bonum bonam steella viridim corem', 'langs':['it']},
 ];
 for (const sample of samples) {
     sample['langs'] = new Set(sample['langs']);

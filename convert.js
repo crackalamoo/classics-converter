@@ -1029,7 +1029,7 @@ function western_romance_to_portuguese(word) {
     if (word.stress !== word.length-1)
         word.replaceAt('i','e',word.length-1);
     if (word.numVowels() > 1 && word.at(-1) === 'e') {
-        if (VOWELS.has(word.at(-3)) && contains(['r','d','n','m','l','s','z','ż','x'], word.at(-2))) {
+        if (VOWELS.has(word.at(-3)) && contains(['r','n','m','l','s','z','ż','x'], word.at(-2))) {
             word.cutAt(word.length-1);
         }
     }
