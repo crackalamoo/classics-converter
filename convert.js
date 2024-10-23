@@ -719,7 +719,7 @@ function western_romance_to_french(word) {
         'ž':'ɣ'
     };
     const lenitionMap2 = {
-        'p':'b',
+        // 'p':'b',
         'c':'g',
         't':'d',
         'f':'v',
