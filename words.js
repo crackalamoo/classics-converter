@@ -355,10 +355,6 @@ function noLostIntertonic(word, i) {
     const cons = CONSONANTS;
     const cons2 = CONSONANTS.union(SEMIVOWELS);
     const sonorants = LIQUIDS.union(SEMIVOWELS).union(new Set(['s','z','n','m','v','f']));
-    // let prev2 = word.sub(i-2,i);
-    // let prev1 = word.sub(i-1,i);
-    // let next1 = word.sub(i+1,i+2);
-    // let next2 = word.sub(i+1,i+3);
     let cluster = filterString(word.sub(i-2,i) + word.sub(i+1,i+3), (c) => cons2.has(c));
     let cluster2 = cluster.substring(1,4);
     cluster = cluster.substring(0,3);
@@ -403,7 +399,7 @@ const samples = [
 
     {'name':'Eightfold Path', 'in':'dRSTi saMkalpa vaac karmaanta aajiiva vyaayaama smRti samaadhi', 'langs':['pi']},
     {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya ksaanti satya adhiSThaana maitrii upeksaa', 'langs':['pi']},
-    {'name':'misc', 'in':'bhiksu shramaNa tathaagata dharma', 'langs':['pi']},
+    {'name':'misc', 'in':'bhiksu shramaNa tathaagata dharma tripiTaka', 'langs':['pi']},
 
     {'name':'numbers', 'in':'uunum duoos trees quattuor sex septem octoo novem decem quiindecim', 'langs':['es']},
     {'name':'numbers', 'in':'trees quattuor sex septem octoo novem decem quiindecim', 'langs':['pt']},
@@ -419,11 +415,11 @@ const samples = [
     {'name':'pronouns', 'in':'tuu illa illoos mee tee nostrum quid', 'langs':['fr']},
     {'name':'pronouns', 'in':'ego tuu ille illa illoos illaas mee tee noos voos nostrum quid', 'langs':['pt']},
     {'name':'pronouns', 'in':'tuu (i)-llui (i)-lloorum noos voos nostrum vostrum quii cui quid', 'langs':['it']},
-    {'name':'negation', 'in':'tuu es passum quoomodo mee magis poor-quid', 'langs':['fr']},
-    {'name':'misc', 'in':'faminem muutaare metum baasium praemium reegulam podium multum folia pugnum cognaatum speculum portam iinsulam super montaaneam corpum bonum bonam benem populum viridim sitim pacem fiilium veeritaatem magistrum camiinum noctem viitam', 'langs':['es']},
-    {'name':'misc', 'in':'liineam folia portam iinsulam montaaneam corpus bonum bonam benem steela pacem viridim gaudiam corem fiilius opera diurnum noctem viitam', 'langs':['fr']},
+    {'name':'negation', 'in':'tuu es passum quoomodo mee et tuu es rem magis poor-quid', 'langs':['fr']},
+    {'name':'misc', 'in':'faminem muutaare metum baasium praemium reegulam podium multum folia pugnum cognaatum speculum portam iinsulam super montaaneam corpum bonum bonam benem populum viridim sitim pacem fiilium veeritaatem magistrum camiinum noctem viitam tootum', 'langs':['es']},
+    {'name':'misc', 'in':'liineam folia portam iinsulam montaaneam corpus bonum bonam benem steela pacem viridim gaudiam corem fiilius opera diurnum noctem viitam arborem toottum', 'langs':['fr']},
     {'name':'misc', 'in':'muutaare metum baasium praemium reegulam multum folia cognaatum speculum portam super montaaneam corpum bonum bonam benem viridim sitim pacem fiilium veeritaatem caelum noctem viitam', 'langs':['pt']},
-    {'name':'misc', 'in':'fluumen folia portam baasium montaaneam corpum bonum bonam steella viridim corem diurnum noctem viitam', 'langs':['it']},
+    {'name':'misc', 'in':'fluumen folia portam baasium montaaneam corpum bonum bonam steella viridim corem diurnum noctem viitam toottum', 'langs':['it']},
 ];
 for (const sample of samples) {
     sample['langs'] = new Set(sample['langs']);
