@@ -37,17 +37,17 @@ function convertWords(text, mapper, inOrthoBox=false) {
     return words;
 }
 
-function convertWord(startWord, inLang, outLang, inOrthoBox=false) {
+function convertWord(startWord, inLang, outLang, inOrthoBox=false, mapStage=null) {
     if (inLang === 'la') {
         if (inOrthoBox)
             return '';
-        return latin_to_lang(startWord, outLang);
+        return latin_to_lang(startWord, outLang, mapStage);
     } else if (inLang === 'sa') {
         let res = startWord;
         let roman = isRoman(startWord)
         if (!roman)
             res = devanagari_to_roman(res);
-        res = sanskrit_to_lang(res, outLang);
+        res = sanskrit_to_lang(res, outLang, mapStage);
         if (outLang === 'pi')
             roman = true; // make Roman script the default output for Pali
         if (roman != inOrthoBox)
@@ -58,27 +58,30 @@ function convertWord(startWord, inLang, outLang, inOrthoBox=false) {
     return startWord;
 }
 
-function latin_to_lang(latinWord, lang) {
+function latin_to_lang(latinWord, lang, mapStage=null) {
     let word = latinOrthography(latinWord.toLowerCase());
-    console.log("Latin: " + new LatinateWord(word));
+    if (mapStage === null) {
+        mapStage = (a, b) => console.log(a + ': ' + b);
+    }
+    mapStage("Latin", new LatinateWord(word));
     word = latin_to_proto_romance(word, lang);
-    console.log("Proto-Romance: " + word);
+    mapStage("Proto-Romance", word.toString());
     if (WESTERN_ROMANCE.has(lang)) {
         word = romance_to_western_romance(word, lang);
-        console.log("Western Romance: " + word);
+        mapStage("Western Romance", word.toString());
         if (lang === 'fr') {
             word = western_romance_to_french(word);
-            console.log("French: " + word);
+            mapStage("French", romanceOrthography(word, latinWord, lang));
         } else if (lang === 'es') {
             word = western_romance_to_spanish(word);
-            console.log("Spanish: " + word);
+            mapStage("Spanish", romanceOrthography(word, latinWord, lang));
         } else if (lang === 'pt') {
             word = western_romance_to_portuguese(word);
-            console.log("Portuguese: " + word);
+            mapStage("Portuguese", romanceOrthography(word, latinWord, lang));
         }
     } else if (lang === 'it') {
         word = romance_to_italian(word);
-        console.log("Italian: " + word);
+        mapStage("Italian", romanceOrthography(word, latinWord, lang));
     }
     // word = word.toString();
     word = romanceOrthography(word, latinWord, lang);
@@ -1165,7 +1168,7 @@ function western_romance_to_portuguese(word) {
     return word;
 }
 
-function sanskrit_to_lang(sanskritWord, lang) {
+function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     let word = sanskritOrthography(sanskritWord);
     word = new SanskriticWord(word);
     const cons = SANSKRIT_CONS;
@@ -1175,6 +1178,11 @@ function sanskrit_to_lang(sanskritWord, lang) {
     const labials = SANSKRIT_LABIAL_CONS;
     const glides = SANSKRIT_GLIDES;
     const sibilants = new Set(['s','z','S']);
+
+    if (mapStage === null) {
+        mapStage = (a, b) => console.log(a + ': ' + b);
+    }
+    mapStage("OIA", word.w);
 
     // Proto Indo-Aryan to Middle Indo-Aryan
 
@@ -1396,6 +1404,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     }
 
     if (lang === 'pi') {
+        mapStage("MIA", word.w);
         return word.w;
     }
 
@@ -1410,7 +1419,7 @@ function sanskrit_to_lang(sanskritWord, lang) {
     word.unjoinAspirate();
 
     // Middle Indo-Aryan to New Indo-Aryan
-    console.log("MIA:", word);
+    mapStage("MIA", word.w);
     // coalescing vowels
     word.replaceAll(['uyu','aā','āa','iī','īyi'], ['ū','ā','ā','ī','ayi']);
     word.replaceAt('aya','á',word.length-3);
@@ -1643,6 +1652,6 @@ function sanskrit_to_lang(sanskritWord, lang) {
     if (lengthen[word.at(-1)])
         word.replaceAt(word.at(-1), lengthen[word.at(-1)], word.length-1);
 
-    console.log("NIA:", word.w);
+    mapStage("NIA", word.w);
     return word.w;
 }
