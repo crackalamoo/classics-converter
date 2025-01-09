@@ -451,7 +451,7 @@ function romance_to_western_romance(word, finalLang='') {
         if (lenitionMap[word.at(i)] && (finalLang !== 'es' || word.at(i) !== 'b')
             && (i !== word.length-1 || (word.at(i) !== 't' && word.at(i) !== 'd'))) {
             // This if statement leaves /b/ unchanged for Spanish (because of the orthography). Leaves final /t/ and /d/ unchanged.
-            // Final /t/ and /d/ after a vowel are handled later (but /t/ is kept for French, because of orthography and liaison.)
+            // Final /t/ and /d/ after a vowel are handled later
             word.replaceAt(word.at(i), lenitionMap[word.at(i)], i);
         }
     }
@@ -489,7 +489,7 @@ function romance_to_western_romance(word, finalLang='') {
         }
     }
     if (VOWELS.has(word.at(-2))) {
-        // remove final -t and -d
+        // remove final -t and -d (except French for orthography reasons)
         if (finalLang !== 'fr')
             word.replaceAt('t', '', word.length-1);
         word.replaceAt('d', '', word.length-1);
@@ -535,7 +535,7 @@ function romance_to_western_romance(word, finalLang='') {
         word.stress += 1;
 
     // loss of final consonants
-    if (finalLang !== 'fr' && CONSONANTS.has(word.at(-1)) && !contains(['l','s','n','z','r'], word.at(-1))) {
+    if (finalLang !== 'fr' && CONSONANTS.has(word.at(-1)) && !contains(['l','s','n','z','r','t'], word.at(-1))) {
         word.cutAt(word.length-1);
     }
 

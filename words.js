@@ -333,14 +333,14 @@ class SanskriticWord extends Word {
     }
 }
 
-function schwaDeletion(word) {
+function schwaDeletion(word, replace='') {
     let res = word;
     const at = (i) => res.substring(i, i+1);
     for (let i = res.length-1; i >= 0; i--) {
         if (at(i) === 'a'
-        && !VOWELS.has(at(i+1)) && !VOWELS.has(at(i-1))
+        && !VOWELS.has(at(i-1)) && !VOWELS.has(at(i+1)) && VOWELS.has(at(i+2))
         && getNextVowel(word, i) !== -1 && getPrevVowel(word, i) !== -1) {
-            res = res.substring(0, i) + res.substring(i+1);
+            res = res.substring(0, i) + replace + res.substring(i+1);
         }
     }
     return res;

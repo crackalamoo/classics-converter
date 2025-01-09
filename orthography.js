@@ -545,7 +545,8 @@ function sanskritRomanOrthography(word, lang) {
     if (lang !== 'sa' && lang !== 'pi') {
         const getAt = (j) => res.substring(j, j+1);
         res = res.replaceAll('aṁ','áṁ');
-        res = schwaDeletion(res);
+        res = schwaDeletion(res, 'ä');
+        res = res.replaceAll('ahä','ehä').replaceAll('ä','');
         res = res.replaceAll('á','a');
         if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
             res = res.substring(0, res.length-1) + 'a';
