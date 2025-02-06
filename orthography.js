@@ -552,7 +552,9 @@ function sanskritRomanOrthography(word, lang) {
             res = res.substring(0, res.length-1) + 'a';
         res = res.replaceAll('ś','sh');
         if (lang === 'mr') {
-            res = res.replaceAll('j','z');
+            res = res.replaceAll('ī','i').replaceAll('ū','u');
+            res = res.replaceAll('ji','Ji').replaceAll('jhi','Jhi').replaceAll('j','z').replaceAll('J','j');
+            res = res.replaceAll('ci','chi');
         } else {
             if (res.endsWith('āṁv'))
                 res = res.substring(0, res.length-3) + 'āõṁ';
