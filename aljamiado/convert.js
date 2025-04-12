@@ -1,8 +1,9 @@
 let inputLang = 'es';
-let outputLang = 'Arab';
+let outputLang = 'Aljamiado';
 const outputLangs = {
-    'es': [],
-}
+    'es': ['Aljamiado'],
+    'ms': ['Jawi'],
+};
 
 const VOWELS = new Set(['a', 'e', 'i', 'o', 'u']);
 

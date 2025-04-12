@@ -1,7 +1,13 @@
 const inputBox = document.getElementById("input-box");
 const outputBox = document.getElementById("output-box");
-// const outputChoices = document.getElementById("output-lang");
+const outputChoices = document.getElementById("output-lang");
 const orthography = document.getElementById("orthography");
+const specialChars = document.getElementById("special-chars");
+
+const specialCharsSet = {
+    'es': ['ñ','á','é','í','ó','ú','ü'],
+    'ms': ['é','ĕ'],
+};
 
 function getText() {
     let text = inputBox.value;
@@ -70,6 +76,7 @@ function setLangChoice(ulSub, callback) {
 }
 const updateInputLang = (l) => {
     inputLang = l;
+
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {
     //     outputLang = outputLangs[l][0];
@@ -77,7 +84,7 @@ const updateInputLang = (l) => {
     // for (const lang of outputLangs[inputLang]) {
     //     const li = document.createElement('li');
     //     li.dataset.lang = lang;
-    //     li.innerHTML = langNames[lang];
+    //     li.innerHTML = lang;
     //     if (lang === outputLang)
     //         li.classList.add('active');
     //     outputChoices.appendChild(li);
@@ -86,6 +93,24 @@ const updateInputLang = (l) => {
     //     outputLang = l;
     //     refreshDisplay();
     // });
+
+    // refreshAside('input-instructions')
+    specialChars.innerHTML = '';
+    for (const char of specialCharsSet[inputLang]) {
+        const button = document.createElement('button');
+        button.innerHTML = char;
+        button.addEventListener('click', () => {
+            const start = inputBox.selectionStart;
+            const end = inputBox.selectionEnd;
+            const text = inputBox.value;
+            inputBox.value = text.substring(0, start) + char + text.substring(end);
+            inputBox.setSelectionRange(start + 1, start + 1);
+            inputBox.focus();
+            refreshOutput();
+        });
+        specialChars.appendChild(button);
+    }
+
     refreshDisplay();
 }
 setLangChoice(inputButtons, updateInputLang);

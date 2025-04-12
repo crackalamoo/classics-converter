@@ -16,6 +16,21 @@
         padding: 12px;
         direction: rtl;
     }
+    #output-settings,#special-chars {
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+    }
+    button {
+        font-size: 1em;
+        font-family: inherit;
+        min-width: 1.2em;
+        background: #EEEEEE;
+        border: 2px solid #CCCCCC;
+        margin: 0 2px;
+    }
+    button:hover {
+        background: #CCCCCC;
+    }
     </style>
     <!-- <base href="https://harysdalvi.com/sub/projects/aljamiado/"> -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPKKGJ4J3K"></script>
@@ -40,9 +55,10 @@
                 <span id="orthography"></span>
             </div>
         </div>
+        <div id="special-chars"></div>
         <ul class="choose-lang" id="input-lang">
             <li data-lang="es" class="active">Spanish</li>
-            <li data-lang="bs">Bosnian</li>
+            <li data-lang="ms">Malay</li>
         </ul>
         <aside id="input-settings">
             <div data-lang="es">
@@ -78,6 +94,7 @@
         </ul> -->
         <aside id="output-settings">
             <div data-lang="es">
+                <b>Aljamía</b>
                 <form name="es_output" action="javascript:void(0)">
                     <input type="checkbox" name="abbr" value="abbr" id="abbr" checked>
                     <label for="abbr">Common word combinations (e.g. el gato → elgato)</label><br>
@@ -86,6 +103,9 @@
                     <p>These were common in Aljamiado texts.</p>
                     </p>
                 </form>
+            </div>
+            <div data-lang="ms">
+                <b>Jawi</b>
             </div>
         </aside>
     </div>
