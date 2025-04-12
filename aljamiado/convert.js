@@ -60,8 +60,6 @@ function convertWords(text, mapper, nonWordMapper=null, noSpaceAfter=null) {
         combineNextWord.push(false);
         needsMap.push(true);
     }
-    console.log(words);
-    console.log(combineNextWord);
     for (let i = words.length-3; i >= 0; i--) {
         if (combineNextWord[i] && words[i+1] === ' ') {
             words[i] = words[i] + ':' + words[i+2];
@@ -104,6 +102,8 @@ function properOrthography(input, lang) {
                 output = 'i' + output.substring(1);
             }
         } else {
+            output = output.replaceAll('méxico','méjico').replaceAll('mexicano','mejicano')
+                .replaceAll('mexicana','mejicana');
             output = output.replaceAll('x','cs');
             output = output.replaceAll('z','ç');
         }
@@ -126,10 +126,68 @@ function punctMapper(char) {
 };
 
 function spanishAljamiado(word) {
+    let predefined = {
+        'alá':'اٗلٗلٗهٗ',
+        'hay':'اَيْ',
+    };
+    if (document.es_output.arabic.checked) {
+        predefined = {
+            ...predefined,
+            'almohada':'اَلْمُخَدَّة',
+            'elixir':'اَلْإكْسِيٗرْ',
+            'elicsir':'اَلْإكْسِيٗرْ',
+            'alcohol':'اَلْكُحُلْ',
+            'sandía':'سَنْدِيَّة',
+            'tarea':'طَرِيٗحَة',
+            'cifra':'صِفْرَ',
+            'albahaca':'اَلبَحَقَ',
+            'asesino':'حَشَاشِيٗنُ',
+            'hay':'اَيْ',
+            'taza':'طَاسَ','taça':'طَاسَ',
+            'limón':'لِيٗمُوٗنْ',
+            'algodón':'اَلْقُطُنْ',
+            'azúcar':'اَلْسُّكَّرْ','açúcar':'اَلْسُّكَّرْ',
+        };
+    }
+    const predefined_latin = {
+        'haber':'aber',
+        'ha':'a',
+        'he':'e',
+        'has':'as',
+        'hay':'ay',
+        'ha':'a',
+        'hemos':'emos',
+        'habéis':'abéis',
+        'han':'an',
+        'había':'abía',
+        'habrá':'abrá',
+        'habían':'abían',
+        'habría':'abría',
+        'habrían':'abrían',
+        'hubiera':'ubiera',
+        'hubieras':'ubieras',
+        'hubieran':'ubieran',
+    };
     if (word === 'y')
         word = 'i';
-    if (word === 'alá')
-        return 'الله';
+    for (const [key, value] of Object.entries(predefined)) {
+        if (word === key)
+            return value.replaceAll('ٗ','');
+        word = word.replaceAll(':'+key+':', ':'+value+':');
+        if (word.startsWith(key+':'))
+            word = value + ':' + word.substring(key.length+1);
+        else if (word.endsWith(':'+key))
+            word = word.substring(0,word.length-key.length-1) + ':' + value;
+    }
+    for (const [key, value] of Object.entries(predefined_latin)) {
+        if (word === key)
+            word = value;
+        word = word.replaceAll(':'+key+':', ':'+value+':');
+        if (word.startsWith(key+':'))
+            word = value + ':' + word.substring(key.length+1);
+        else if (word.endsWith(':'+key))
+            word = word.substring(0,word.length-key.length-1) + ':' + value;
+    }
     word = word.replaceAll('de:e','de').replaceAll('s:s','s s').replaceAll('l:l','l l').replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':','');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
@@ -138,7 +196,6 @@ function spanishAljamiado(word) {
     word = word.replaceAll('ch','č').replaceAll('c','k').replaceAll('zk','çk');
     word = word.replaceAll('ia','iya').replaceAll('ie','iye').replaceAll('io','iyo').replaceAll('iu','iyu');
     word = word.replaceAll('ua','uwa').replaceAll('ue','uwe').replaceAll('ui',"u'i").replaceAll('uo','uwo');
-    word = word.replaceAll('ei','eyi');
     word = word.replaceAll('v','b').replaceAll('ll','L').replaceAll('rr','R');
     word = word.replaceAll('nd','nD').replaceAll('md','mD');
     word = word.replaceAll('ss','s');
@@ -151,6 +208,7 @@ function spanishAljamiado(word) {
     }
     word = word.replaceAll('Huwa','huwa').replaceAll('Huwe','huwe');
     word = word.replaceAll('h','').replaceAll('H','h');
+    word = word.replaceAll('ai','ayi').replaceAll('ei','eyi').replaceAll('oi','oyi');
     word = "'" + word;
     word = word.replaceAll('au','ao').replaceAll('eu','eo');
     word = word.replaceAll('ee',"é").replaceAll('aa','á').replaceAll('oo','ú').replaceAll('uu','ú');
@@ -219,7 +277,8 @@ function spanishAljamiado(word) {
     word = word.replaceAll("'",'').replaceAll('´','').replaceAll('˜','');
 
     const cons_set = new Set(Object.values(cons_map));
-    const diacritic_set = new Set(['َ','ِ','ُ','ّ']);
+    console.log(word);
+    const diacritic_set = new Set(['َ','ِ','ُ','ّ','ٗ','ْ']);
     for (let i = word.length; i >= 0; i--) {
         let char = word.substring(i,i+1);
         let next;
@@ -231,6 +290,7 @@ function spanishAljamiado(word) {
             word = word.substring(0,i+1) + 'ْ' + word.substring(i+1);
         }
     }
+    word = word.replaceAll('ٗ','');
 
     return word;
 }
