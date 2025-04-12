@@ -6,7 +6,7 @@ function convertWords(text, mapper, inOrthoBox=false) {
     let isWord = [];
     for (let i = 0; i < text.length; i++) {
         chars.push(text[i]);
-        if (contains([' ',',',';','.','!','?',';','-','\n'], text[i])) {
+        if (contains([' ',',',':',';','.','!','?',';','-','\n','¿','¡'], text[i])) {
             isWord.push(false);
         } else {
             isWord.push(true);
