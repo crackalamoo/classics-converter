@@ -10,9 +10,9 @@ function getText() {
 function refreshOutput() {
     const text = getText();
     const output = convertWords(text,
-        (w) => convertWord(w, inputLang, outputLang));
-    orthography.innerHTML = convertWords(text,
-        (w) => properOrthography(w, inputLang)).replaceAll('\n\n',' <br>').replaceAll('\n',' <br>');
+        (w) => convertWord(w, inputLang, outputLang), punctMapper);
+    // orthography.innerHTML = convertWords(text,
+    //     (w) => properOrthography(w, inputLang)).replaceAll('\n\n',' <br>').replaceAll('\n',' <br>');
     outputBox.innerHTML = output.replaceAll('\n',' <br>');
 }
 function refreshAside(id) {
@@ -22,12 +22,12 @@ function refreshAside(id) {
         else
             child.style.display = 'none';
     }
-    for (const grandchild of document.querySelectorAll('#'+id+' > * > *')) {
-        if (grandchild.dataset.lang === undefined || grandchild.dataset.lang.indexOf(outputLang) !== -1)
-            grandchild.style.display = '';
-        else
-            grandchild.style.display = 'none';
-    }
+    // for (const grandchild of document.querySelectorAll('#'+id+' > * > *')) {
+    //     if (grandchild.dataset.lang === undefined || grandchild.dataset.lang.indexOf(outputLang) !== -1)
+    //         grandchild.style.display = '';
+    //     else
+    //         grandchild.style.display = 'none';
+    // }
 }
 function refreshDisplay() {
     refreshOutput();
