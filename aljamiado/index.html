@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Aljamiado">
+    <meta property="og:image" content="https://harysdalvi.com/sub/projects/classics-converter/img/Romance_languages.jpg">
+    <link rel="stylesheet" href="https://harysdalvi.com/main.css">
+    <title>Aljamiado</title>
+    <style>
+    .before-main {
+        padding: 8px;
+        background-color: #fff;
+        color: #123242;
+        min-width: 800px;
+    }
+    .before-main h1 {
+        color: #123242;
+    }
+    .box-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        font-family: "Times New Roman", serif;
+    }
+    .box-container-column.has-box {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 0;
+        flex-grow: 4;
+        width: 40%;
+        height: fit-content;
+    }
+    .text-box {
+        background-color: #DDD;
+        font-size: 24px;
+    }
+    #conv-arrow {
+        flex-grow: 1;
+        min-height: calc(max(200px, 35vh) - 24px - 16px - 12px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    #output-box {
+        width: calc(100% - 24px);
+        min-height: calc(max(200px, 35vh));
+        padding: 12px;
+    }
+    #input-box {
+        width: calc(100% - 24px);
+        min-height: calc(max(200px, 35vh) - 24px - 20px - 12px);
+        padding: 12px;
+    }
+    textarea {
+        background: none;
+        border: none;
+        font: inherit;
+        resize: none;
+    }
+    .ortho-box {
+        font-size: 18px;
+        color: #666;
+        min-height: 50px;
+    }
+    .ortho-box > * {
+        width: 100%;
+        box-sizing: border-box;
+        padding-top: 12px;
+        padding-inline-start: 12px;
+        padding-bottom: 12px;
+        display: inline-block;
+    }
+    #conv-arrow {
+        text-align: center;
+        font-size: 36px;
+        flex-basis: 0;
+    }
+    ul.choose-lang {
+        display: inline;
+        list-style-type: none;
+        height: 225px;
+        width: fit-content;
+        overflow-y: scroll;
+        color: #050505;
+    }
+
+    ul.choose-lang li {
+        width: 250px;
+        height: 24px;
+        font-size: 16px;
+        background: #EEEEEE;
+        line-height: 25px;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+    ul.choose-lang li:hover {
+        background: #CCCCCC;
+    }
+    ul.choose-lang li.active {
+        background: #AAAA99;
+    }
+    ul.choose-lang li.inactive {
+        display: none;
+    }
+    </style>
+    <!-- <base href="https://harysdalvi.com/sub/projects/aljamiado/"> -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPKKGJ4J3K"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YPKKGJ4J3K');
+    </script>
+    <script src="convert.js"></script>
+</head>
+
+<body>
+<div class="before-main">
+<h1>Aljamiado</h1>
+<div class="box-container">
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <textarea id="input-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+            <div class="ortho-box">
+                <span id="orthography"></span>
+            </div>
+        </div>
+        <ul class="choose-lang" id="input-lang">
+            <li data-lang="es" class="active">Spanish</li>
+            <li data-lang="id">Malay</li>
+        </ul>
+        <aside id="input-settings">
+            <div data-lang="es">
+                <form name="es_settings" action="javascript:void(0)">
+                    <input type="radio" name="es" value="modern" id="modern" checked>
+                    <label for="modern">Modern Spanish</label><br>
+                    <input type="radio" name="es" value="old" id="old">
+                    <label for="old">Old Spanish</label>
+                </form>
+            </div>
+        </aside>
+        <aside id="input-instructions">
+            <div data-lang="es">
+                <p>
+                    Changes from Old Spanish to Modern Spanish:
+                    <ul>
+                        <li>z, ç, c[e/i] → z, c[e/i]</li>
+                        <li>ss, s → s</li>
+                        <li>x, j → j</li>
+                    </ul>
+                </p>
+            </div>
+        </aside>
+    </div>
+
+    <div id="conv-arrow">→</div>
+
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <div id="output-box"></div>
+        </div>
+        <!-- <ul class="choose-lang" id="output-lang">
+        </ul> -->
+        <aside id="output-settings">
+            
+        </aside>
+    </div>
+</div>
+
+</div>
+
+<div class="main">
+    
+
+    <h2 id="ref">References</span></h2>
+    <ol id="reflist">
+    </ol>
+    <h2>Footnotes</h2>
+    <ul id="footnotes">
+    </ul>
+</div>
+
+
+<div id="footer"></div>
+<script src="http://harysdalvi.com/services.js"></script>
+<script>
+setAnchors();
+orderCitations();
+orderCitations('footnotes', ['*']);
+// const DARK = darkTheme();
+</script>
+<script src="main.js"></script>
+
+</body>
+
+</html>
