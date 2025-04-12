@@ -20,5 +20,5 @@ This is done by applying a series of rules. For example, Sanskrit consonant clus
 * `convert.js` has the bulk of the conversions.
 * `es.py` is an old file, serving as a demo of conversions from Latin to Spanish and Italian.
 
-![Romance languages](img/Romance_languages.jpg)
-![Indo-Aryan languages](img/Indo-Aryan_language_map.svg)
+![Romance languages](classics-converter/img/Romance_languages.jpg)
+![Indo-Aryan languages](classics-converter/img/Indo-Aryan_language_map.svg)
