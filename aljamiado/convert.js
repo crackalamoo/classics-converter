@@ -19,7 +19,7 @@ function isRoman(word) {
     return true;
 }
 
-function convertWords(text, mapper, nonWordMapper=null) {
+function convertWords(text, mapper, nonWordMapper=null, noSpaceAfter=null) {
     let chars = [];
     let isWord = [];
     for (let i = 0; i < text.length; i++) {
@@ -35,19 +35,45 @@ function convertWords(text, mapper, nonWordMapper=null) {
     if (nonWordMapper === null) {
         nonWordMapper = (char) => char;
     }
+    if (noSpaceAfter === null) {
+        noSpaceAfter = new Set([]);
+    }
+    let combineNextWord = [];
+    let needsMap = [];
     for (let i = 0; i < chars.length; i++) {
         if (isWord[i]) {
             word += chars[i];
         } else {
             if (word.length > 0) {
-                words.push(mapper(word));
+                combineNextWord.push(noSpaceAfter.has(word.toLowerCase()));
+                needsMap.push(true);
+                words.push(word);
                 word = '';
             }
             words.push(nonWordMapper(chars[i]));
+            needsMap.push(false);
+            combineNextWord.push(false);
         }
     }
     if (word.length > 0) {
-        words.push(mapper(word));
+        words.push(word);
+        combineNextWord.push(false);
+        needsMap.push(true);
+    }
+    console.log(words);
+    console.log(combineNextWord);
+    for (let i = words.length-3; i >= 0; i--) {
+        if (combineNextWord[i] && words[i+1] === ' ') {
+            words[i] = words[i] + ':' + words[i+2];
+            words.splice(i+1, 2);
+            needsMap.splice(i+1, 2);
+            combineNextWord.splice(i+1, 2);
+        }
+    }
+    for (let i = 0; i < words.length; i++) {
+        if (needsMap[i]) {
+            words[i] = mapper(words[i]);
+        }
     }
     words = words.join('');
     return words;
@@ -72,7 +98,7 @@ function matchCase(word, caseModel) {
 function properOrthography(input, lang) {
     let output = input.toLowerCase();
     if (lang === 'es') {
-        if (document.es_settings.es.value === 'old') {
+        if (document.es_input.era.value === 'old') {
             output = output.replaceAll('nn','ñ');
             if (!VOWELS.has(output.substring(1,2)) && output.substring(0,1) === 'y') {
                 output = 'i' + output.substring(1);
@@ -104,13 +130,15 @@ function spanishAljamiado(word) {
         word = 'i';
     if (word === 'alá')
         return 'الله';
+    word = word.replaceAll('de:e','de').replaceAll('s:s','s s').replaceAll('l:l','l l').replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':','');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
-        .replaceAll('q','k');
+        .replaceAll('q','k').replaceAll('güe','guwe').replaceAll('güi','guwi');
     word = word.replaceAll('ch','č').replaceAll('c','k').replaceAll('zk','çk');
     word = word.replaceAll('ia','iya').replaceAll('ie','iye').replaceAll('io','iyo').replaceAll('iu','iyu');
     word = word.replaceAll('ua','uwa').replaceAll('ue','uwe').replaceAll('ui',"u'i").replaceAll('uo','uwo');
+    word = word.replaceAll('ei','eyi');
     word = word.replaceAll('v','b').replaceAll('ll','L').replaceAll('rr','R');
     word = word.replaceAll('nd','nD').replaceAll('md','mD');
     word = word.replaceAll('ss','s');
@@ -118,12 +146,14 @@ function spanishAljamiado(word) {
         word = 'D' + word.substring(1);
     if (word.startsWith('r'))
         word = 'R' + word.substring(1);
-    if (word.startsWith('h'))
-        word = 'h'+word.substring(1).replaceAll('h','');
-    else
-        word = word.replaceAll('h','');
+    if (word.startsWith('h')) {
+        word = 'H'+word.substring(1);
+    }
+    word = word.replaceAll('Huwa','huwa').replaceAll('Huwe','huwe');
+    word = word.replaceAll('h','').replaceAll('H','h');
     word = "'" + word;
     word = word.replaceAll('au','ao').replaceAll('eu','eo');
+    word = word.replaceAll('ee',"é").replaceAll('aa','á').replaceAll('oo','ú').replaceAll('uu','ú');
     for (const strong of ['a','e','o']) {
         for (const strong2 of ['a','o']) {
             word = word.replaceAll(strong+strong2, strong + "'" + strong2);
@@ -163,13 +193,18 @@ function spanishAljamiado(word) {
         'e':'َا',
         'i':'ِ',
         'u':'ُ',
+        'é':'َاَا',
+        'á':'َأَ',
+        'ú':'ُؤُ'
     };
     const vow_map_2 = {
         'a':'اَ',
         'e':'ءَا',
         'i':'اِ',
         'u':'اُ',
-        'é':'اَا'
+        'é':'اَا',
+        'á':'اَأَ',
+        'ú':'اُؤُ'
     };
     for (const [key, value] of Object.entries(cons_map)) {
         word = word.replaceAll(key, value);

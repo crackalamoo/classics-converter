@@ -9,8 +9,7 @@ function getText() {
 }
 function refreshOutput() {
     const text = getText();
-    const output = convertWords(text,
-        (w) => convertWord(w, inputLang, outputLang), punctMapper);
+    const output = getOutput(text);
     // orthography.innerHTML = convertWords(text,
     //     (w) => properOrthography(w, inputLang)).replaceAll('\n\n',' <br>').replaceAll('\n',' <br>');
     outputBox.innerHTML = output.replaceAll('\n',' <br>');
@@ -35,11 +34,25 @@ function refreshDisplay() {
     refreshAside('input-settings');
     refreshAside('output-settings');
 }
+function getOutput(text) {
+    if (inputLang === 'es') {
+        const noSpaceAfter = document.es_output.abbr.checked ?
+            new Set(['el','la','los','las', 'lo', 'que', 'a', 'al', 'y', 'de', 'del', 'para', 'por', 'si', 'en', 'con',
+                'no', 'porque', 'mi','tu','su', 'me','te','se','le',
+            ])
+            : null;
+        return convertWords(text,
+            (w) => convertWord(w, inputLang, outputLang),
+            punctMapper, noSpaceAfter);
+    }
+    return convertWords(text,
+        (w) => convertWord(w, inputLang, outputLang), punctMapper);
+}
 
 inputBox.addEventListener("input", refreshOutput);
 for (const radioButton of document.querySelectorAll('input[type=radio]'))
     radioButton.addEventListener("change", refreshDisplay);
-// document.es_settings.es.addEventListener("change", refreshOutput);
+document.es_output.abbr.addEventListener("change", refreshOutput);
 
 const inputButtons = document.querySelectorAll('ul#input-lang li');
 

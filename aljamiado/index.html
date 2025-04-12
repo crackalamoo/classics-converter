@@ -46,10 +46,10 @@
         </ul>
         <aside id="input-settings">
             <div data-lang="es">
-                <form name="es_settings" action="javascript:void(0)">
-                    <input type="radio" name="es" value="modern" id="modern" checked>
+                <form name="es_input" action="javascript:void(0)">
+                    <input type="radio" name="era" value="modern" id="modern" checked>
                     <label for="modern">Modern Spanish</label><br>
-                    <input type="radio" name="es" value="old" id="old">
+                    <input type="radio" name="era" value="old" id="old">
                     <label for="old">Old Spanish</label>
                 </form>
             </div>
@@ -77,7 +77,14 @@
         <!-- <ul class="choose-lang" id="output-lang">
         </ul> -->
         <aside id="output-settings">
-            
+            <div data-lang="es">
+                <form name="es_output" action="javascript:void(0)">
+                    <input type="checkbox" name="es_output" value="abbr" id="abbr" checked>
+                    <label for="abbr">Common word combinations (e.g. el gato → elgato)</label>
+                    <p>This was common in Aljamiado texts.</p>
+                    </p>
+                </form>
+            </div>
         </aside>
     </div>
 </div>
