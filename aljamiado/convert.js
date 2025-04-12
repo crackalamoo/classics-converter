@@ -181,8 +181,21 @@ function spanishAljamiado(word) {
         word = word.replaceAll(key, value);
     }
 
-    // word = word.replaceAll('a','').replaceAll('e','').replaceAll('i','').replaceAll('u','');
+    word = word.replaceAll("'",'').replaceAll('´','').replaceAll('˜','');
 
-    word = word.replaceAll("'",'');
+    const cons_set = new Set(Object.values(cons_map));
+    const diacritic_set = new Set(['َ','ِ','ُ','ّ']);
+    for (let i = word.length; i >= 0; i--) {
+        let char = word.substring(i,i+1);
+        let next;
+        if (i === word.length)
+            next = '';
+        else
+            next = word.substring(i+1,i+2);
+        if ((cons_set.has(char) || char === 'ّ') && !diacritic_set.has(next)) {
+            word = word.substring(0,i+1) + 'ْ' + word.substring(i+1);
+        }
+    }
+
     return word;
 }
