@@ -163,8 +163,13 @@ function spanishAljamiado(word) {
     if (word === 'y')
         word = 'i';
     for (const [key, value] of Object.entries(predefined)) {
-        if (word === key)
-            return value.replaceAll('ٗ','');
+        if (word === key) {
+            word = value.replaceAll('ٗ','');
+            if (document.es_output.maghrebi.checked) {
+                word = word.replaceAll('ف','ڢ').replaceAll('ق','ڧ');
+            }
+            return word;
+        }
         word = word.replaceAll(':'+key+':', ':'+value+':');
         if (word.startsWith(key+':'))
             word = value + ':' + word.substring(key.length+1);
@@ -180,7 +185,8 @@ function spanishAljamiado(word) {
         else if (word.endsWith(':'+key))
             word = word.substring(0,word.length-key.length-1) + ':' + value;
     }
-    word = word.replaceAll('de:e','de').replaceAll('s:s','s s').replaceAll('l:l','l l').replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':','');
+    word = word.replaceAll('de:e','de').replaceAll('s:s','s s').replaceAll('l:l','l l').replaceAll(':h',':H')
+        .replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
@@ -241,6 +247,9 @@ function spanishAljamiado(word) {
         }
     }
     word = word.replaceAll('ٗ','');
+    if (document.es_output.maghrebi.checked) {
+        word = word.replaceAll('ف','ڢ').replaceAll('ق','ڧ');
+    }
 
     return word;
 }

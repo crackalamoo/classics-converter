@@ -64,6 +64,7 @@ for (const radioButton of document.querySelectorAll('input[type=radio]'))
     radioButton.addEventListener("change", refreshDisplay);
 document.es_output.abbr.addEventListener("change", refreshOutput);
 document.es_output.arabic.addEventListener("change", refreshOutput);
+document.es_output.maghrebi.addEventListener("change", refreshOutput);
 
 const inputButtons = document.querySelectorAll('ul#input-lang li');
 
