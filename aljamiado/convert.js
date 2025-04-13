@@ -5,12 +5,6 @@ const outputLangs = {
     'ms': ['Jawi'],
 };
 
-const VOWELS = new Set(['a', 'e', 'i', 'o', 'u',
-    'á', 'é', 'í', 'ó', 'ú',
-    'ĕ', 'ü',
-    'à', 'ä', 'ò',
-]);
-
 function contains(set, item) {
     return (new Set(set).has(item));
 }
@@ -143,19 +137,7 @@ function spanishAljamiado(word) {
     if (document.es_output.arabic.checked) {
         predefined = {
             ...predefined,
-            'almohada':'اَلْمُخَدَّة',
-            'elixir':'اَلْإكْسِيٗرْ',
-            'alcohol':'اَلْكُحُلْ',
-            'sandía':'سَنْدِيَّة',
-            'tarea':'طَرِيٗحَة',
-            'cifra':'صِفْرَ',
-            'albahaca':'اَلْبَحَقَ',
-            'asesino':'حَشَاشِيٗنُ',
-            'taza':'طَاسَ',
-            'limón':'لِيٗمُوٗنْ',
-            'algodón':'اَلْقُطُنْ',
-            'azúcar':'اَلْسُّكَّرْ',
-            'árabe':'عَرَبَا',
+            ...PREDEFINED_ALJAMIADO,
         };
         predefined['elicsir'] = predefined['elixir'];
         predefined['taça'] = predefined['taza'];
@@ -177,27 +159,7 @@ function spanishAljamiado(word) {
             predefined[word+'s'] = predefined[word] + 'شْ';
         }
     }
-    const predefined_latin = {
-        'haber':'aber',
-        'ha':'a',
-        'he':'e',
-        'has':'as',
-        'hay':'ay',
-        'ha':'a',
-        'hemos':'emos',
-        'habéis':'abéis',
-        'han':'an',
-        'había':'abía',
-        'habrá':'abrá',
-        'habían':'abían',
-        'habría':'abría',
-        'habrían':'abrían',
-        'hubiera':'ubiera',
-        'hubieras':'ubieras',
-        'hubieran':'ubieran',
-        'hora':'ora',
-        'horas':'oras',
-    };
+    const predefined_latin = PREDEFINED_SPANISH;
     if (word === 'y')
         word = 'i';
     for (const [key, value] of Object.entries(predefined)) {
@@ -250,50 +212,9 @@ function spanishAljamiado(word) {
     }
     word = word.replaceAll('o','u');
 
-    const cons_map = {
-        'b':'ب',
-        'p':'بّ',
-        't':'ت',
-        'j':'ج',
-        'č':'جّ',
-        'D':'د',
-        'd':'ذ',
-        'r':'ر',
-        'R':'رّ',
-        'z':'ز',
-        'ç':'س',
-        's':'ش',
-        'x':'شّ',
-        'g':'غ',
-        'f':'ف',
-        'k':'ک',
-        'l':'ل',
-        'L':'لّ',
-        'm':'م',
-        'n':'ن',
-        'ñ':'نّ',
-        'w':'و',
-        'h':'ه',
-        'y':'ي',
-    }
-    const vow_map = {
-        'a':'َ',
-        'e':'َا',
-        'i':'ِ',
-        'u':'ُ',
-        'é':'َاَا',
-        'á':'َأَ',
-        'ú':'ُؤُ'
-    };
-    const vow_map_2 = {
-        'a':'اَ',
-        'e':'ءَا',
-        'i':'اِ',
-        'u':'اُ',
-        'é':'اَا',
-        'á':'اَأَ',
-        'ú':'اُؤُ'
-    };
+    const cons_map = CONS_MAP_ALJAMIADO;
+    const vow_map = VOW_MAP_ALJAMIADO;
+    const vow_map_2 = VOW_MAP_2_ALJAMIADO;
     for (const [key, value] of Object.entries(cons_map)) {
         word = word.replaceAll(key, value);
     }
@@ -327,25 +248,7 @@ function spanishAljamiado(word) {
 function malayJawi(word) {
     if (word === '-')
         return word;
-    const predefined = {
-        'ada':'اد',
-        'di':'د',
-        'dia':'دي',
-        'dan':'دان',
-        'ia':'اي',
-        'jika':'جک',
-        'juga':'جوݢ',
-        'ke':'ک',
-        'lima':'ليم',
-        'kita':'كيت',
-        'mereka':'مريک',
-        'ini':'اين',
-        'itu':'ايت',
-        'pada':'ڤد',
-        'suka':'سوک',
-        'tiga':'تيݢ',
-        'saat':'ساعت',
-    };
+    const predefined = PREDEFINED_JAWI;
     if (predefined[word] !== undefined) {
         return predefined[word];
     }
@@ -371,7 +274,6 @@ function malayJawi(word) {
     word = word.replaceAll('o','u');
 
     word = word.replaceAll('K','k').replaceAll('aa','a`').replaceAll('ua','u`a')
-    // .replaceAll('ia','ì').replaceAll('ie','ì').replaceAll('iu','ìw').replaceAll('ii','ìy')
     .replaceAll('ea','ì').replaceAll('ee','ì').replaceAll('ei','ìy').replaceAll('eu','ìw')
     .replaceAll('éi','é`i').replaceAll('ié','i`é');
     const closedSyllable = []
@@ -407,78 +309,11 @@ function malayJawi(word) {
         word = word.substring(0, 1) + 'e' + word.substring(2);
     }
 
-    const cons_map = {
-        'b':'ب',
-        't':'ت',
-        'j':'ج',
-        'c':'چ',
-        'K':'خ',
-        'd':'د',
-        'r':'ر',
-        'z':'ز',
-        's':'س',
-        'š':'ش',
-        'ŋ':'ڠ',
-        'f':'ف',
-        'p':'ڤ',
-        'q':'ق',
-        'k':'ک',
-        'g':'ݢ',
-        'l':'ل',
-        'm':'م',
-        'n':'ن',
-        'w':'و',
-        'v':'ۏ',
-        'h':'ه',
-        'y':'ي',
-        'ñ':'ڽ',
-        'X':'خ',
-        '`':'ء'
-    };
-    const vow_map_1 = {
-        'a':'ا',
-        'é':'اي',
-        'e':'ا',
-        'i':'اي',
-        'u':'او',
-        'à':'اءي',
-        'ä':'اءو',
-        'ò':'اووي',
-        'ì':'أ'
-    };
-    const vow_map_open = {
-        'a':'ا',
-        'é':'ي',
-        'e':'',
-        'i':'ي',
-        'u':'و',
-        'à':'اي',
-        'ä':'او',
-        'ò':'وي',
-        'ì':'أ'
-    };
-    const vow_map_closed = {
-        'a':'',
-        'é':'ي',
-        'e':'',
-        'i':'ي',
-        'u':'و',
-        'à':'اءي',
-        'ä':'اءو',
-        'ò':'وءي',
-        'ì':'أ'
-    };
-    const vow_map_2 = {
-        'a':'ا',
-        'é':'ي',
-        'e':'ی',
-        'i':'ي',
-        'u':'و',
-        'à':'اي',
-        'ä':'او',
-        'ò':'وي',
-        'ì':'أ'
-    };
+    const cons_map = CONS_MAP_JAWI;
+    const vow_map_1 = VOW_MAP_1_JAWI;
+    const vow_map_open = VOW_MAP_OPEN_JAWI;
+    const vow_map_closed = VOW_MAP_CLOSED_JAWI;
+    const vow_map_2 = VOW_MAP_2_JAWI;
 
     word = "'" + word + "'";
     closedSyllable.unshift(false);
