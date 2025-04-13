@@ -22,7 +22,7 @@ function isRoman(word) {
 function convertWords(text, mapper, nonWordMapper=null, noSpaceAfter=null) {
     let chars = [];
     let isWord = [];
-    let punct = [' ',',',':',';','.','!','?',';','\n','¿','¡','#','"'];
+    let punct = [' ',',',':',';','.','!','?',';','\n','¿','¡','#','"','“','”'];
     if (inputLang !== 'ms')
         punct.push('-');
     for (let i = 0; i < text.length; i++) {
@@ -135,6 +135,8 @@ function punctMapper(char) {
         ',' : '،',
         ';' : '؛',
         '.' : '۔',
+        '“' : '”',
+        '”' : '“',
     };
     return punct_map[char] !== undefined ? punct_map[char] : char;
 };
@@ -379,15 +381,25 @@ function ottomanTurkish(word) {
     }
 
     const backMap = {
-        'k':'q', 't':'T', 'd':'T', 'g':'G', 's':'S'
+        'k':'q', 't':'T', 'd':'T', 'g':'G', 's':'S',
     };
 
     word = word.replaceAll('ğ', 'g');
     word = word.replace(/[ˆ¨]/g, '');
-    word = word.replace(/([kg])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
-    word = word.replace(/^([tds])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
-    word = word.replace(/([aıou])([kgs])/g, (_, p1, p2) => p1 + backMap[p2]);
-    // word = word.replace(/(\S+)lı$/g, '$1_-lu').replace(/(\S+)li$/g, '$1_-lü');
+    word = word.replace(/(\S+)([aı])([^aıoueiöüâû0]+)lı$/g, '$1$2$3_-lu');
+    word = word.replace(/(\S+)([ei])([^aıoueiöüâû0]+)li$/g, '$1$2$3_-lü');
+    word = word.replace(/(\S+)([ou])([^aıoueiöüâû0]+)lu$/g, '$1$2$3_-lu');
+    word = word.replace(/(\S+)([öü])([^aıoueiöüâû0]+)lü$/g, '$1$2$3_-lü');
+    if (word.indexOf('-') !== -1) {
+        let hyphen = word.indexOf('-');
+        let first = word.substring(0, hyphen);
+        let second = word.substring(hyphen+1);
+        word = ottomanTurkish(first) + ottomanTurkish(second);
+        word = word.replace(/یی$/g, 'Y').replace(/^یی/g, 'Y');
+        word = word.replaceAll('یی', 'ی').replaceAll('Y', 'یی');
+        word = word.replace(/ییه$/g, 'یه');
+        return word;
+    }
 
     // plurals
     word = word.replace(/(\S+)ler(|i|e|de|den|in)$/g, '$1_-l0r$2');
@@ -398,16 +410,21 @@ function ottomanTurkish(word) {
     word = word.replace(/(\S+)([aıoueiöüâû0])y([ıiuü])$/g, '$1$2_-y$3');
     word = word.replace(/(\S+)([^aıoueiöüâûtd0])([ae])$/g, '$1$2-0$3');
     word = word.replace(/(\S+)([aıoueiöüâû0])y([ae])$/g, '$1$2_-y$3');
-    word = word.replace(/(\S+)da$/g, '$1_-da');
-    word = word.replace(/(\S+)([ptçkfsş])ta$/g, '$1$2-da');
+    word = word.replace(/(\S+)da$/g, '$1_-Da');
+    word = word.replace(/(\S+)([ptçkfsş])ta$/g, '$1$2-Da');
     word = word.replace(/(\S+)de$/g, '$1_-de');
     word = word.replace(/(\S+)([ptçkfsş])te$/g, '$1$2-de');
     word = word.replace(/(\S+)dan$/g, '$1_-d0n');
     word = word.replace(/(\S+)([ptçkfsş])tan$/g, '$1$2-d0n');
     word = word.replace(/(\S+)den$/g, '$1_-d0n');
     word = word.replace(/(\S+)([ptçkfsş])ten$/g, '$1$2-d0n');
-    word = word.replace(/(\S+)([^aıoueiöüâû0])(?:[ıiuü])n$/g, '$1$2-0n');
+    word = word.replace(/(\S+)([^aıoueiöüâû0])(?:[ıiuü])n$/g, '$1$2_-0n');
     word = word.replace(/(\S+)([aıoueiöüâû0])n(?:[ıiuü])n$/g, '$1$2_-n0n');
+
+    word = word.replace(/([kg])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
+    word = word.replace(/^([tds])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
+    word = word.replace(/^D([aıou])/g, 'd$1');
+    word = word.replace(/([aıou])([kgs])/g, (_, p1, p2) => p1 + backMap[p2]);
 
     word = word.replace(/(\S+)maq/g, '$1m0q');
     word = word.replace(/([ei])([^aıoueiöüâû0]*)lik$/g, '$1$2_-l0k');
@@ -421,7 +438,11 @@ function ottomanTurkish(word) {
         let hyphen = word.indexOf('-');
         let first = word.substring(0, hyphen);
         let second = word.substring(hyphen+1);
-        return ottomanTurkish(first) + ottomanTurkish(second);
+        word = ottomanTurkish(first) + ottomanTurkish(second);
+        word = word.replace(/یی$/g, 'Y').replace(/^یی/g, 'Y');
+        word = word.replaceAll('یی', 'ی').replaceAll('Y', 'یی');
+        word = word.replace(/ییه$/g, 'یه');
+        return word;
     }
 
     let cons_map = CONS_MAP_OTTOMAN;
@@ -431,12 +452,13 @@ function ottomanTurkish(word) {
     const vow_map_m = VOW_MAP_MID_OTTOMAN;
     const vow_map_2 = VOW_MAP_2_OTTOMAN;
     word = word.replaceAll('_','0');
-    word = word.replace(/([^aıoueiöüâû0])/g, (match, p1) => cons_map[p1]);
-    word = word.replace(/^([aıoueiöüâû0])/g, (match, p1) => vow_map_1[p1]);
-    word = word.replace(/([aıoueiöüâû0])$/g, (match, p1) => vow_map_2[p1]);
-    word = word.replace(/([aıoueiöüâû0])/g, (match, p1) => vow_map_m[p1]);
+    word = word.replace(/([^aıoueiöüâû0])/g, (_, p1) => cons_map[p1]);
+    word = word.replace(/^([aıoueiöüâû0])/g, (_, p1) => vow_map_1[p1]);
+    word = word.replace(/([aıoueiöüâû0])$/g, (_, p1) => vow_map_2[p1]);
+    word = word.replace(/([aıoueiöüâû0])/g, (_, p1) => vow_map_m[p1]);
     word = word.replace(/یی$/g, 'Y').replace(/^یی/g, 'Y');
     word = word.replaceAll('یی', 'ی').replaceAll('Y', 'یی');
+    word = word.replace(/ییه$/g, 'یه');
 
     return word;
 }

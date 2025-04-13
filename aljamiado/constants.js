@@ -103,6 +103,7 @@ const PREDEFINED_JAWI = {
     'suka':'سوک',
     'tiga':'تيݢ',
     'saat':'ساعت',
+    'hakikat':'حقيقت',
 };
 const CONS_MAP_JAWI = {
     'b':'ب',
@@ -251,6 +252,7 @@ const PREDEFINED_OTTOMAN = {
     'vermek':'ویرمك',
     'ama':'اما',
     'kadar':'قدر',
+    'qadar':'قدر',
     'insan':'انسان',
     'değil':'دكل',
     'ara':'آرا',
@@ -259,6 +261,7 @@ const PREDEFINED_OTTOMAN = {
     'çocuk':'چقجق',
     'çocuq':'چقجق',
     'kalmak':'قلمق',
+    'qalmaq':'قلمق',
     'siz':'سز',
     'kadın':'قادین',
     'ev':'أو',
@@ -270,6 +273,9 @@ const PREDEFINED_OTTOMAN = {
     'adam':'آدم',
     'kitap':'کتاب',
     'bütün':'بتون',
+    'hakikat':'حقیقت',
+    'haqiqat':'حقیقت',
+    'osman':'عثمان',
 };
 const PREDEFINED_TURKISH = {
     'istemek':'estemek',
@@ -284,4 +290,8 @@ const PREDEFINED_TURKISH = {
     'türk':'t0rk',
     'türkçe':'t0rkce',
     'dil':'d0l',
+    'şehir':'şeher',
+    'kelime':'keleme',
+    'teşekkür':'teşek0r',
+    'istanbul':'estanbul',
 };

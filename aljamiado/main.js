@@ -28,6 +28,8 @@ function refreshOutput() {
 }
 function refreshAside(id) {
     for (const child of document.querySelectorAll('#'+id+' > *')) {
+        if (!child.dataset.lang)
+            continue;
         if (child.dataset.lang.indexOf(inputLang) !== -1)
             child.style.display = '';
         else
