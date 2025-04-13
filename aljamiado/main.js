@@ -7,10 +7,12 @@ const specialChars = document.getElementById("special-chars");
 const specialCharsSet = {
     'es': ['ñ','á','é','í','ó','ú','ü'],
     'ms': ['é','ĕ'],
+    'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
 };
 const languageNames = {
     'es': 'Spanish',
     'ms': 'Malay',
+    'tr': 'Turkish',
 };
 
 function getText() {
@@ -80,9 +82,10 @@ function setLangChoice(ulSub, callback) {
     });
 }
 const updateInputLang = (l) => {
+    if (l !== inputLang)
+        inputBox.value = '';
     inputLang = l;
     inputBox.placeholder = 'Type in ' + languageNames[inputLang];
-    inputBox.value = '';
 
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {
@@ -103,7 +106,11 @@ const updateInputLang = (l) => {
 
     // refreshAside('input-instructions')
     specialChars.innerHTML = '';
-    for (const char of specialCharsSet[inputLang]) {
+    let special = specialCharsSet[inputLang];
+    if (inputLang === 'es' && document.es_input.era.value === 'old') {
+        special = ['ç'].concat(special);
+    }
+    for (const char of special) {
         const button = document.createElement('button');
         button.innerHTML = char;
         button.addEventListener('click', () => {
@@ -122,6 +129,10 @@ const updateInputLang = (l) => {
 }
 setLangChoice(inputButtons, updateInputLang);
 updateInputLang(inputLang);
+for (const radioButton of document.querySelectorAll('form[name="es_input"] input[type=radio]')) {
+    radioButton.removeEventListener("change", refreshDisplay);
+    radioButton.addEventListener("change", () => updateInputLang('es'));
+}
 
 // setLangChoice(document.querySelectorAll('ul#output-lang li'), (l) => {
 //     outputLang = l;

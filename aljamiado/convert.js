@@ -3,6 +3,7 @@ let outputLang = 'Aljamiado';
 const outputLangs = {
     'es': ['Aljamiado'],
     'ms': ['Jawi'],
+    'tr': ['Ottoman'],
 };
 
 function contains(set, item) {
@@ -84,6 +85,8 @@ function convertWord(startWord, inLang, outLang) {
         return spanishAljamiado(properOrthography(startWord, inLang).toLowerCase());
     } else if (inLang === 'ms') {
         return malayJawi(properOrthography(startWord, inLang).toLowerCase());
+    } else if (inLang === 'tr') {
+        return ottomanTurkish(properOrthography(startWord, inLang).toLowerCase());
     }
     return startWord;
 }
@@ -98,7 +101,10 @@ function matchCase(word, caseModel) {
 }
 
 function properOrthography(input, lang) {
-    let output = input.toLowerCase();
+    let output = input;
+    if (lang !== 'tr') {
+        output = input.toLowerCase();
+    }
     if (lang === 'es') {
         if (document.es_input.era.value === 'old') {
             output = output.replaceAll('nn','ñ');
@@ -111,9 +117,13 @@ function properOrthography(input, lang) {
             output = output.replaceAll('x','cs');
             output = output.replaceAll('z','ç');
         }
+    } else if (lang === 'tr') {
+        output = output.replaceAll('I','ı').replaceAll('İ','i');
+        output = output.toLowerCase();
     }
     output = output.replaceAll("'", "");
-    output = matchCase(output, input);
+    if (lang !== 'tr')
+        output = matchCase(output, input);
     return output;
 }
 
@@ -276,6 +286,7 @@ function malayJawi(word) {
         }
         return malayJawi(word.substring(0,hyphen)) + '-' + malayJawi(word.substring(hyphen+1));
     }
+    word = word.replaceAll('´','');
     word = word.replaceAll('ĕ','e').replaceAll('x','Ks');
     word = word.replaceAll('sy','š').replaceAll('sh','š');
     word = word.replaceAll('ny','ñ').replaceAll('ng','ŋ').replaceAll('kh','X');
@@ -348,6 +359,84 @@ function malayJawi(word) {
     word = word.replaceAll('يءي', 'يئي');
 
     word = word.replaceAll("'",'');
+
+    return word;
+}
+
+function ottomanTurkish(word) {
+    const predefined = PREDEFINED_OTTOMAN;
+    if (predefined[word] !== undefined) {
+        return predefined[word];
+    }
+    if (predefined[word.replace(/\_$/g, '')] !== undefined) {
+        return predefined[word.replace(/\_$/g, '')];
+    }
+    if (PREDEFINED_TURKISH[word] !== undefined) {
+        word = PREDEFINED_TURKISH[word];
+    }
+    if (PREDEFINED_TURKISH[word.replace(/\_$/g, '')] !== undefined) {
+        word = PREDEFINED_TURKISH[word.replace(/\_$/g, '')] + '_';
+    }
+
+    const backMap = {
+        'k':'q', 't':'T', 'd':'T', 'g':'G', 's':'S'
+    };
+
+    word = word.replaceAll('ğ', 'g');
+    word = word.replace(/[ˆ¨]/g, '');
+    word = word.replace(/([kg])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
+    word = word.replace(/^([tds])([aıou])/g, (_, p1, p2) => backMap[p1] + p2);
+    word = word.replace(/([aıou])([kgs])/g, (_, p1, p2) => p1 + backMap[p2]);
+    // word = word.replace(/(\S+)lı$/g, '$1_-lu').replace(/(\S+)li$/g, '$1_-lü');
+
+    // plurals
+    word = word.replace(/(\S+)ler(|i|e|de|den|in)$/g, '$1_-l0r$2');
+    word = word.replace(/(\S+)lar(|ı|a|da|dan|ın)$/g, '$1_-l0r$2');
+
+    // cases
+    word = word.replace(/(\S+)([^aıoueiöüâû0])([ıiuü])$/g, '$1$2-0$3');
+    word = word.replace(/(\S+)([aıoueiöüâû0])y([ıiuü])$/g, '$1$2_-y$3');
+    word = word.replace(/(\S+)([^aıoueiöüâûtd0])([ae])$/g, '$1$2-0$3');
+    word = word.replace(/(\S+)([aıoueiöüâû0])y([ae])$/g, '$1$2_-y$3');
+    word = word.replace(/(\S+)da$/g, '$1_-da');
+    word = word.replace(/(\S+)([ptçkfsş])ta$/g, '$1$2-da');
+    word = word.replace(/(\S+)de$/g, '$1_-de');
+    word = word.replace(/(\S+)([ptçkfsş])te$/g, '$1$2-de');
+    word = word.replace(/(\S+)dan$/g, '$1_-d0n');
+    word = word.replace(/(\S+)([ptçkfsş])tan$/g, '$1$2-d0n');
+    word = word.replace(/(\S+)den$/g, '$1_-d0n');
+    word = word.replace(/(\S+)([ptçkfsş])ten$/g, '$1$2-d0n');
+    word = word.replace(/(\S+)([^aıoueiöüâû0])(?:[ıiuü])n$/g, '$1$2-0n');
+    word = word.replace(/(\S+)([aıoueiöüâû0])n(?:[ıiuü])n$/g, '$1$2_-n0n');
+
+    word = word.replace(/(\S+)maq/g, '$1m0q');
+    word = word.replace(/([ei])([^aıoueiöüâû0]*)lik$/g, '$1$2_-l0k');
+    word = word.replace(/([ouû])([^aıoueiöüâû0]*)luq$/g, '$1$2_-l0q');
+    word = word.replace(/([öü])([^aıoueiöüâû0]*)lük$/g, '$1$2_-l0k');
+    word = word.replace(/([ei])([^aıoueiöüâû0]*)dir$/g, '$1$2_-d0r');
+    word = word.replace(/([ouû])([^aıoueiöüâû0]*)dur$/g, '$1$2_-d0r');
+    word = word.replace(/([öü])([^aıoueiöüâû0]*)dür$/g, '$1$2_-d0r');
+    word = word.replace(/n([r])/g, 'ñ$1');
+    if (word.indexOf('-') !== -1) {
+        let hyphen = word.indexOf('-');
+        let first = word.substring(0, hyphen);
+        let second = word.substring(hyphen+1);
+        return ottomanTurkish(first) + ottomanTurkish(second);
+    }
+
+    let cons_map = CONS_MAP_OTTOMAN;
+    cons_map['g'] = cons_map['k'];
+    cons_map['ñ'] = cons_map['k'];
+    const vow_map_1 = VOW_MAP_1_OTTOMAN;
+    const vow_map_m = VOW_MAP_MID_OTTOMAN;
+    const vow_map_2 = VOW_MAP_2_OTTOMAN;
+    word = word.replaceAll('_','0');
+    word = word.replace(/([^aıoueiöüâû0])/g, (match, p1) => cons_map[p1]);
+    word = word.replace(/^([aıoueiöüâû0])/g, (match, p1) => vow_map_1[p1]);
+    word = word.replace(/([aıoueiöüâû0])$/g, (match, p1) => vow_map_2[p1]);
+    word = word.replace(/([aıoueiöüâû0])/g, (match, p1) => vow_map_m[p1]);
+    word = word.replace(/یی$/g, 'Y').replace(/^یی/g, 'Y');
+    word = word.replaceAll('یی', 'ی').replaceAll('Y', 'یی');
 
     return word;
 }
