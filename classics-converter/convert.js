@@ -1,12 +1,9 @@
 function convertWords(text, mapper, inOrthoBox=false) {
-    // let words = text.split(' ').filter((w) => w.length > 0);
-    // words = words.map((w) => w === '\n' ? w : mapper(w));
-    // words = words.join(' ').replaceAll(' \n ','\n').replaceAll(' \n','\n').replaceAll('\n ','\n');
     let chars = [];
     let isWord = [];
     for (let i = 0; i < text.length; i++) {
         chars.push(text[i]);
-        if (contains([' ',',',':',';','.','!','?',';','-','\n','¿','¡'], text[i])) {
+        if (contains([' ',',',':',';','.','!','?',';','-','\n','¿','¡','#','"'], text[i])) {
             isWord.push(false);
         } else {
             isWord.push(true);
@@ -458,10 +455,6 @@ function romance_to_western_romance(word, finalLang='') {
     if (finalLang === 'es') {
         word.replace('bye','vye'); // partial lenition of /b/
     }
-    // if (finalLang === 'fr') {
-    //     if (word.at(-2) === 'ð' && VOWELS.has(word.at(-1)) && word.at(-1) !== 'a')
-    //         word.replaceAt('ð', 'd', word.length-2); // final -d kept in French with orthography/liaison
-    // }
     word.replaceAt('Γe','je',word.length-2);
     word.replace('Γ','ɣ');
     word.replaceAll(['aðo','aɣo','oðè'], ['ado','ago','odè']);
@@ -545,15 +538,6 @@ function romance_to_western_romance(word, finalLang='') {
 function western_romance_to_french(word) {
     // to early Old French
 
-    // convert /j/ to /dʒ/ in some contexts
-    // for (let i = word.length-1; i >= 0; i--) {
-    //     if (word.at(i) === 'j' && !VOWELS.has(word.at(i-1))) {
-    //         word.replaceAt('j', 'ž', i);
-    //     } if (word.at(i) === 'j' && !VOWELS.has(word.at(i+1))) {
-    //         word.replaceAt(word.at(i+1), word.at(i+1)+'J', i+1);
-    //     }
-    // }
-    // apocope of final /e/ to avoid extra /ž/
     if (word.numVowels() > 1)
         word.replaceAt('je','j',word.length-2);
     word.w = replaceIntervocal(word.w, 'j', 'ž');
@@ -1409,7 +1393,6 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     }
 
     // shorten final long vowels
-    // const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'e':'i', 'o':'u','aM':'u'};
     const shorten2 = {'ā':'a', 'ī':'i', 'ū':'u', 'aM':'u'};
     for (const [key, val] of Object.entries(shorten2)) {
         word.replaceAt(key, val, word.length-key.length);
@@ -1626,7 +1609,6 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
         word.replaceBefore('cch','s',VOWELS);
         word.replaceBefore('ch','s', VOWELS);
         word.replaceAt('ch','s',word.length-2);
-        // word.replaceBefore('c','s', VOWELS);
         word.replaceAt('on','oN',word.length-2);
         word.replaceAt('M','',word.length-1); // remove nasalization
     } else {

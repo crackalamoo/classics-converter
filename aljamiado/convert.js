@@ -27,7 +27,7 @@ function isRoman(word) {
 function convertWords(text, mapper, nonWordMapper=null, noSpaceAfter=null) {
     let chars = [];
     let isWord = [];
-    let punct = [' ',',',':',';','.','!','?',';','\n','¿','¡'];
+    let punct = [' ',',',':',';','.','!','?',';','\n','¿','¡','#','"'];
     if (inputLang !== 'ms')
         punct.push('-');
     for (let i = 0; i < text.length; i++) {
@@ -145,19 +145,37 @@ function spanishAljamiado(word) {
             ...predefined,
             'almohada':'اَلْمُخَدَّة',
             'elixir':'اَلْإكْسِيٗرْ',
-            'elicsir':'اَلْإكْسِيٗرْ',
             'alcohol':'اَلْكُحُلْ',
             'sandía':'سَنْدِيَّة',
             'tarea':'طَرِيٗحَة',
             'cifra':'صِفْرَ',
-            'albahaca':'اَلبَحَقَ',
+            'albahaca':'اَلْبَحَقَ',
             'asesino':'حَشَاشِيٗنُ',
-            'hay':'اَيْ',
-            'taza':'طَاسَ','taça':'طَاسَ',
+            'taza':'طَاسَ',
             'limón':'لِيٗمُوٗنْ',
             'algodón':'اَلْقُطُنْ',
-            'azúcar':'اَلْسُّكَّرْ','açúcar':'اَلْسُّكَّرْ',
+            'azúcar':'اَلْسُّكَّرْ',
+            'árabe':'عَرَبَا',
         };
+        predefined['elicsir'] = predefined['elixir'];
+        predefined['taça'] = predefined['taza'];
+        predefined['açúcar'] = predefined['azúcar'];
+        for (const word of Object.keys(predefined)) {
+            if (!(word.endsWith('o') || word.endsWith('a') || word.endsWith('e'))) {
+                if (word.endsWith('ón')) {
+                    let base = word.substring(0,word.length-2);
+                    let current = predefined[word];
+                    predefined[base+'ones'] = current.substring(0,current.length-1) + 'َاشْ';
+                }
+                continue;
+            }
+            if (predefined[word].endsWith('ة')) {
+                let current = predefined[word];
+                predefined[word+'s'] = current.substring(0,current.length-1) + 'شْ';
+                continue;
+            }
+            predefined[word+'s'] = predefined[word] + 'شْ';
+        }
     }
     const predefined_latin = {
         'haber':'aber',
@@ -177,6 +195,8 @@ function spanishAljamiado(word) {
         'hubiera':'ubiera',
         'hubieras':'ubieras',
         'hubieran':'ubieran',
+        'hora':'ora',
+        'horas':'oras',
     };
     if (word === 'y')
         word = 'i';
@@ -324,6 +344,7 @@ function malayJawi(word) {
         'pada':'ڤد',
         'suka':'سوک',
         'tiga':'تيݢ',
+        'saat':'ساعت',
     };
     if (predefined[word] !== undefined) {
         return predefined[word];
@@ -350,7 +371,7 @@ function malayJawi(word) {
     word = word.replaceAll('o','u');
 
     word = word.replaceAll('K','k').replaceAll('aa','a`').replaceAll('ua','u`a')
-    .replaceAll('ia','ì').replaceAll('ie','ì').replaceAll('iu','ìw').replaceAll('ii','ìy')
+    // .replaceAll('ia','ì').replaceAll('ie','ì').replaceAll('iu','ìw').replaceAll('ii','ìy')
     .replaceAll('ea','ì').replaceAll('ee','ì').replaceAll('ei','ìy').replaceAll('eu','ìw')
     .replaceAll('éi','é`i').replaceAll('ié','i`é');
     const closedSyllable = []

@@ -8,6 +8,10 @@ const specialCharsSet = {
     'es': ['ñ','á','é','í','ó','ú','ü'],
     'ms': ['é','ĕ'],
 };
+const languageNames = {
+    'es': 'Spanish',
+    'ms': 'Malay',
+};
 
 function getText() {
     let text = inputBox.value;
@@ -76,6 +80,8 @@ function setLangChoice(ulSub, callback) {
 }
 const updateInputLang = (l) => {
     inputLang = l;
+    inputBox.placeholder = 'Type in ' + languageNames[inputLang];
+    inputBox.value = '';
 
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {
