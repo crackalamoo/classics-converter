@@ -26,6 +26,9 @@
         margin-block-start: 1em;
         margin-block-end: 1em;
     }
+    ul.choose-lang {
+        height: 160px;
+    }
     button {
         font-size: 1.2em;
         font-family: inherit;
@@ -89,6 +92,14 @@
                     </ul>
                 </p>
             </div>
+            <div data-lang="ms">
+                <p>
+                    <ul>
+                        <li>Always use é for e taling: mérah</li>
+                        <li>Use e or ĕ for e pepet: kecil/kĕcil</li>
+                    </ul>
+                </p>
+            </div>
         </aside>
     </div>
 
@@ -118,7 +129,7 @@
                     <input type="checkbox" name="arabic" value="arabic" id="arabic" checked>
                     <label for="arabic">Arabic spellings for common Arabic-origin words (e.g. almohada, sandía)</label><br>
                     <input type="checkbox" name="maghrebi" value="maghrebi" id="maghrebi">
-                    <label for="maghrebi">Maghrebi script (ڢ ڧ)</label>
+                    <label for="maghrebi">Maghrebi Kufic script (ڢ ڧ)</label>
                     <p>These were common in Aljamiado texts.</p>
                 </form>
             </div>
@@ -129,13 +140,173 @@
 </div>
 
 <div class="main">
-    
+    <h2 id="what-is-this">What is this?</h2>
+    <p>This is a tool to write Spanish, Malay,
+        and Turkish in their historic Arabic scripts.
+        These historic Arabic scripts are:
+        <ul>
+            <li>For Spanish, the <strong>Aljamiado script</strong>
+                used first during Muslim rule of Spain, and then secretly for some time after
+                the Reconquista.[<a data-cite="aljamiado"></a>][<a data-cite="morisco"></a>]
+                (In Spanish, the script itself is called aljamía; aljamiado and morisco are
+                adjectives.)[<a data-cite="aragon"></a>]</li>
+            <li>For Malay, the <strong>Jawi script</strong>
+                widely used in the Malay Archipelago from the 15th century until the 20th century,
+                and still used occasionally.[<a data-cite="jawi"></a>]</li>
+            <li>For Turkish, the <strong>Ottoman Turkish script</strong>
+                used during the Ottoman Empire, until after World War I.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
+        </ul>
+        Although the Arabic script plays an important role in the history of each of these languages,
+            it was not always used the same way. Conventions differ between authors and time periods.
+            In addition, these languages all had a tendency to keep Arabic loanwords spelled the same,
+            even if it wasn't phonetic. For these reasons and more, you might find some
+            transcriptions that are not completely faithful to historical manuscripts.
+    </p>
+    <p>The Ottoman Turkish script is especially likely to have mistakes because of the
+        large number of Arabic and Persian loanwords, the many variations in spelling,
+        and the difficulty of using the script for the Turkish language.
+    </p>
+
+    <h2 id="historical-background">Historical Background</h2>
+    <figure class="bigimg">
+        <img src="img/Poema_de_Yusuf.jpg" alt="Poema de Yusuf">
+        <figcaption>An Aljamiado manuscript of Poema de Yuçuf, a 14th-century poem about the story of Joseph in the Qur'an.
+            The language is Aragonese strongly influenced by Castilian.[<a data-cite="yusuf"></a>]</figcaption>
+    </figure>
+    <p>Romance languages like <strong>Spanish</strong> (Castilian) were first written in the Arabic script in the 15th
+        century, towards the end of Muslim rule in Spain. This was known as <strong>Aljamía</strong>.[<a data-cite="aljamiado"></a>]</p>
+    <figure class="endfloat">
+        <img src="img/arevalo.jpg" alt="Aljamiado text by Mancebo de Arévalo, 16th century">
+        <figcaption>An Aljamiado text by Mancebo de Arévalo, 16th century.
+            The text is in Spanish. It encourages Moriscos to continue practicing Islam despite
+            the laws against it, and to hide by showing faith in Christianity in public.<a data-footnotes="aljamiado"></a>[<a data-cite="arevalo"></a>]
+        </figcaption>
+    </figure>
+    <p>
+        After the Christians reconquered Spain in
+        1492, they put an increasing emphasis on Christianity and worked to erase Arab and Islamic culture from
+        the peninsula. By 1526, Muslims were forced to convert to Christianity or leave Spain.
+        By 1564, the Spanish crown had ordered Arabic books to be burned,
+        and banned the Arabic language entirely, giving the former Muslims just three years to learn Spanish.[<a data-cite="nuria"></a>]
+    </p>
+        Although the Arabic language (which was widely used in Spain during Muslim rule)
+        gradually died out, the remaining Muslims &mdash; now called Moriscos &mdash;
+        continued to practice Islam in secret.
+        They increasingly began to write their
+        Romance languages in the Arabic script as a form of resistance.
+        Thus, Aljamía was not restricted to the Islamic period at all:
+        most Aljamiado manuscripts actually come from the
+        16th century, when Arabic was banned, and served as a way for Moriscos to practice Islam and Islamic culture in secret.
+        Aljamiado manuscripts were often hidden in
+        ceilings and walls, and were only discovered centuries later.[<a data-cite="nuria"></a>]
+    </p>
+    <p>Aljamía stopped being mainstream hundreds of years ago, and Aljamiado texts were archaic
+        even for their time: 16th century texts use language more like it's from the 13th or 14th century.[<a data-cite="nuria"></a>]
+        Therefore, the language used is not actually modern Spanish, but Old Spanish (and Old Aragonese,
+        and other Romance languages.) In this tool, you can choose between Old Spanish and Modern Spanish:
+        the two have different sounds and different spellings, but I've tried to keep the Modern Spanish
+        spellings as close as possible to what they would be in Old Spanish.
+    </p>
+    <p>Arabic has only three written vowels, while Spanish has five. Aljamía came up with an unusual solution:
+        the vowel E is written with the Arabic alif, which in Arabic is used for a long A sound.
+        A, I, and O are written with vowel markings that are almost never used in written Arabic.
+        U is written the same as O.[<a data-cite="aljamiado"></a>]
+    </p>
+    <figure class="endfloat">
+        <img src="img/jawi.jpg" alt="Jawi script">
+        <figcaption>A letter in Jawi script from William Farquhar to Sultan Muhammad Kanzul Alam, the sultan of Brunei, dated 28 November 1819.[<a data-cite="jawi"></a>]</figcaption>
+    </figure>
+    <p>The <strong>Jawi script</strong> has been used for <strong>Malay</strong> for over 700 years.
+        It was first used in the 14th century,
+        replacing earlier Indian-derived scripts. Although it was replaced by the Latin script during
+        European (British and Dutch) rule, it is still co-official in Brunei and parts of Malaysia.[<a data-cite="malay"></a>]
+    </p>
+    <p>Unlike the earlier scripts for Malay, Jawi was used by all classes of society, not just the rulers and monks.
+        It also added letters to effectively represent Malay sounds not found in Arabic.
+        These factors, combined with its association with the spread of Islam, quickly made Jawi the primary
+        script for Malay and allowed it to develop an extensive literature.[<a data-cite="jawi"></a>]
+    </p>
+    <p>While the Roman script is now the most common script for Malay, Jawi is still used in
+        some religious and cultural contexts in Malaysia, Brunei, and parts of Indonesia and Thailand.
+        The script has continued evolving, and became standardized over the course of the 20th century,
+        with the last reform in 1986.[<a data-cite="jawi"></a>]
+    </p>
+    <br clear="all">
+    <figure class="endfloat">
+        <img src="img/ottoman.jpg" alt="Ottoman Turkish script">
+        <figcaption>A poem about Rumi in Ottoman Turkish.[<a data-cite="ottoman-rumi"></a>]</figcaption>
+    </figure>
+    <p>During the Ottoman Empire, from 1299 to 1928, Turkish was written in the Arabic script.
+        In particular, the Ottomans used a version of the Arabic script derived from Persian,
+        with extra letters to represent Persian words. A peculiar feature of Ottoman Turkish is that
+        when borrowing words from Arabic and Persian, the <em>consonants</em> used in those languages
+        affected the Turkish vowels; and when writing Turkish words, variations in <em>vowels</em>
+        were sometimes represented by choosing different consonants with the same sound.
+        This and other aspects made the Ottoman Turkish alphabet quite difficult.[<a data-cite="ottoman"></a>]
+    </p>
+    <p>Today Azerbaijani, closely related to Turkish, is still written in the Arabic script in Iran.
+        However, they have added vowel diacritics to distinguish between Azerbaijani vowels,
+        making it easier than the Ottoman Turkish script.[<a data-cite="ottoman"></a>]
+    </p>
+    <p>
+        On the other hand, Turkey took the approach of completely replacing the Arabic script with a Latin-based
+        one. Mustafa Kemal, the President of Turkey, believed in a secular and literate Turkey. He saw the old alphabet as holding the country back from these goals.
+        Therefore, he led the development of a new phonetic Latin script for Turkey which became official in 1928.[<a data-cite="turkish"></a>][<a data-cite="reform"></a>]
+    </p>
+    <p>
+        It's debatable how much the script itself held back literacy in Turkey, as many other factors were involved such as poor education,
+        cultural attitudes, and differences between spoken and written Turkish.
+        Regardless,
+        the literacy rate in Turkey was just 8% in 1927 and increased to 30% by 1945 through an education project
+        in the new alphabet. Mustafa Kemal personally promoted the alphabet by traveling to towns in Anatolia and
+        teaching the letters on blackboards.[<a data-cite="reform"></a>]
+    </p>
+    <br clear="all">
+    <figure class="endfloat">
+        <img src="img/ataturk.jpg">
+        <figcaption>Mustafa Kemal Atatürk introducing the new Turkish alphabet to the people of Kayseri. September 20, 1928[<a data-cite="ataturk"></a>]</figcaption>
+    </figure>
+
+
 
     <h2 id="ref">References</span></h2>
+    <p>The rules applied in the converter code, while not necessarily referenced in the main article,
+        mostly came from:
+        <ul>
+            <li>For Spanish: <a data-cite="aljamiado"></a>, <a data-cite="morisco"></a>, <a data-cite="aragon"></a>,
+                <a data-cite="nuria"></a>, <a data-cite="nuria2"></a>, and from manuscripts referenced by these.
+            </li>
+            <li>For Malay: <a data-cite="jawi"></a>, <a data-cite="malay"></a>, <a data-cite="wiktionary"></a>.</li>
+            <li>For Turkish: <a data-cite="ottoman"></a>, <a data-cite="turkish"></a>, <a data-cite="wiktionary"></a>.</li>
+        </ul>
+    </p>
     <ol id="reflist">
+        <li data-cite="wiktionary"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
+        <li data-cite="aljamiado"><a href="https://en.wikipedia.org/wiki/Aljamiado" target="_blank">Aljamiado</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="morisco"><a href="https://www.omniglot.com/writing/aljamiado.htm" target="_blank">Morisco alphabet</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="jawi"><a href="https://en.wikipedia.org/wiki/Jawi_script" target="_blank">Jawi script</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="malay"><a href="https://www.omniglot.com/writing/malay.htm" target="_blank">Malay (Bahasa Melayu / بهاس ملايو)</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman"><a href="https://en.wikipedia.org/wiki/Ottoman_Turkish_alphabet" target="_blank">Ottoman Turkish alphabet</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman-rumi"><a href="https://commons.wikimedia.org/wiki/File:Poem_about_Rumi_in_Ottoman_Turkish.jpg" target="_blank">Poem about Rumi in Ottoman Turkish</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="turkish"><a href="https://www.omniglot.com/writing/turkish.htm" target="_blank">Turkish (Türkçe)</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="aragon"><a href="https://ifc.dpz.es/recursos/publicaciones/23/31/ebook2431_4.pdf" target="_blank">La aljamía: una voz islámica en Aragón</a>
+            (Alberto Montaner, University of Zaragoza; in Spanish) <a data-cite="up">^</a></li>
+        <li data-cite="yusuf"><a href="https://es.wikipedia.org/wiki/Poema_de_Yuçuf" target="_blank">Poema de Yuçuf</a> (Wikipedia; in Spanish) <a data-cite="up">^</a></li>
+        <li data-cite="arevalo"><a href="https://commons.wikimedia.org/wiki/File:Aljamiado.png" target="_blank">Aljamiado</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="nuria"><a href="https://doi.org/10.1515/9783110639063-005" target="_blank">Uses and Written Practices in
+            Aljamiado Manuscripts</a> (Nuria de Castilla, <cite>Creating Standards: Interactions with Arabic script in 12 manuscript cultures</cite>, 2019) <a data-cite="up">^</a></li>
+        <li data-cite="nuria2"><a href="https://doi.org/10.3366/jqs.2020.0439" target="_blank">An Aljamiado Translation of the ‘Morisco Qur'an’ and its Arabic Text (c. 1609)</a>
+            (Nuria de Castilla, <cite>Journal of Qur'anic Studies</cite>, Volume 22 Issue 3, 2020) <a data-cite="up">^</a></li>
+        <li data-cite="reform"><a href="https://www.cambridge.org/core/journals/international-journal-of-middle-east-studies/article/learning-to-read-again-the-social-experiences-of-turkeys-1928-alphabet-reform/F313C1942EB18220E9FD9B2B417D5601" target="_blank">Learning
+            to Read (Again): The Social Experiences of Turkey's 1928 Alphabet Reform</a> (Hale Yılmaz, Cambridge University Press, 2011) <a data-cite="up">^</a></li>
+        <li data-cite="ataturk"><a href="https://commons.wikimedia.org/wiki/File:Ataturk-September_20,_1928.jpg" target="_blank">Ataturk-September 20, 1928</a> (Wikimedia) <a data-cite="up">^</a></li>
     </ol>
     <h2>Footnotes</h2>
     <ul id="footnotes">
+        <li data-footnotes="aljamiado">The text in Old Spanish reads:[<a data-cite="arevalo"></a>]
+            <blockquote>Dixo un alim [=ulema] d'este rreyno hablando de nuestro || encerramiento: «Yo bien conozco que somos en una temporada || de grande espanto, mas no por eso dexara Allah de darnos cautori||çada [=castigo] si dexamos el pro'o [=el pro, la ventaja] de nuestro poderío en lo que toca al pre||çeptado mandamiento. ∴ ∴ Y a quanto l'amonestança [=el disimulo, la taqiyya], todos la podemos || usar por la bía p[]r[]ebile[ji]yada? ∴ y con los cantares ajenos por donde || los christianos hazen salva, pues todo cabe debaxo de buena || disimulança, ∴ porque la buena doctrina no la puede bedar ninguna ley ∴ por inumana que sea ∴».
+            </blockquote>
+            <a data-footnotes="up">^</a></li>
     </ul>
 </div>
 

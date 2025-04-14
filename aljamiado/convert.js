@@ -205,7 +205,7 @@ function spanishAljamiado(word) {
         .replaceAll('q','k').replaceAll('güe','guwe').replaceAll('güi','guwi');
     word = word.replaceAll('ch','č').replaceAll('c','k').replaceAll('zk','çk');
     word = word.replaceAll('ia','iya').replaceAll('ie','iye').replaceAll('io','iyo').replaceAll('iu','iyu');
-    word = word.replaceAll('ua','uwa').replaceAll('ue','uwe').replaceAll('ui',"u'i").replaceAll('uo','uwo');
+    word = word.replaceAll('ua','uwa').replaceAll('ue','uwe').replaceAll('ui',"uwi").replaceAll('uo','uwo');
     word = word.replaceAll('v','b').replaceAll('ll','L').replaceAll('rr','R');
     word = word.replaceAll('nd','nD').replaceAll('md','mD');
     word = word.replaceAll('ss','s');
@@ -218,7 +218,7 @@ function spanishAljamiado(word) {
     }
     word = word.replaceAll('Huwa','huwa').replaceAll('Huwe','huwe');
     word = word.replaceAll('h','').replaceAll('H','h');
-    word = word.replaceAll('ai','ayi').replaceAll('ei','eyi').replaceAll('oi','oyi');
+    word = word.replaceAll('ai','ay').replaceAll('ei','ey').replaceAll('oi','oy');
     word = "'" + word;
     word = word.replaceAll('au','ao').replaceAll('eu','eo');
     word = word.replaceAll('ee',"é").replaceAll('aa','á').replaceAll('oo','ú').replaceAll('uu','ú');
@@ -358,7 +358,7 @@ function malayJawi(word) {
             word = word.substring(0,i) + vow_map_closed[char] + word.substring(i+1);
         }
     }
-    word = word.replaceAll('يءي', 'يئي');
+    word = word.replaceAll('يءي', 'يئي').replaceAll('وءا', 'وا');
 
     word = word.replaceAll("'",'');
 

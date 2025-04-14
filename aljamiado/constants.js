@@ -42,6 +42,10 @@ const PREDEFINED_SPANISH = {
     'hubo':'ubo',
     'hora':'ora',
     'horas':'oras',
+    'christiano':'cristiano',
+    'christiana':'cristiana',
+    'christianos':'cristianos',
+    'christianas':'cristianas',
 }
 const CONS_MAP_ALJAMIADO = {
     'b':'ب',
