@@ -52,7 +52,7 @@ function getOutput(text) {
     if (inputLang === 'es') {
         const noSpaceAfter = document.es_output.abbr.checked ?
             new Set(['el','la','los','las', 'lo', 'que', 'a', 'al', 'y', 'de', 'del', 'para', 'por', 'si', 'en', 'con',
-                'no', 'porque', 'mi','tu','su', 'me','te','se','le',
+                'no', 'porque','sobre', 'mi','tu','su', 'me','te','se','le',
             ])
             : null;
         return convertWords(text,

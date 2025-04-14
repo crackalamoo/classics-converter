@@ -37,6 +37,9 @@ const PREDEFINED_SPANISH = {
     'hubiera':'ubiera',
     'hubieras':'ubieras',
     'hubieran':'ubieran',
+    'haya':'aya',
+    'hayan':'ayan',
+    'hubo':'ubo',
     'hora':'ora',
     'horas':'oras',
 }

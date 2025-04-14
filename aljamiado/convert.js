@@ -197,8 +197,8 @@ function spanishAljamiado(word) {
         else if (word.endsWith(':'+key))
             word = word.substring(0,word.length-key.length-1) + ':' + value;
     }
-    word = word.replaceAll('de:e','de').replaceAll('s:s','s s').replaceAll('l:l','l l').replaceAll(':h',':H')
-        .replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
+    word = word.replaceAll('de:e','de').replaceAll('sobre:e','sobre').replaceAll('s:s','s s').replaceAll('l:l','l l')
+        .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
