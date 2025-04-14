@@ -11,13 +11,16 @@
     <title>Aljamiado</title>
     <meta name="description" content="An online tool to write Spanish, Malay, and Turkish in their historic Arabic scripts">
     <link rel="stylesheet" href="https://harysdalvi.com/sub/projects/classics-converter/classics-shared.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
     <style>
     #output-box {
         width: calc(100% - 24px);
         min-height: calc(max(200px, 35vh));
         padding: 12px;
         direction: rtl;
-        font-family: 'Times New Roman';
+        font-family: 'Scheherazade New', 'Times New Roman', serif;
     }
     #output-settings,#special-chars {
         margin-block-start: 1em;
@@ -107,17 +110,16 @@
             <div data-lang="tr">
                 <b>Ottoman Turkish</b>
             </div>
-            <p>Note: this conversion may have errors.</p>
+            Note: this conversion may have errors.
             <div data-lang="es">
                 <form name="es_output" action="javascript:void(0)">
                     <input type="checkbox" name="abbr" value="abbr" id="abbr" checked>
                     <label for="abbr">Common word combinations (e.g. el gato → elgato)</label><br>
                     <input type="checkbox" name="arabic" value="arabic" id="arabic" checked>
-                    <label for="arabic">Arabic spellings for common Arabic-origin words (e.g. almohada, sandía)</label>
-                    <input type="checkbox" name="maghrebi" value="maghrebi" id="maghrebi" checked>
+                    <label for="arabic">Arabic spellings for common Arabic-origin words (e.g. almohada, sandía)</label><br>
+                    <input type="checkbox" name="maghrebi" value="maghrebi" id="maghrebi">
                     <label for="maghrebi">Maghrebi script (ڢ ڧ)</label>
                     <p>These were common in Aljamiado texts.</p>
-                    </p>
                 </form>
             </div>
         </aside>

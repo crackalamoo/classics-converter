@@ -63,12 +63,25 @@ function getOutput(text) {
         (w) => convertWord(w, inputLang, outputLang), punctMapper);
 }
 
+function loadFont(fontUrl) {
+    if (document.querySelector(`link[href="${fontUrl}"]`)) return; // already loaded
+    const link = document.createElement('link');
+    link.href = fontUrl;
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+}
+
 inputBox.addEventListener("input", refreshOutput);
 for (const radioButton of document.querySelectorAll('input[type=radio]'))
     radioButton.addEventListener("change", refreshDisplay);
 document.es_output.abbr.addEventListener("change", refreshOutput);
 document.es_output.arabic.addEventListener("change", refreshOutput);
-document.es_output.maghrebi.addEventListener("change", refreshOutput);
+
+document.es_output.maghrebi.addEventListener("change", () => {
+    refreshOutput();
+    loadFont('https://fonts.googleapis.com/css2?family=Fustat&display=swap');
+    outputBox.style.fontFamily = document.es_output.maghrebi.checked ? 'Fustat' : '';
+});
 
 const inputButtons = document.querySelectorAll('ul#input-lang li');
 
