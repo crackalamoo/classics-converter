@@ -1,12 +1,12 @@
 const inputBox = document.getElementById("input-box");
 const outputBox = document.getElementById("output-box");
-const outputChoices = document.getElementById("output-lang");
-const orthography = document.getElementById("orthography");
+// const outputChoices = document.getElementById("output-lang");
+// const orthography = document.getElementById("orthography");
 const specialChars = document.getElementById("special-chars");
 
 const specialCharsSet = {
     'es': ['ñ','á','é','í','ó','ú','ü'],
-    'ms': ['é','ĕ'],
+    'ms': ['é'],
     'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
 };
 const languageNames = {
@@ -19,6 +19,17 @@ function getText() {
     let text = inputBox.value;
     return text;
 }
+function copyOutput() {
+    const text = getText();
+    const output = getOutput(text);
+    navigator.clipboard.writeText(output);
+}
+function clearOutput() {
+    if (confirm("Clear text?")) {
+        inputBox.value = '';
+        refreshOutput();
+    }
+  }
 function refreshOutput() {
     const text = getText();
     const output = getOutput(text);
@@ -50,18 +61,18 @@ function refreshDisplay() {
     refreshAside('output-settings');
 }
 function getOutput(text) {
+    let noSpaceAfter = null;
     if (inputLang === 'es') {
-        const noSpaceAfter = document.es_output.abbr.checked ?
+        noSpaceAfter = document.es_output.abbr.checked ?
             new Set(['el','la','los','las', 'lo', 'que', 'a', 'al', 'y', 'de', 'del', 'para', 'por', 'si', 'en', 'con',
                 'no', 'porque','sobre', 'mi','tu','su', 'me','te','se','le',
             ])
             : null;
-        return convertWords(text,
-            (w) => convertWord(w, inputLang, outputLang),
-            punctMapper, noSpaceAfter);
+    } else if (inputLang === 'ms') {
+        noSpaceAfter = new Set(['di', 'ke']);
     }
     return convertWords(text,
-        (w) => convertWord(w, inputLang, outputLang), punctMapper);
+        (w) => convertWord(w, inputLang, outputLang), punctMapper, noSpaceAfter);
 }
 
 function loadFont(fontUrl) {

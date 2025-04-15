@@ -15,14 +15,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
     <style>
-    #output-box {
-        width: calc(100% - 24px);
+    #input-box,#output-box {
         min-height: calc(max(200px, 35vh));
-        padding: 12px;
+    }
+    #output-box {
         direction: rtl;
         font-family: 'Scheherazade New', 'Times New Roman', serif;
     }
-    #output-settings,#special-chars {
+    #output-settings,#special-chars,#output-buttons {
         margin-block-start: 1em;
         margin-block-end: 1em;
     }
@@ -32,13 +32,18 @@
     button {
         font-size: 1.2em;
         font-family: inherit;
+        color: inherit;
         min-width: 1.4em;
+        max-width: fit-content;
         background: #EEEEEE;
         border: 2px solid #CCCCCC;
         margin: 0 2px;
     }
     button:hover {
         background: #CCCCCC;
+    }
+    button:active {
+        background: #AAAA99;
     }
     </style>
     <!-- <base href="https://harysdalvi.com/sub/projects/aljamiado/"> -->
@@ -61,9 +66,6 @@
     <div class="box-container-column has-box">
         <div class="text-box">
             <textarea id="input-box" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Type in Spanish"></textarea>
-            <div class="ortho-box">
-                <span id="orthography"></span>
-            </div>
         </div>
         <div id="special-chars"></div>
         <ul class="choose-lang" id="input-lang">
@@ -96,7 +98,7 @@
                 <p>
                     <ul>
                         <li>Always use é for e taling: mérah</li>
-                        <li>Use e or ĕ for e pepet: kecil/kĕcil</li>
+                        <li>Use e for e pepet: kecil/kĕcil</li>
                     </ul>
                 </p>
             </div>
@@ -108,6 +110,10 @@
     <div class="box-container-column has-box">
         <div class="text-box">
             <div id="output-box"></div>
+        </div>
+        <div id="output-buttons">
+            <button onclick="copyOutput()">Copy</button>
+            <button onclick="clearOutput()">Clear</button>
         </div>
         <!-- <ul class="choose-lang" id="output-lang">
         </ul> -->
@@ -179,7 +185,7 @@
         <img src="img/arevalo.jpg" alt="Aljamiado text by Mancebo de Arévalo, 16th century">
         <figcaption>An Aljamiado text by Mancebo de Arévalo, 16th century.
             The text is in Spanish. It encourages Moriscos to continue practicing Islam despite
-            the laws against it, and to hide by showing faith in Christianity in public.<a data-footnotes="aljamiado"></a>[<a data-cite="arevalo"></a>]
+            the laws against it, while outwardly showing faith in Christianity in public.<a data-footnotes="aljamiado"></a>[<a data-cite="arevalo"></a>]
         </figcaption>
     </figure>
     <p>
@@ -189,10 +195,10 @@
         By 1564, the Spanish crown had ordered Arabic books to be burned,
         and banned the Arabic language entirely, giving the former Muslims just three years to learn Spanish.[<a data-cite="nuria"></a>]
     </p>
-        Although the Arabic language (which was widely used in Spain during Muslim rule)
-        gradually died out, the remaining Muslims &mdash; now called Moriscos &mdash;
+        Although the Arabic language &mdash; which was widely used in Spain during Muslim rule &mdash;
+        gradually died out, the remaining Muslims, now called Moriscos,
         continued to practice Islam in secret.
-        They increasingly began to write their
+        They increasingly wrote their
         Romance languages in the Arabic script as a form of resistance.
         Thus, Aljamía was not restricted to the Islamic period at all:
         most Aljamiado manuscripts actually come from the
@@ -200,10 +206,10 @@
         Aljamiado manuscripts were often hidden in
         ceilings and walls, and were only discovered centuries later.[<a data-cite="nuria"></a>]
     </p>
-    <p>Aljamía stopped being mainstream hundreds of years ago, and Aljamiado texts were archaic
-        even for their time: 16th century texts use language more like it's from the 13th or 14th century.[<a data-cite="nuria"></a>]
-        Therefore, the language used is not actually modern Spanish, but Old Spanish (and Old Aragonese,
-        and other Romance languages.) In this tool, you can choose between Old Spanish and Modern Spanish:
+    <p>Aljamía fell out of use hundreds of years ago, and Aljamiado texts were archaic
+        even for their time: 16th-century texts often use language closer to the 13th or 14th centuries.[<a data-cite="nuria"></a>]
+        Therefore, the language used is not actually modern Spanish, but Old Spanish, Old Aragonese,
+        and other Romance languages. In this tool, you can choose between Old Spanish and Modern Spanish:
         the two have different sounds and different spellings, but I've tried to keep the Modern Spanish
         spellings as close as possible to what they would be in Old Spanish.
     </p>
@@ -217,48 +223,48 @@
         <figcaption>A letter in Jawi script from William Farquhar to Sultan Muhammad Kanzul Alam, the sultan of Brunei, dated 28 November 1819.[<a data-cite="jawi"></a>]</figcaption>
     </figure>
     <p>The <strong>Jawi script</strong> has been used for <strong>Malay</strong> for over 700 years.
-        It was first used in the 14th century,
+        It emerged in the 14th century,
         replacing earlier Indian-derived scripts. Although it was replaced by the Latin script during
-        European (British and Dutch) rule, it is still co-official in Brunei and parts of Malaysia.[<a data-cite="malay"></a>]
+        British and Dutch colonial rule, it is still co-official in Brunei and parts of Malaysia.[<a data-cite="malay"></a>]
     </p>
-    <p>Unlike the earlier scripts for Malay, Jawi was used by all classes of society, not just the rulers and monks.
-        It also added letters to effectively represent Malay sounds not found in Arabic.
-        These factors, combined with its association with the spread of Islam, quickly made Jawi the primary
-        script for Malay and allowed it to develop an extensive literature.[<a data-cite="jawi"></a>]
+    <p>Unlike the earlier scripts for Malay, Jawi was adopted by all classes of society, not just the rulers and monks.
+        It also added new letters to effectively represent Malay sounds not found in Arabic.
+        Combined with its association with the spread of Islam, these factors quickly made Jawi the primary
+        script for Malay and allowed it to develop a rich literature.[<a data-cite="jawi"></a>]
     </p>
-    <p>While the Roman script is now the most common script for Malay, Jawi is still used in
-        some religious and cultural contexts in Malaysia, Brunei, and parts of Indonesia and Thailand.
+    <p>While the Latin script is now the most common script for Malay, Jawi is still used in
+        religious and cultural contexts in Malaysia, Brunei, and parts of Indonesia and Thailand.
         The script has continued evolving, and became standardized over the course of the 20th century,
-        with the last reform in 1986.[<a data-cite="jawi"></a>]
+        with the most recent reform in 1986.[<a data-cite="jawi"></a>]
     </p>
     <br clear="all">
     <figure class="endfloat">
         <img src="img/ottoman.jpg" alt="Ottoman Turkish script">
         <figcaption>A poem about Rumi in Ottoman Turkish.[<a data-cite="ottoman-rumi"></a>]</figcaption>
     </figure>
-    <p>During the Ottoman Empire, from 1299 to 1928, Turkish was written in the Arabic script.
-        In particular, the Ottomans used a version of the Arabic script derived from Persian,
+    <p>During the Ottoman Empire, from 1299 to 1928, <strong>Turkish</strong> was written in the Arabic script.
+        In particular, the Ottomans used a Persian origin version of the Arabic script,
         with extra letters to represent Persian words. A peculiar feature of Ottoman Turkish is that
-        when borrowing words from Arabic and Persian, the <em>consonants</em> used in those languages
-        affected the Turkish vowels; and when writing Turkish words, variations in <em>vowels</em>
+        when writing words from Arabic and Persian, the <em>consonants</em> used in those languages
+        affected the spoken vowels; and when writing Turkish words, variations in <em>vowels</em>
         were sometimes represented by choosing different consonants with the same sound.
-        This and other aspects made the Ottoman Turkish alphabet quite difficult.[<a data-cite="ottoman"></a>]
+        This was one factor that made the Ottoman Turkish alphabet quite difficult.[<a data-cite="ottoman"></a>]
     </p>
     <p>Today Azerbaijani, closely related to Turkish, is still written in the Arabic script in Iran.
-        However, they have added vowel diacritics to distinguish between Azerbaijani vowels,
+        However, vowel diacritics now help distinguish between Azerbaijani vowels,
         making it easier than the Ottoman Turkish script.[<a data-cite="ottoman"></a>]
     </p>
     <p>
         On the other hand, Turkey took the approach of completely replacing the Arabic script with a Latin-based
-        one. Mustafa Kemal, the President of Turkey, believed in a secular and literate Turkey. He saw the old alphabet as holding the country back from these goals.
-        Therefore, he led the development of a new phonetic Latin script for Turkey which became official in 1928.[<a data-cite="turkish"></a>][<a data-cite="reform"></a>]
+        one. <strong>Mustafa Kemal Atatürk</strong>, the President of Turkey, believed the new alphabet would help create a secular, literate, and modernized Turkey.
+        He led the development of a new phonetic Latin script for Turkey which became official in 1928.[<a data-cite="turkish"></a>][<a data-cite="reform"></a>]
     </p>
     <p>
-        It's debatable how much the script itself held back literacy in Turkey, as many other factors were involved such as poor education,
-        cultural attitudes, and differences between spoken and written Turkish.
-        Regardless,
-        the literacy rate in Turkey was just 8% in 1927 and increased to 30% by 1945 through an education project
-        in the new alphabet. Mustafa Kemal personally promoted the alphabet by traveling to towns in Anatolia and
+        It's debatable how much the script itself held back literacy in Turkey &mdash; poor education,
+        cultural attitudes, and differences between spoken and written Turkish were important underlying issues.
+        Regardless, promotion of the new system did help raise literacy.
+        The literacy rate in Turkey was just 8% in 1927 and increased to 30% by 1945 thanks to state-sponsored education.
+        Mustafa Kemal personally promoted the alphabet by traveling to towns in Anatolia and
         teaching the letters on blackboards.[<a data-cite="reform"></a>]
     </p>
     <br clear="all">
@@ -304,7 +310,15 @@
     <h2>Footnotes</h2>
     <ul id="footnotes">
         <li data-footnotes="aljamiado">The text in Old Spanish reads:[<a data-cite="arevalo"></a>]
-            <blockquote>Dixo un alim [=ulema] d'este rreyno hablando de nuestro || encerramiento: «Yo bien conozco que somos en una temporada || de grande espanto, mas no por eso dexara Allah de darnos cautori||çada [=castigo] si dexamos el pro'o [=el pro, la ventaja] de nuestro poderío en lo que toca al pre||çeptado mandamiento. ∴ ∴ Y a quanto l'amonestança [=el disimulo, la taqiyya], todos la podemos || usar por la bía p[]r[]ebile[ji]yada? ∴ y con los cantares ajenos por donde || los christianos hazen salva, pues todo cabe debaxo de buena || disimulança, ∴ porque la buena doctrina no la puede bedar ninguna ley ∴ por inumana que sea ∴».
+            <blockquote>Dixo un alim [=ulema] d'este rreyno hablando de nuestro<br>
+                encerramiento: «Yo bien conozco que somos en una temporada<br>
+                de grande espanto, mas no por eso dexara Allah de darnos cautori-<br>
+                çada [=castigo] si dexamos el pro'o [=el pro, la ventaja] de nuestro poderío en lo que toca al pre-<br>
+                çeptado mandamiento. ∴ ∴ Y a quanto l'amonestança [=el disimulo, la taqiyya], todos la podemos<br>
+                usar por la bía p[]r[]ebile[ji]yada? ∴ y con los cantares ajenos por donde<br>
+                los christianos hazen salva, pues todo cabe debaxo de buena<br>
+                disimulança, ∴ porque la buena doctrina no la puede bedar ninguna ley<br>
+                por inumana que sea ∴».
             </blockquote>
             <a data-footnotes="up">^</a></li>
     </ul>

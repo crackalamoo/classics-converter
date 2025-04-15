@@ -47,6 +47,7 @@ textarea {
     border: none;
     font: inherit;
     resize: none;
+    display: block;
 }
 .ortho-box {
     font-size: 18px;

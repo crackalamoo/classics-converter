@@ -199,6 +199,7 @@ function spanishAljamiado(word) {
     }
     word = word.replaceAll('de:e','de').replaceAll('sobre:e','sobre').replaceAll('s:s','s s').replaceAll('l:l','l l')
         .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
+    word = word.replaceAll('aí','ayi').replaceAll('eí','eyi').replaceAll('oí','oyi').replaceAll('uí','uyi');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
@@ -287,6 +288,11 @@ function malayJawi(word) {
             }
         }
         return malayJawi(word.substring(0,hyphen)) + '-' + malayJawi(word.substring(hyphen+1));
+    }
+    console.log(word);
+    const colon = word.indexOf(':');
+    if (colon !== -1) {
+        return malayJawi(word.substring(0,colon)) + '\u200c' + malayJawi(word.substring(colon+1));
     }
     word = word.replaceAll('´','');
     word = word.replaceAll('ĕ','e').replaceAll('x','Ks');
