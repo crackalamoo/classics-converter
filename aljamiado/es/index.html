@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Aljamiado">
+    <meta property="og:description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts">
+    <meta property="og:image" content="https://harysdalvi.com/sub/projects/classics-converter/img/Romance_languages.jpg">
+    <link rel="stylesheet" href="https://harysdalvi.com/main.css">
+    <title>Aljamiado</title>
+    <meta name="description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts">
+    <link rel="stylesheet" href="https://harysdalvi.com/sub/projects/classics-converter/classics-shared.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap" rel="stylesheet">
+    <style>
+    #input-box,#output-box {
+        min-height: calc(max(200px, 35vh));
+    }
+    #output-box {
+        direction: rtl;
+        font-family: 'Scheherazade New', 'Times New Roman', serif;
+    }
+    #output-settings,#special-chars,#output-buttons {
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+    }
+    ul.choose-lang {
+        height: 160px;
+    }
+    button {
+        font-size: 1.2em;
+        font-family: inherit;
+        color: inherit;
+        min-width: 1.4em;
+        max-width: fit-content;
+        background: #EEEEEE;
+        border: 2px solid #CCCCCC;
+        margin: 0 2px;
+    }
+    button:hover {
+        background: #CCCCCC;
+    }
+    button:active {
+        background: #AAAA99;
+    }
+    #lang-switch {
+        text-align: right;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+    }
+    </style>
+    <base href="https://harysdalvi.com/sub/projects/aljamiado/">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPKKGJ4J3K"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YPKKGJ4J3K');
+    </script>
+    <script>
+    const pageLang = 'es';
+    </script>
+    <script src="constants.js"></script>
+    <script src="convert.js"></script>
+
+    <link rel="alternate" hreflang="en" href="https://harysdalvi.com/aljamiado">
+    <link rel="alternate" hreflang="es" href="https://harysdalvi.com/es/aljamiado">
+</head>
+
+<body>
+<div class="before-main">
+<h1>Aljamiado</h1>
+<div id="lang-switch">
+    <a href="https://harysdalvi.com/aljamiado">English</a> | Español
+</div>
+<div class="box-container">
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <textarea id="input-box" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Escribe en español"></textarea>
+        </div>
+        <div id="special-chars"></div>
+        <ul class="choose-lang" id="input-lang">
+            <li data-lang="es" class="active">Español</li>
+            <li data-lang="ms">Malayo</li>
+            <li data-lang="tr">Turco</li>
+        </ul>
+        <aside id="input-settings">
+            <div data-lang="es">
+                <form name="es_input" action="javascript:void(0)">
+                    <input type="radio" name="era" value="modern" id="modern" checked>
+                    <label for="modern">Castellano moderno</label><br>
+                    <input type="radio" name="era" value="old" id="old">
+                    <label for="old">Castellano medieval</label>
+                </form>
+            </div>
+        </aside>
+        <aside id="input-instructions">
+            <div data-lang="es">
+                <p>
+                    Cambios del castellano medieval al castellano moderno:
+                    <ul>
+                        <li>z, ç, c[e/i] → z, c[e/i]</li>
+                        <li>ss, s → s</li>
+                        <li>x, j → j</li>
+                    </ul>
+                </p>
+            </div>
+            <div data-lang="ms">
+                <p>
+                    <ul>
+                        <li>Usa siempre é para e taling: mérah</li>
+                        <li>Usa e para e pepet: kecil/kĕcil</li>
+                    </ul>
+                </p>
+            </div>
+        </aside>
+    </div>
+
+    <div id="conv-arrow">→</div>
+
+    <div class="box-container-column has-box">
+        <div class="text-box">
+            <div id="output-box"></div>
+        </div>
+        <div id="output-buttons">
+            <button onclick="copyOutput()">Copiar</button>
+            <button onclick="clearOutput()">Borrar</button>
+        </div>
+        <!-- <ul class="choose-lang" id="output-lang">
+        </ul> -->
+        <aside id="output-settings">
+            <div data-lang="es">
+                <b>Aljamía</b>
+            </div>
+            <div data-lang="ms">
+                <b>Jawi</b>
+            </div>
+            <div data-lang="tr">
+                <b>Turco otomano</b>
+            </div>
+            Nota: esta conversión puede contenir errores.
+            <div data-lang="es">
+                <form name="es_output" action="javascript:void(0)">
+                    <input type="checkbox" name="abbr" value="abbr" id="abbr" checked>
+                    <label for="abbr">Combinaciones comunes de palabras (p. ej. el gato → elgato)</label><br>
+                    <input type="checkbox" name="arabic" value="arabic" id="arabic" checked>
+                    <label for="arabic">Ortografía árabe para palabras comunes de origen árabe (p. ej. almohada, sandía)</label><br>
+                    <input type="checkbox" name="maghrebi" value="maghrebi" id="maghrebi">
+                    <label for="maghrebi">Escritura cúfica magrebí (ڢ ڧ)</label>
+                    <p>Estos eran comunes en los textos aljamiados.</p>
+                </form>
+            </div>
+        </aside>
+    </div>
+</div>
+
+</div>
+
+<div class="main">
+    <h2 id="que-es-esto">¿Qué es esto?</h2>
+    <p>Esto es una herramienta para escribir el español, el malayo y el turco
+        en sus escrituras árabes históricas.
+        Estas escrituras árabes históricas son:
+        <ul>
+            <li>Para el español, la <strong>escritura aljamiada</strong>
+                utilizado durante el dominio musulmán de España y luego en secreto durante algún tiempo después
+                de la Reconquista.[<a data-cite="aljamiado"></a>][<a data-cite="morisco"></a>]
+                (La escritura misma se llama aljamía; aljamiado es
+                un adjetivo.[<a data-cite="aragon"></a>])</li>
+            <li>Para el malayo, la <strong>escritura jawi</strong> que se
+                utilizaba ampliamente en el archipiélago malayo desde el siglo XV hasta el siglo XX,
+                y todavía se usa ocasionalmente.[<a data-cite="jawi"></a>]</li>
+            <li>Para el turco, la <strong>escritura turca otomana</strong> que se
+                utilizabe durante el Imperio otomano y después la República de Turquía hasta 1928.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
+        </ul>
+        Aunque la escritura árabe tiene un papel importante en la historia de cada uno de estos idiomas,
+        no siempre se usaba de la misma manera. Las convenciones difieren entre autores y periodos.
+        Además, estos idiomas tenían una tendencia a mantener las palabras árabes escritas de la misma manera,
+        incluso si no era fonético. Por estas razones y más, es posible que encuentres algunas
+        transcripciones que no son completamente fieles a los manuscritos históricos.
+    </p>
+    <p>La escritura otomana es especialmente propensa a tener errores debido al
+        gran número de préstamos del árabe y el persa, las muchas variaciones en la ortografía,
+        y la dificultad de usar la escritura para el idioma turco.
+    </p>
+
+    <h2 id="contexto-historico">Contexto histórico</h2>
+    <figure class="bigimg">
+        <img src="img/Poema_de_Yusuf.jpg" alt="Poema de Yusuf">
+        <figcaption>Un manuscrito aljamiado del Poema de Yuçuf, un poema del siglo XIV sobre la historia de José en el Corán.
+            El idioma es un aragonés muy castellanizado.[<a data-cite="yusuf"></a>]</figcaption>
+    </figure>
+    <p>Las lenguas romances como el <strong>español</strong> (castellano) se escribieron por primera vez en la escritura árabe en el siglo XIV,
+        hacia el final del dominio musulmán en España. Esto se conocía como <strong>aljamía</strong>.[<a data-cite="aljamiado"></a>]</p>
+    <figure class="endfloat">
+        <img src="img/arevalo.jpg" alt="Texto aljamiado de Mancebo de Arévalo, siglo XVI">
+        <figcaption>Un texto aljamiado de Mancebo de Arévalo, siglo XVI.
+            La lengua del texto es el español. Es una invitación a los moriscos que sigan practicando el islam a pesar
+            de las leyes que lo prohíben, mientras que muestren aparentemente la fe cristiana en público.<a data-footnotes="aljamiado"></a>[<a data-cite="arevalo"></a>]
+        </figcaption>
+    </figure>
+    <p>
+        Después de la reconquista de España por los cristianos en 1492,
+        los cristianos empezaron a enfatizar cada vez más el cristianismo y se esforzaron por erradicar la cultura árabe e islámica de la península.
+        Para 1526, los musulmánes fueron obligados a convertirse al cristianismo o abandonar España.
+        Para 1564, la corona española ordenó que se quemaran los libros árabes y
+        prohibió por completo el idioma árabe, dando a los antiguos musulmanes
+        solo tres años para aprender español.[<a data-cite="nuria"></a>]
+    </p>
+    <p>
+        Aunque el idioma árabe &mdash; que se usaba ampliamente en España durante el dominio musulmán &mdash;
+        fue poco a poco desapareciendo, los musulmanes restantes, que ya se llamaban moriscos,
+        continuaron practicando el islam en secreto. Escribían con más frecuencia sus lenguas romances
+        en la escritura árabe como forma de resistencia.
+        Entonces la aljamía no se limitó en absoluto a la época islámica:
+        en realidad, la mayoría de los manuscritos aljamiados provienen del siglo XVI,
+        cuando el árabe estaba prohibido, y sirvieron a los moriscos para practicar el islam y la cultura islámica en secreto.
+        Los manuscritos aljamiados solían esconderse en techos y paredes, y solo se descubrieron siglos después.[<a data-cite="nuria"></a>]
+    </p>
+    <p>
+        La aljamía cayó en desuso hace siglos, y los textos aljamiados eran arcaicos
+        incluso para su época: los textos del siglo XVI suelen usar un lenguaje más cercano al de los siglos XIII o XIV.[<a data-cite="nuria"></a>]
+        Por lo tanto, el idioma utilizado no es en realidad el castellano moderno, sino el castellano medieval,
+        el aragonés medieval y otras lenguas romances. En esta herramienta, se puede elegir entre el castellano medieval y el moderno:
+        ambos tienen sonidos y ortografías diferentes, pero he intentado que las ortografías del castellano moderno
+        sean lo más parecidas posible a lo que serían en el castellano medieval.
+    </p>
+    <p>El árabe solo tiene tres vocales escritas, mientras que el español tiene cinco. La aljamía
+        ideó una solución inusual: la vocal E se escribe con el álif árabe, que en árabe se usa para el sonido de la A larga.
+        La A, la I y la O se escriben con marcas de vocales que casi nunca se usan en el árabe escrito.
+        La U se escribe igual que la O.[<a data-cite="aljamiado"></a>]
+    </p>
+    <figure class="endfloat">
+        <img src="img/jawi.jpg" alt="Escritura jawi">
+        <figcaption>
+            Una carta en escritura jawi de William Farquhar al sultán Muhammad Kanzul Alam, el sultán de Brunei, fechada el 28 de noviembre de 1819.[<a data-cite="jawi"></a>]
+        </figcaption>
+    </figure>
+    <p>La <strong>escritura jawi</strong> se ha utilizado en <strong>malayo</strong> durante más de 700 años.
+        Surgió en el siglo XIV, reemplazando las escrituras anteriores de origen indio.
+        Aunque fue reemplazada por la escritura latina durante el dominio colonial británico y holandés,
+        sigue siendo cooficial en Brunéi y algunas partes de Malasia.[<a data-cite="malay"></a>]
+    </p>
+    <p>A diferencia de las escrituras anteriores del malayo, el jawi fue adoptado por todas las clases sociales,
+        no solo por governantes y monjes. Además, añadió nuevas letras para representar eficazmente sonidos malayos
+        que no se encuentran en el árabe. Junto con su asociación con la expansión del islam, estos factores
+        rápidamente convirtieron al jawi en la escritura principal del malayo y le permitieron desarrollar una rica literatura.[<a data-cite="jawi"></a>]
+    </p>
+    <p>Aunque la escritura latina es actualmente la más común en malayo, el jawi aún se utiliza
+        en contextos religiosos y culturales en Malasia, Brunéi y partes de Indonesia y Tailandia.
+        La escritura ha seguido evolucionando y se ha estandarizado a lo largo del siglo XX,
+        con su reforma más reciente en 1986.[<a data-cite="jawi"></a>]
+    </p>
+    <br clear="all">
+    <figure class="endfloat">
+        <img src="img/ottoman.jpg" alt="Escritura turca otomana">
+        <figcaption>Un poema sobre Rumi en el turco otomano.[<a data-cite="ottoman-rumi"></a>]</figcaption>
+    </figure>
+    <p>Durante el Imperio otomano, de 1299 a 1928, el <strong>turco</strong> se escribía en escritura árabe.
+        En particular, los otomanos utilizaban una versión de origen persa de la escritura árabe,
+        con letras adicionales para representar palabras persas. Una característica peculiar del turco otomano es que
+        al escribir palabras del árabe y el persa, las <em>consonantes</em> utilizadas en esos idiomas
+        afectaban a las vocales habladas; y al escribir palabras turcas, las variaciones en las <em>vocales</em>
+        a veces se representaban eligiendo diferentes consonantes con el mismo sonido.
+        Este fue un factor por el que el alfabeto turco otomano era bastante difícil.[<a data-cite="ottoman"></a>]
+    </p>
+    <p>Hoy en día, el azerí, estrechamente relacionado con el turco, todavía se escribe con la escritura árabe en Irán.
+        Sin embargo, en el azerí moderno los diacríticos vocálicos ayudan a distinguir las vocales azeríes.
+        Esto lo hace más fácil que el alfabeto turco otomano.[<a data-cite="ottoman"></a>]
+    </p>
+    <p>
+        Por otro lado, el enfoque de Turquía fue reemplazar completamente la escritura árabe por una basada en el latín.
+        <strong>Mustafa Kemal Atatürk</strong>, presidente de Turquía, creía que el nuevo alfabeto ayudaría a crear una Turquía secular, alfabetizada y modernizada.
+        Lideró el desarrollo de un nuevo alfabeto latino fonético para el turco, que se oficializó en 1928.[<a data-cite="turkish"></a>][<a data-cite="reform"></a>]
+    </p>
+    <p>Es discutible en qué medida la escritura en sí misma frenó la alfabetización en Turquía:
+        la educación deficiente, las actitudes culturales y las diferencias entre el turco hablado y escrito
+        eran problemas subyacentes importantes. En cualquier caso, la promoción del nuevo sistema sí contribuyó
+        a aumentar la alfabetización. La tasa de alfabetización en Turquía era de tan solo el 8% en 1927
+        y aumentó al 30% para 1945 gracias a la educación estatal.
+        Mustafa Kemal promovió personalmente el alfabeto viajando a pueblos de Anatolia
+        y enseñando las letras en pizarras.[<a data-cite="reform"></a>]
+    </p>
+    <br clear="all">
+    <figure class="endfloat">
+        <img src="img/ataturk.jpg">
+        <figcaption>Mustafa Kemal Atatürk presenta el nuevo alfabeto turco a los habitantes de Kayseri. 20 de septiembre de 1928[<a data-cite="ataturk"></a>]</figcaption>
+    </figure>
+
+
+
+    <h2 id="ref">References</span></h2>
+    <p>Las reglas aplicadas en el código del convertidor, aunque no necesariamente se mencionan en el artículo principal,
+        provienen principalmente de:
+        <ul>
+            <li>Para el español: <a data-cite="aljamiado"></a>, <a data-cite="morisco"></a>, <a data-cite="aragon"></a>,
+                <a data-cite="nuria"></a>, <a data-cite="nuria2"></a>, and from manuscripts referenced by these.
+            </li>
+            <li>Para el malayo: <a data-cite="jawi"></a>, <a data-cite="malay"></a>, <a data-cite="wiktionary"></a>.</li>
+            <li>Para el turco: <a data-cite="ottoman"></a>, <a data-cite="turkish"></a>, <a data-cite="wiktionary"></a>.</li>
+        </ul>
+    </p>
+    <ol id="reflist">
+        <li data-cite="wiktionary"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> (en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="aljamiado"><a href="https://en.wikipedia.org/wiki/Aljamiado" target="_blank">Aljamiado</a> (Wikipedia; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="morisco"><a href="https://www.omniglot.com/writing/aljamiado.htm" target="_blank">Morisco alphabet</a> (Omniglot; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="jawi"><a href="https://en.wikipedia.org/wiki/Jawi_script" target="_blank">Jawi script</a> (Wikipedia; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="malay"><a href="https://www.omniglot.com/writing/malay.htm" target="_blank">Malay (Bahasa Melayu / بهاس ملايو)</a> (Omniglot; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman"><a href="https://en.wikipedia.org/wiki/Ottoman_Turkish_alphabet" target="_blank">Ottoman Turkish alphabet</a> (Wikipedia; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman-rumi"><a href="https://commons.wikimedia.org/wiki/File:Poem_about_Rumi_in_Ottoman_Turkish.jpg" target="_blank">Poem about Rumi in Ottoman Turkish</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="turkish"><a href="https://www.omniglot.com/writing/turkish.htm" target="_blank">Turkish (Türkçe)</a> (Omniglot; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="aragon"><a href="https://ifc.dpz.es/recursos/publicaciones/23/31/ebook2431_4.pdf" target="_blank">La aljamía: una voz islámica en Aragón</a>
+            (Alberto Montaner, Universidad de Zaragoza) <a data-cite="up">^</a></li>
+        <li data-cite="yusuf"><a href="https://es.wikipedia.org/wiki/Poema_de_Yuçuf" target="_blank">Poema de Yuçuf</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="arevalo"><a href="https://commons.wikimedia.org/wiki/File:Aljamiado.png" target="_blank">Aljamiado</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="nuria"><a href="https://doi.org/10.1515/9783110639063-005" target="_blank">Uses and Written Practices in
+            Aljamiado Manuscripts</a> (Nuria de Castilla, <cite>Creating Standards: Interactions with Arabic script in 12 manuscript cultures</cite>, 2019; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="nuria2"><a href="https://doi.org/10.3366/jqs.2020.0439" target="_blank">An Aljamiado Translation of the ‘Morisco Qur'an’ and its Arabic Text (c. 1609)</a>
+            (Nuria de Castilla, <cite>Journal of Qur'anic Studies</cite>, Volume 22 Issue 3, 2020; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="reform"><a href="https://www.cambridge.org/core/journals/international-journal-of-middle-east-studies/article/learning-to-read-again-the-social-experiences-of-turkeys-1928-alphabet-reform/F313C1942EB18220E9FD9B2B417D5601" target="_blank">Learning
+            to Read (Again): The Social Experiences of Turkey's 1928 Alphabet Reform</a> (Hale Yılmaz, Cambridge University Press, 2011; en inglés) <a data-cite="up">^</a></li>
+        <li data-cite="ataturk"><a href="https://commons.wikimedia.org/wiki/File:Ataturk-September_20,_1928.jpg" target="_blank">Ataturk-September 20, 1928</a> (Wikimedia) <a data-cite="up">^</a></li>
+    </ol>
+    <h2>Footnotes</h2>
+    <ul id="footnotes">
+        <li data-footnotes="aljamiado">El texto en el castellano medieval dice:[<a data-cite="arevalo"></a>]
+            <blockquote>Dixo un alim [=ulema] d'este rreyno hablando de nuestro<br>
+                encerramiento: «Yo bien conozco que somos en una temporada<br>
+                de grande espanto, mas no por eso dexara Allah de darnos cautori-<br>
+                çada [=castigo] si dexamos el pro'o [=el pro, la ventaja] de nuestro poderío en lo que toca al pre-<br>
+                çeptado mandamiento. ∴ ∴ Y a quanto l'amonestança [=el disimulo, la taqiyya], todos la podemos<br>
+                usar por la bía p[]r[]ebile[ji]yada? ∴ y con los cantares ajenos por donde<br>
+                los christianos hazen salva, pues todo cabe debaxo de buena<br>
+                disimulança, ∴ porque la buena doctrina no la puede bedar ninguna ley<br>
+                por inumana que sea ∴».
+            </blockquote>
+            <a data-footnotes="up">^</a></li>
+    </ul>
+</div>
+
+
+<div id="footer"></div>
+<script src="http://harysdalvi.com/services.js"></script>
+<script>
+setAnchors();
+orderCitations();
+orderCitations('footnotes', ['*']);
+// const DARK = darkTheme();
+</script>
+<script src="main.js"></script>
+
+</body>
+
+</html>

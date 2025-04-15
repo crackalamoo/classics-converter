@@ -9,7 +9,13 @@ const specialCharsSet = {
     'ms': ['é'],
     'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
 };
-const langNames = {
+const langNames = pageLang === 'es' ?
+{
+    'es': 'español',
+    'ms': 'malayo',
+    'tr': 'turco',
+} :
+{
     'es': 'Spanish',
     'ms': 'Malay',
     'tr': 'Turkish',
@@ -111,7 +117,7 @@ const updateInputLang = (l) => {
     if (l !== inputLang)
         inputBox.value = '';
     inputLang = l;
-    inputBox.placeholder = 'Type in ' + langNames[inputLang];
+    inputBox.placeholder = I18N[pageLang]['placeholder'].replace('$1', langNames[inputLang]);
 
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {

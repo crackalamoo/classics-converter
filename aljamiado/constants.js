@@ -18,6 +18,8 @@ const PREDEFINED_ALJAMIADO = {
     'algodón':'اَلْقُطُنْ',
     'azúcar':'اَلْسُّكَّرْ',
     'árabe':'عَرَبَا',
+    'arábigo':'عَرَبِغُ',
+    'arábiga':'عَرَبِغُ',
 };
 const PREDEFINED_SPANISH = {
     'haber':'aber',
@@ -301,4 +303,13 @@ const PREDEFINED_TURKISH = {
     'kelime':'keleme',
     'teşekkür':'teşek0r',
     'istanbul':'estanbul',
+};
+
+const I18N = {
+    'en': {
+        'placeholder': 'Type in $1'
+    },
+    'es': {
+        'placeholder': 'Escribe en $1'
+    },
 };

@@ -45,6 +45,11 @@
     button:active {
         background: #AAAA99;
     }
+    #lang-switch {
+        text-align: right;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+    }
     </style>
     <!-- <base href="https://harysdalvi.com/sub/projects/aljamiado/"> -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPKKGJ4J3K"></script>
@@ -55,13 +60,22 @@
 
     gtag('config', 'G-YPKKGJ4J3K');
     </script>
+    <script>
+    const pageLang = 'en';
+    </script>
     <script src="constants.js"></script>
     <script src="convert.js"></script>
+
+    <link rel="alternate" hreflang="en" href="https://harysdalvi.com/aljamiado">
+    <link rel="alternate" hreflang="es" href="https://harysdalvi.com/es/aljamiado">
 </head>
 
 <body>
 <div class="before-main">
 <h1>Aljamiado</h1>
+<div id="lang-switch">
+    English | <a href="https://harysdalvi.com/es/aljamiado">Español</a>
+</div>
 <div class="box-container">
     <div class="box-container-column has-box">
         <div class="text-box">
@@ -155,12 +169,12 @@
                 used first during Muslim rule of Spain, and then secretly for some time after
                 the Reconquista.[<a data-cite="aljamiado"></a>][<a data-cite="morisco"></a>]
                 (In Spanish, the script itself is called aljamía; aljamiado is
-                an adjective.)[<a data-cite="aragon"></a>]</li>
+                an adjective.[<a data-cite="aragon"></a>])</li>
             <li>For Malay, the <strong>Jawi script</strong>
                 widely used in the Malay Archipelago from the 15th century until the 20th century,
                 and still used occasionally.[<a data-cite="jawi"></a>]</li>
             <li>For Turkish, the <strong>Ottoman Turkish script</strong>
-                used during the Ottoman Empire and Republican Turkey until 1928.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
+                used during the Ottoman Empire and then Republican Turkey until 1928.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
         </ul>
         Although the Arabic script plays an important role in the history of each of these languages,
             it was not always used the same way. Conventions differ between authors and time periods.
@@ -179,7 +193,7 @@
         <figcaption>An Aljamiado manuscript of Poema de Yuçuf, a 14th-century poem about the story of Joseph in the Qur'an.
             The language is Aragonese strongly influenced by Castilian.[<a data-cite="yusuf"></a>]</figcaption>
     </figure>
-    <p>Romance languages like <strong>Spanish</strong> (Castilian) were first written in the Arabic script in the 15th
+    <p>Romance languages like <strong>Spanish</strong> (Castilian) were first written in the Arabic script in the 14th
         century, towards the end of Muslim rule in Spain. This was known as <strong>Aljamía</strong>.[<a data-cite="aljamiado"></a>]</p>
     <figure class="endfloat">
         <img src="img/arevalo.jpg" alt="Aljamiado text by Mancebo de Arévalo, 16th century">
@@ -195,6 +209,7 @@
         By 1564, the Spanish crown had ordered Arabic books to be burned,
         and banned the Arabic language entirely, giving the former Muslims just three years to learn Spanish.[<a data-cite="nuria"></a>]
     </p>
+    <p>
         Although the Arabic language &mdash; which was widely used in Spain during Muslim rule &mdash;
         gradually died out, the remaining Muslims, now called Moriscos,
         continued to practice Islam in secret.
