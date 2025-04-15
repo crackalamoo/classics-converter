@@ -5,7 +5,8 @@ const outputLangs = {
 const langNames = {
     'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
     'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
-    'pi':'Pali'
+    'pi':'Pali',
+    'la':'Latin', 'sa':'Sanskrit'
 };
 
 const SHORT_VOWELS = new Set(['a','e','i','o','u']);

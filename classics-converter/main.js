@@ -56,7 +56,6 @@ function refreshOutput() {
         stageDiv.innerHTML = '<b>' + stage + '</b>: ' + stages[stage].join(' ');
         stageBox.appendChild(stageDiv);
     }
-    console.log(stages);
 }
 function refreshAside(id) {
     for (const child of document.querySelectorAll('#'+id+' > *')) {
@@ -104,7 +103,10 @@ function setLangChoice(ulSub, callback) {
     });
 }
 const updateInputLang = (l) => {
+    if (l !== inputLang)
+        inputBox.value = '';
     inputLang = l;
+    inputBox.placeholder = 'Type in ' + langNames[inputLang];
     outputChoices.innerHTML = '';
     if (outputLangs[l].indexOf(outputLang) === -1) {
         outputLang = outputLangs[l][0];

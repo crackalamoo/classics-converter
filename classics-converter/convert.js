@@ -482,7 +482,7 @@ function romance_to_western_romance(word, finalLang='') {
         }
     }
     if (VOWELS.has(word.at(-2))) {
-        // remove final -t and -d (except French for orthography reasons)
+        // remove final -t and -d (except French -t for orthography reasons)
         if (finalLang !== 'fr')
             word.replaceAt('t', '', word.length-1);
         word.replaceAt('d', '', word.length-1);
@@ -528,7 +528,7 @@ function romance_to_western_romance(word, finalLang='') {
         word.stress += 1;
 
     // loss of final consonants
-    if (finalLang !== 'fr' && CONSONANTS.has(word.at(-1)) && !contains(['l','s','n','z','r','t'], word.at(-1))) {
+    if (finalLang !== 'fr' && CONSONANTS.has(word.at(-1)) && !contains(['l','s','n','z','r'], word.at(-1))) {
         word.cutAt(word.length-1);
     }
 

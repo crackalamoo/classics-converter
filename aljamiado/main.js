@@ -9,7 +9,7 @@ const specialCharsSet = {
     'ms': ['é'],
     'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
 };
-const languageNames = {
+const langNames = {
     'es': 'Spanish',
     'ms': 'Malay',
     'tr': 'Turkish',
@@ -111,7 +111,7 @@ const updateInputLang = (l) => {
     if (l !== inputLang)
         inputBox.value = '';
     inputLang = l;
-    inputBox.placeholder = 'Type in ' + languageNames[inputLang];
+    inputBox.placeholder = 'Type in ' + langNames[inputLang];
 
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {
