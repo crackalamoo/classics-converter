@@ -9,7 +9,7 @@ const specialCharsSet = {
     'ms': ['é'],
     'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
 };
-const langNames = pageLang === 'es' ?
+const langNames = PAGE_LANG === 'es' ?
 {
     'es': 'español',
     'ms': 'malayo',
@@ -117,7 +117,7 @@ const updateInputLang = (l) => {
     if (l !== inputLang)
         inputBox.value = '';
     inputLang = l;
-    inputBox.placeholder = I18N[pageLang]['placeholder'].replace('$1', langNames[inputLang]);
+    inputBox.placeholder = I18N[PAGE_LANG]['placeholder'].replace('$1', langNames[inputLang]);
 
     // outputChoices.innerHTML = '';
     // if (outputLangs[l].indexOf(outputLang) === -1) {

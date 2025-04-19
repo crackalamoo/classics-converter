@@ -200,6 +200,7 @@ function spanishAljamiado(word) {
     word = word.replaceAll('de:e','de').replaceAll('sobre:e','sobre').replaceAll('s:s','s s').replaceAll('l:l','l l')
         .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
     word = word.replaceAll('aí','ayi').replaceAll('eí','eyi').replaceAll('oí','oyi').replaceAll('uí','uyi');
+    word = word.replaceAll('aú','awu').replaceAll('eú','ewu').replaceAll('iú','iwu').replaceAll('oú','owu');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
@@ -220,8 +221,8 @@ function spanishAljamiado(word) {
     word = word.replaceAll('Huwa','huwa').replaceAll('Huwe','huwe');
     word = word.replaceAll('h','').replaceAll('H','h');
     word = word.replaceAll('ai','ay').replaceAll('ei','ey').replaceAll('oi','oy');
+    word = word.replaceAll('au','aw').replaceAll('eu','ew').replaceAll('ou','ow');
     word = "'" + word;
-    word = word.replaceAll('au','ao').replaceAll('eu','eo');
     word = word.replaceAll('ee',"é").replaceAll('aa','á').replaceAll('oo','ú').replaceAll('uu','ú');
     for (const strong of ['a','e','o']) {
         for (const strong2 of ['a','o']) {
