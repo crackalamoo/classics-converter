@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-no-dark>
 
 <head>
     <meta charset="utf-8">
@@ -21,6 +21,7 @@
     #output-box {
         direction: rtl;
         font-family: 'Scheherazade New', 'Times New Roman', serif;
+        line-height: 2;
     }
     #output-settings,#special-chars,#output-buttons {
         margin-block-start: 1em;
@@ -31,19 +32,6 @@
     }
     button {
         font-size: 1.2em;
-        font-family: inherit;
-        color: inherit;
-        min-width: 1.4em;
-        max-width: fit-content;
-        background: #EEEEEE;
-        border: 2px solid #CCCCCC;
-        margin: 0 2px;
-    }
-    button:hover {
-        background: #CCCCCC;
-    }
-    button:active {
-        background: #AAAA99;
     }
     #lang-switch {
         text-align: right;
@@ -159,11 +147,11 @@
 
 </div>
 
-<div class="main">
+<article class="main">
     <h2 id="what-is-this">What is this?</h2>
     <p>This is a tool to write Spanish, Malay,
         and Turkish in their historical Arabic scripts.
-        These historical Arabic scripts are:
+        These historical Arabic scripts are:</p>
         <ul>
             <li>For Spanish, the <strong>Aljamiado script</strong>
                 used first during Muslim rule of Spain, and then secretly for some time after
@@ -176,6 +164,7 @@
             <li>For Turkish, the <strong>Ottoman Turkish script</strong>
                 used during the Ottoman Empire and then Republican Turkey until 1928.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
         </ul>
+    <p>
         Although the Arabic script plays an important role in the history of each of these languages,
             it was not always used the same way. Conventions differ between authors and time periods.
             In addition, these languages all had a tendency to keep Arabic loanwords spelled the same,
@@ -344,10 +333,10 @@
             </blockquote>
             <a data-footnotes="up">^</a></li>
     </ul>
-</div>
+</article>
 
 
-<div id="footer"></div>
+<footer id="footer"></footer>
 <script src="http://harysdalvi.com/services.js"></script>
 <script>
 setAnchors();
