@@ -198,7 +198,10 @@ function spanishAljamiado(word) {
             word = word.substring(0,word.length-key.length-1) + ':' + value;
     }
     word = word.replaceAll('de:e','de').replaceAll('sobre:e','sobre').replaceAll('s:s','s s').replaceAll('l:l','l l')
-        .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr').replaceAll(':','');
+        .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr')
+        .replaceAll('a:i','ayi').replaceAll('e:i','eyi').replaceAll('o:i','oyi')
+        .replaceAll('a:u','awu').replaceAll('e:u','ewu').replaceAll('o:u','owu')
+        .replaceAll(':','');
     word = word.replaceAll('aí','ayi').replaceAll('eí','eyi').replaceAll('oí','oyi').replaceAll('uí','uyi');
     word = word.replaceAll('aú','awu').replaceAll('eú','ewu').replaceAll('iú','iwu').replaceAll('oú','owu');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');

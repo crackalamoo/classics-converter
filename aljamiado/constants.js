@@ -8,7 +8,7 @@ const PREDEFINED_ALJAMIADO = {
     'almohada':'اَلْمُخَدَّة',
     'elixir':'اَلْإكْسِيٗرْ',
     'alcohol':'اَلْكُحُلْ',
-    'sandía':'سَنْدِيَّة',
+    'sandía':'سَنْدِيَّة',
     'tarea':'طَرِيٗحَة',
     'cifra':'صِفْرَ',
     'albahaca':'اَلْبَحَقَ',

@@ -195,6 +195,26 @@ const URDU_MAP_F = {
     'e': 'ے', 'è': 'ے', 'M': 'ں', '~': 'ں'
 }
 
+if (VOWELS.union === undefined) {
+    Set.prototype.union = function(otherSet) {
+        const unionSet = new Set(this);
+        for (const elem of otherSet) {
+            unionSet.add(elem);
+        }
+        return unionSet;
+    };
+}
+if (VOWELS.intersection === undefined) {
+    Set.prototype.intersection = function(otherSet) {
+        const intersectionSet = new Set();
+        for (const elem of this) {
+            if (otherSet.has(elem))
+                intersectionSet.add(elem);
+        }
+        return intersectionSet;
+    };
+}
+
 function matchCase(word, caseModel) {
     if (caseModel.toUpperCase() === caseModel) {
         return word.toUpperCase();
@@ -385,7 +405,7 @@ function displayOrthography(input, lang) {
     return input;
 }
 
-const isRoman = (w) => (SANSKRIT_CONS.union(VOWELS).union(new Set(['R']))).intersection(new Set(w.split(''))).size > 0;
+const isRoman = (w) => w === '' || (SANSKRIT_CONS.union(VOWELS).union(new Set(['R']))).intersection(new Set(w.split(''))).size > 0;
 
 function nativeOrthography(word, lang) {
     word = sanskritOrthography(word, lang === 'sa');

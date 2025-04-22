@@ -35,16 +35,22 @@ function refreshOutput() {
     if (inputLang === 'sa') {
         const isGurmukhi = (outputLang === 'pa' && document.pa_settings.pa_script.value === 'gurmukhi');
         if (isRoman(text)) {
+            orthography.lang = 'sa';
+            inputBox.lang = 'sa-Latn';
             orthography2.lang = outputLang;
             if (isGurmukhi)
                 orthography2.lang += '-Guru';
             outputBox.lang = outputLang+'-Latn';
         } else {
+            orthography.lang = 'sa-Latn';
+            inputBox.lang = 'sa';
             orthography2.lang = outputLang+'-Latn';
             outputBox.lang = outputLang;
             if (isGurmukhi)
                 outputBox.lang += '-Guru';
         }
+    } else {
+        inputBox.lang = '';
     }
     let stageBox = document.getElementById("stage-outputs");
     stageBox.innerHTML = '';
@@ -126,16 +132,6 @@ const updateInputLang = (l) => {
         outputLang = l;
         refreshDisplay();
     });
-    if (inputLang === 'sa') {
-        const text = getText();
-        if (isRoman(text)) {
-            orthography.lang = 'sa';
-            inputBox.lang = 'sa-Latn';
-        } else {
-            orthography.lang = 'sa-Latn';
-            inputBox.lang = 'sa';
-        }
-    }
     refreshDisplay();
 }
 setLangChoice(inputButtons, updateInputLang);

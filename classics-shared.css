@@ -7,6 +7,9 @@
 .before-main h1 {
     color: #123242;
 }
+.page-intro {
+    margin-block-start: 0.67em;
+}
 .box-container {
     display: flex;
     align-items: flex-start;
