@@ -199,15 +199,15 @@ function spanishAljamiado(word) {
     }
     word = word.replaceAll('de:e','de').replaceAll('sobre:e','sobre').replaceAll('s:s','s s').replaceAll('l:l','l l')
         .replaceAll(':h',':H').replaceAll('y:','i:').replaceAll(':r',':rr')
-        .replaceAll('a:i','ayi').replaceAll('e:i','eyi').replaceAll('o:i','oyi')
-        .replaceAll('a:u','awu').replaceAll('e:u','ewu').replaceAll('o:u','owu')
+        .replaceAll('a:i','a\'i').replaceAll('e:i','e\'i').replaceAll('o:i','o\'i')
+        .replaceAll('a:u','a\'u').replaceAll('e:u','e\'u').replaceAll('o:u','o\'u')
         .replaceAll(':','');
     word = word.replaceAll('aí','ayi').replaceAll('eí','eyi').replaceAll('oí','oyi').replaceAll('uí','uyi');
     word = word.replaceAll('aú','awu').replaceAll('eú','ewu').replaceAll('iú','iwu').replaceAll('oú','owu');
     word = word.replaceAll('á','a').replaceAll('é','e').replaceAll('í','i').replaceAll('ó','o').replaceAll('ú','u');
     word = word.replaceAll('ge','je').replaceAll('gi','ji').replaceAll('gue','ge').replaceAll('gui','gi');
     word = word.replaceAll('ce','çe').replaceAll('ci','çi').replaceAll('que','ke').replaceAll('qui','ki')
-        .replaceAll('q','k').replaceAll('güe','guwe').replaceAll('güi','guwi');
+        .replaceAll('q','k').replaceAll('güe','guwe').replaceAll('güi','guwi').replaceAll('ü','u');
     word = word.replaceAll('ch','č').replaceAll('c','k').replaceAll('zk','çk');
     word = word.replaceAll('ia','iya').replaceAll('ie','iye').replaceAll('io','iyo').replaceAll('iu','iyu');
     word = word.replaceAll('ua','uwa').replaceAll('ue','uwe').replaceAll('ui',"uwi").replaceAll('uo','uwo');
