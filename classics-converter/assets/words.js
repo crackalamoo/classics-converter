@@ -415,7 +415,7 @@ const samples = [
 
     {'name':'numbers', 'in':'uunum duoos trees quattuor sex septem octoo novem decem quiindecim', 'langs':['es']},
     {'name':'numbers', 'in':'trees quattuor sex septem octoo novem decem quiindecim', 'langs':['pt']},
-    {'name':'numbers', 'in':'uunum duoos trees septem octoo novem decem centum', 'langs':['fr']},
+    {'name':'numbers', 'in':'uunum duoos trees sex septem octoo novem decem centum', 'langs':['fr']},
     {'name':'numbers', 'in':'uunum trees quattuor septem octoo centum', 'langs':['it']},
     {'name':'cloud', 'in':'illoos sunt dee uunam nebulam grandem in ille caelum quid stat creescendum tootum ille tempum et iibant ad suii casam', 'langs':['es']},
     {'name':'animals', 'in':'taurum vaccam ursum piscees galliinam cuniculum oviculam palumbum araaneam caballum cervum', 'langs':['es']},

@@ -794,6 +794,9 @@ function western_romance_to_french(word) {
     word.replace('ú','u');
     word.replace('ej','ój');
 
+    word.replaceAt('jè','i',word.stress-1);
+    if (word.at(word.stress-1) === 'i') word.stress -= 1;
+
     // to Late Old French
     word.replace('ou','ów');
     word.replace('o','ów');
@@ -873,7 +876,7 @@ function western_romance_to_french(word) {
     word.replaceAll(['nm','mn'], ['mm','mm']);
     for (const cons of ['t','z'])
         word.replaceAt('v'+cons,cons,word.length-2);
-    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t','r'], word.at(-1))) {
+    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t','r','s','z'], word.at(-1))) {
         word.w += 'ë';
     } else if (word.at(-2) === 'î' && contains(['n','m'], word.at(-1))) {
         word.w += 'ë';
