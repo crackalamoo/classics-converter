@@ -12,7 +12,15 @@ const replaceIntervocal = (word, prev, to, vowels=VOWELS) => {
     return word;
 }
 
-function closedSyllable(string, pos, useLiquids=true, removePalatal=false, vowels=VOWELS) {
+/**
+ * @param {boolean} opts.useLiquids                 - stop+liquid clusters don't close (default: true)
+ * @param {boolean} opts.removePalatal              - strip J before checking (default: false)
+ * @param {string[]} opts.vowels                    - what counts as a vowel (default: VOWELS)
+ */
+function closedSyllable(string, pos, opts={}) {
+    const useLiquids = opts.useLiquids !== undefined ? opts.useLiquids : true;
+    const removePalatal = opts.removePalatal || false;
+    const vowels = opts.vowels || VOWELS;
     if (removePalatal) {
         for (let i = string.length-1; i >= 0; i--) {
             if (string.substring(i,i+1) === 'J') {
@@ -27,8 +35,8 @@ function closedSyllable(string, pos, useLiquids=true, removePalatal=false, vowel
     return (!vowels.has(p1) && !vowels.has(p2) && p1 !== ''
         && !(useLiquids && STOPS.has(p1) && LIQUIDS.has(p2)));
 }
-function openSyllable(string, pos, useLiquids=true, removePalatal=false, vowels=VOWELS) {
-    return !closedSyllable(string, pos, useLiquids, removePalatal, vowels);
+function openSyllable(string, pos, opts={}) {
+    return !closedSyllable(string, pos, opts);
 }
 
 

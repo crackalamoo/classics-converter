@@ -273,7 +273,7 @@ function romance_to_italian(word) {
     // first diphthongization
     let didDiphthong = 0;
     for (let i = word.length-1; i >= 0; i--) {
-        let openCriterion = openSyllable(word.w, i, true, true, VOWELS);
+        let openCriterion = openSyllable(word.w, i, { removePalatal: true });
         if (i === word.stress && openCriterion) {
             if ((word.at(i) === 'è' || word.at(i) === 'ò')
             && !(word.at(i) === 'ò' && (word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
@@ -363,7 +363,7 @@ function romance_to_western_romance(word, finalLang='') {
     // first diphthongization
     let didDiphthong = false;
     let i = word.stress;
-    let openCriterion = openSyllable(word.w, i, true, false, VOWELS) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
+    let openCriterion = openSyllable(word.w, i, { removePalatal: false }) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
     if (finalLang === 'es' || finalLang === 'pt') {
         // vowel raising in stressed syllables
         if (CONSONANTS.has(word.at(word.stress+2))) {
@@ -553,7 +553,7 @@ function western_romance_to_french(word) {
     word.replace('clJ','lJ');
 
     const isOpen = (i) => (
-        openSyllable(word.w, i, false, true, VOWELS.union(new Set(['j','w'])))
+        openSyllable(word.w, i, { useLiquids: false, removePalatal: true, vowels: VOWELS.union(new Set(['j','w'])) }
     );
 
     word.replaceAll(['ç', 'č', 'ž', 'ż', 'ssJ'], ['çJ', 'čJ', 'žJ', 'żJ', 'ßJ']);
@@ -584,9 +584,11 @@ function western_romance_to_french(word) {
 
     // second diphthongization, and related vowel changes
     // const isOpen = (i) => (
-    //     openSyllable(word.w, i, true, true, VOWELS.union(LIQUIDS).union(new Set(['j','w','n'])))
+    //     openSyllable(word.w, i, { vowels: VOWELS.union(LIQUIDS).union(new Set(['j','w','n'])) })
     // );
-    // const isOpen = (i) => openSyllable(word.w, i, false, true, VOWELS.union(SEMIVOWELS));//.union(new Set(['r'])));
+    // const isOpen = (i) => openSyllable(word.w, i, { useLiquids: false, removePalatal: true,
+    //   vowels: VOWELS.union(SEMIVOWELS)//.union(new Set(['r']))
+    // });
     if (word.sub(word.stress+1,word.stress+3) === 'nJ' || word.sub(word.stress+1,word.stress+4) === 'jnJ') {
         word.replaceAt('j','',word.stress+1);
         if (isOpen(word.stress)) {
@@ -796,8 +798,8 @@ function western_romance_to_french(word) {
     }
 
     word.replace('aw','aW');
-    // const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS.union(SEMIVOWELS));
-    const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS);
+    // const isOpen2 = (i) => openSyllable(word.w, i, { useLiquids: false, vowels: VOWELS.union(SEMIVOWELS) });
+    const isOpen2 = (i) => openSyllable(word.w, i, { useLiquids: false });
     // syllable-final consonant loss
     for (let i = word.length-1; i >= 0; i--) {
         if (CONSONANTS.has(word.at(i)) && !VOWELS.has(word.at(i+1)) && !isOpen2(word.getPrevVowel(i))
