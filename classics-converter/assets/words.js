@@ -16,11 +16,14 @@ const replaceIntervocal = (word, prev, to, vowels=VOWELS) => {
  * @param {boolean} opts.useLiquids                 - stop+liquid clusters don't close (default: true)
  * @param {boolean} opts.removePalatal              - strip J before checking (default: false)
  * @param {string[]} opts.vowels                    - what counts as a vowel (default: VOWELS)
+ * @param {function(): boolean} opts.isOpenOverride - optional closure in the form of (p1, p2) => boolean;
+ *                                                    if evaluates to true, overrides and marks the syllable as open
  */
 function closedSyllable(string, pos, opts={}) {
     const useLiquids = opts.useLiquids !== undefined ? opts.useLiquids : true;
     const removePalatal = opts.removePalatal || false;
     const vowels = opts.vowels || VOWELS;
+    const isOpenOverride = opts.isOpenOverride || null;
     if (removePalatal) {
         for (let i = string.length-1; i >= 0; i--) {
             if (string.substring(i,i+1) === 'J') {
@@ -32,6 +35,7 @@ function closedSyllable(string, pos, opts={}) {
     }
     const p1 = string.substring(pos+1, pos+2);
     const p2 = string.substring(pos+2, pos+3);
+    if (isOpenOverride && isOpenOverride(p1, p2)) return false;
     return (!vowels.has(p1) && !vowels.has(p2) && p1 !== ''
         && !(useLiquids && STOPS.has(p1) && LIQUIDS.has(p2)));
 }
@@ -411,7 +415,7 @@ const samples = [
 
     {'name':'numbers', 'in':'uunum duoos trees quattuor sex septem octoo novem decem quiindecim', 'langs':['es']},
     {'name':'numbers', 'in':'trees quattuor sex septem octoo novem decem quiindecim', 'langs':['pt']},
-    {'name':'numbers', 'in':'uunum septem octoo novem decem centum', 'langs':['fr']},
+    {'name':'numbers', 'in':'uunum duoos trees septem octoo novem decem centum', 'langs':['fr']},
     {'name':'numbers', 'in':'uunum trees quattuor septem octoo centum', 'langs':['it']},
     {'name':'cloud', 'in':'illoos sunt dee uunam nebulam grandem in ille caelum quid stat creescendum tootum ille tempum et iibant ad suii casam', 'langs':['es']},
     {'name':'animals', 'in':'taurum vaccam ursum piscees galliinam cuniculum oviculam palumbum araaneam caballum cervum', 'langs':['es']},

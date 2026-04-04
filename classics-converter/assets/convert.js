@@ -552,9 +552,16 @@ function western_romance_to_french(word) {
     }
     word.replace('clJ','lJ');
 
-    const isOpen = (i) => (
-        openSyllable(word.w, i, { useLiquids: false, removePalatal: true, vowels: VOWELS.union(new Set(['j','w'])) }
-    );
+    // In Gallo-Romance, an "open" syllable is followed by at most one consonant.
+    // See footnote 1: https://en.wikipedia.org/wiki/Phonological_history_of_French#endnote_context
+    // e.g. Latin "duōs" should turn into Western Romance stressed "doz" which is considered open, so that it should become "deux" and not "doux"
+    const isOpen = (i) => openSyllable(word.w, i, {
+        useLiquids: false, removePalatal: true,
+        vowels: VOWELS.union(new Set(['j','w'])),
+        isOpenOverride: (p1, p2) => {
+            return CONSONANTS.has(p1) && p2 === ''
+        }
+    });
 
     word.replaceAll(['ç', 'č', 'ž', 'ż', 'ssJ'], ['çJ', 'čJ', 'žJ', 'żJ', 'ßJ']);
     for (let i = word.length-1; i >= 0; i--) {
