@@ -20,6 +20,10 @@ const PREDEFINED_ALJAMIADO = {
     'árabe':'عَرَبَا',
     'arábigo':'عَرَبِغُ',
     'arábiga':'عَرَبِغُ',
+    'aceite':'اَلْزَيْتَ',
+    'azeyte':'اَلْزَيْتَ',
+    'azeite':'اَلْزَيْتَ',
+    'açotea':'اَلْسُّطَيْحَ',
 };
 const PREDEFINED_SPANISH = {
     'haber':'aber',
