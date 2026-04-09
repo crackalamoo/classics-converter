@@ -501,6 +501,7 @@ function cleanPinyin(syllable) {
             .toLowerCase()
             .trim();
     }
+    return syllable;
 }
 
 function pinyinToXiaoerjing(pinyinWord) {
@@ -520,7 +521,7 @@ function pinyinToXiaoerjing(pinyinWord) {
         }
     }
 
-    if (xiaoerjingSyllables.length > 1 && xiaoerjingSyllables.every(s => /[\u0600-\u06FF]/.test(s))) {
+    if (xiaoerjingSyllables.length > 1 && xiaoerjingSyllables.every(s => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(s))) {
         return xiaoerjingSyllables.join(ZWNJ);
     } else {
         return xiaoerjingSyllables.join('');
