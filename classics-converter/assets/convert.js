@@ -273,7 +273,7 @@ function romance_to_italian(word) {
     // first diphthongization
     let didDiphthong = 0;
     for (let i = word.length-1; i >= 0; i--) {
-        let openCriterion = openSyllable(word.w, i, true, true, VOWELS);
+        let openCriterion = openSyllable(word.w, i, { removePalatal: true });
         if (i === word.stress && openCriterion) {
             if ((word.at(i) === 'è' || word.at(i) === 'ò')
             && !(word.at(i) === 'ò' && (word.at(i+1) === 'n' || word.at(i+1) === 'm') && CONSONANTS.has(word.at(i+2)))) {
@@ -363,7 +363,7 @@ function romance_to_western_romance(word, finalLang='') {
     // first diphthongization
     let didDiphthong = false;
     let i = word.stress;
-    let openCriterion = openSyllable(word.w, i, true, false, VOWELS) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
+    let openCriterion = openSyllable(word.w, i, { removePalatal: false }) || word.at(i+1) === 'j' || word.at(i+2) === 'J'; // diphthongize before a vowel or palatal
     if (finalLang === 'es' || finalLang === 'pt') {
         // vowel raising in stressed syllables
         if (CONSONANTS.has(word.at(word.stress+2))) {
@@ -552,9 +552,16 @@ function western_romance_to_french(word) {
     }
     word.replace('clJ','lJ');
 
-    const isOpen = (i) => (
-        openSyllable(word.w, i, false, true, VOWELS.union(new Set(['j','w'])))
-    );
+    // In Gallo-Romance, an "open" syllable is followed by at most one consonant.
+    // See footnote 1: https://en.wikipedia.org/wiki/Phonological_history_of_French#endnote_context
+    // e.g. Latin "duōs" should turn into Western Romance stressed "doz" which is considered open, so that it should become "deux" and not "doux"
+    const isOpen = (i) => openSyllable(word.w, i, {
+        useLiquids: false, removePalatal: true,
+        vowels: VOWELS.union(new Set(['j','w'])),
+        isOpenOverride: (p1, p2) => {
+            return CONSONANTS.has(p1) && p2 === ''
+        }
+    });
 
     word.replaceAll(['ç', 'č', 'ž', 'ż', 'ssJ'], ['çJ', 'čJ', 'žJ', 'żJ', 'ßJ']);
     for (let i = word.length-1; i >= 0; i--) {
@@ -584,9 +591,11 @@ function western_romance_to_french(word) {
 
     // second diphthongization, and related vowel changes
     // const isOpen = (i) => (
-    //     openSyllable(word.w, i, true, true, VOWELS.union(LIQUIDS).union(new Set(['j','w','n'])))
+    //     openSyllable(word.w, i, { vowels: VOWELS.union(LIQUIDS).union(new Set(['j','w','n'])) })
     // );
-    // const isOpen = (i) => openSyllable(word.w, i, false, true, VOWELS.union(SEMIVOWELS));//.union(new Set(['r'])));
+    // const isOpen = (i) => openSyllable(word.w, i, { useLiquids: false, removePalatal: true,
+    //   vowels: VOWELS.union(SEMIVOWELS)//.union(new Set(['r']))
+    // });
     if (word.sub(word.stress+1,word.stress+3) === 'nJ' || word.sub(word.stress+1,word.stress+4) === 'jnJ') {
         word.replaceAt('j','',word.stress+1);
         if (isOpen(word.stress)) {
@@ -785,6 +794,9 @@ function western_romance_to_french(word) {
     word.replace('ú','u');
     word.replace('ej','ój');
 
+    word.replaceAt('jè','i',word.stress-1);
+    if (word.at(word.stress-1) === 'i') word.stress -= 1;
+
     // to Late Old French
     word.replace('ou','ów');
     word.replace('o','ów');
@@ -796,8 +808,8 @@ function western_romance_to_french(word) {
     }
 
     word.replace('aw','aW');
-    // const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS.union(SEMIVOWELS));
-    const isOpen2 = (i) => openSyllable(word.w, i, false, false, VOWELS);
+    // const isOpen2 = (i) => openSyllable(word.w, i, { useLiquids: false, vowels: VOWELS.union(SEMIVOWELS) });
+    const isOpen2 = (i) => openSyllable(word.w, i, { useLiquids: false });
     // syllable-final consonant loss
     for (let i = word.length-1; i >= 0; i--) {
         if (CONSONANTS.has(word.at(i)) && !VOWELS.has(word.at(i+1)) && !isOpen2(word.getPrevVowel(i))
@@ -864,7 +876,7 @@ function western_romance_to_french(word) {
     word.replaceAll(['nm','mn'], ['mm','mm']);
     for (const cons of ['t','z'])
         word.replaceAt('v'+cons,cons,word.length-2);
-    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t','r'], word.at(-1))) {
+    if (CONSONANTS.has(word.at(-1)) && contains(['i','î'], word.at(-2)) && !contains(['g','c','ż','n','m','l','t','r','s','z'], word.at(-1))) {
         word.w += 'ë';
     } else if (word.at(-2) === 'î' && contains(['n','m'], word.at(-1))) {
         word.w += 'ë';
