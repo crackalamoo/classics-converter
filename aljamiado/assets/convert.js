@@ -4,6 +4,7 @@ const outputLangs = {
     'es': ['Aljamiado'],
     'ms': ['Jawi'],
     'tr': ['Ottoman'],
+    'zh': ["Xiao'erjing"],
 };
 
 function contains(set, item) {
@@ -87,6 +88,8 @@ function convertWord(startWord, inLang, outLang) {
         return malayJawi(properOrthography(startWord, inLang).toLowerCase());
     } else if (inLang === 'tr') {
         return ottomanTurkish(properOrthography(startWord, inLang).toLowerCase());
+    } else if (inLang === 'zh') {
+        return pinyinToXiaoerjing(properOrthography(startWord, inLang).toLowerCase());
     }
     return startWord;
 }
@@ -120,8 +123,14 @@ function properOrthography(input, lang) {
     } else if (lang === 'tr') {
         output = output.replaceAll('I','ı').replaceAll('İ','i');
         output = output.toLowerCase();
+    } else if (lang === 'zh') {
+        output = cleanPinyin(output);
     }
-    output = output.replaceAll("'", "");
+
+    if (lang !== 'zh') { // apostrophes are important in Chinese pinyin to separate syllables within words
+      output = output.replaceAll("'", "");
+    }
+
     if (lang !== 'tr')
         output = matchCase(output, input);
     return output;
@@ -471,4 +480,50 @@ function ottomanTurkish(word) {
     word = word.replace(/ییه$/g, 'یه');
 
     return word;
+}
+
+function cleanPinyin(syllable) {
+    // Check if it's a Chinese syllable or punctuation
+    if (/[a-züāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(syllable)) {
+        // Remove tone marks and convert to lowercase
+        return syllable
+            .replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/g, (match) => {
+                const toneMap = {
+                    'ā': 'a', 'á': 'a', 'ǎ': 'a', 'à': 'a',
+                    'ē': 'e', 'é': 'e', 'ě': 'e', 'è': 'e',
+                    'ī': 'i', 'í': 'i', 'ǐ': 'i', 'ì': 'i',
+                    'ō': 'o', 'ó': 'o', 'ǒ': 'o', 'ò': 'o',
+                    'ū': 'u', 'ú': 'u', 'ǔ': 'u', 'ù': 'u',
+                    'ǖ': 'ü', 'ǘ': 'ü', 'ǚ': 'ü', 'ǜ': 'ü'
+                };
+                return toneMap[match] || match;
+            })
+            .toLowerCase()
+            .trim();
+    }
+    return syllable;
+}
+
+function pinyinToXiaoerjing(pinyinWord) {
+    const xiaoerjingSyllables = [];
+
+    // Assume the syllables of a word are separated by an apostrophe
+    // e.g. 中国 zhong'guo, 名字 ming'zi, 公园 gong'yuan are multi-syllable words
+    // (Real Pinyin doesn't use apostrophes unless it's to separate vowels like in 西安 Xi'an,
+    // but we want to make parsing easy here and not do segmentation)
+    const syllables = pinyinWord.split("'");
+    for (const syllable of syllables) {
+        if (syllable in PINYIN_TO_XIAOERJING) {
+            xiaoerjingSyllables.push(PINYIN_TO_XIAOERJING[syllable]);
+        } else {
+            // Punctuation or other characters
+            xiaoerjingSyllables.push(syllable);
+        }
+    }
+
+    if (xiaoerjingSyllables.length > 1 && xiaoerjingSyllables.every(s => /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(s))) {
+        return xiaoerjingSyllables.join(ZWNJ);
+    } else {
+        return xiaoerjingSyllables.join('');
+    }
 }

@@ -8,17 +8,20 @@ const specialCharsSet = {
     'es': ['ñ','á','é','í','ó','ú','ü'],
     'ms': ['é'],
     'tr': ['ç','ğ','ş', 'ı','ö','ü', 'â','û'],
+    'zh': ['ü'],
 };
 const langNames = PAGE_LANG === 'es' ?
 {
     'es': 'español',
     'ms': 'malayo',
     'tr': 'turco',
+    'zh': 'chino',
 } :
 {
     'es': 'Spanish',
     'ms': 'Malay',
     'tr': 'Turkish',
+    'zh': 'Chinese',
 };
 
 function getText() {
