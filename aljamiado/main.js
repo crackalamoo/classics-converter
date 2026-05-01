@@ -15,13 +15,13 @@ const langNames = PAGE_LANG === 'es' ?
     'es': 'español',
     'ms': 'malayo',
     'tr': 'turco',
-    'zh': 'chino',
+    'zh': 'chino (pinyin)',
 } :
 {
     'es': 'Spanish',
     'ms': 'Malay',
     'tr': 'Turkish',
-    'zh': 'Chinese',
+    'zh': 'Chinese (Pinyin)',
 };
 
 function getText() {
