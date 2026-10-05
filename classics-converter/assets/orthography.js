@@ -1,11 +1,11 @@
 const outputLangs = {
     'la': ['es','fr','pt','it'],
-    'sa': ['hi','pa','mr','pi']
+    'sa': ['hi','bn','pa','mr','pi']
 };
 const langNames = {
     'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
     'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
-    'pi':'Pali',
+    'bn':'Bengali', 'pi':'Pali',
     'la':'Latin', 'sa':'Sanskrit'
 };
 
@@ -114,6 +114,35 @@ const GURMUKHI_VOW_MAP_2 = {
     'e':'ਏ','è':'ਐ','o':'ਓ','ò':'ਔ',
     'M':'ੰ','~':'ੰ'
 };
+const BENGALI_DOUBLE_MAP = {
+    'kh':'খ', 'gh':'ঘ',
+    'ch':'ছ', 'jh':'ঝ',
+    'Th':'ঠ', 'Dh':'ঢ',
+    'th':'থ', 'dh':'ধ',
+    'ph':'ফ', 'bh':'ভ',
+    'řh':'Ř'
+};
+const BENGALI_CONS_MAP = {
+    'k':'ক','g':'গ','ń':'ঙ',
+    'c':'চ','j':'জ','ñ':'ঞ',
+    'T':'ট','D':'ড','N':'ণ',
+    't':'ত','d':'দ','n':'ন',
+    'p':'প','b':'ব','m':'ম',
+    'y':'য','r':'র','l':'ল','v':'ব','L':'ল',
+    'z':'শ','S':'ষ','s':'স','h':'হ',
+    'ř':'ř'
+};
+const BENGALI_VOW_MAP_1 = {
+    'ā':'া','i':'ি','ī':'ী','u':'ু','ū':'ূ',
+    'e':'ে','è':'ৈ','o':'ো','ò':'ৌ',
+    'R':'ৃ',
+    'H':'ঃ','M':'ং','~':'ঁ'
+};
+const BENGALI_VOW_MAP_2 = {
+    'a':'অ','ā':'আ','i':'ই','ī':'ঈ','u':'উ','ū':'ঊ',
+    'e':'এ','è':'ঐ','o':'ও','ò':'ঔ',
+    'R':'ঋ','H':'ঃ','M':'ং','~':'ঁ'
+};
 const THAI_DOUBLE_MAP = {
     'kh':'ข', 'gh':'ฆ',
     'ch':'ฉ', 'jh':'ฌ',
@@ -168,10 +197,10 @@ const KHMER_VOW_MAP_2 = {
     'e':'ឯ','è':'ឰ','o':'ឱ','ò':'ឳ',
     'R':'ឫ','H':'ះ','M':'ំ'
 };
-const NON_DEVANAGARI_CONS_MAP = {'pa':GURMUKHI_CONS_MAP, 'th':THAI_CONS_MAP, 'km':KHMER_CONS_MAP};
-const NON_DEVANAGARI_DOUBLE_MAP = {'pa':GURMUKHI_DOUBLE_MAP, 'th':THAI_DOUBLE_MAP, 'km':KHMER_DOUBLE_MAP};
-const NON_DEVANAGARI_VOW_MAP_1 = {'pa':GURMUKHI_VOW_MAP_1, 'th':THAI_VOW_MAP_1, 'km':KHMER_VOW_MAP_1};
-const NON_DEVANAGARI_VOW_MAP_2 = {'pa':GURMUKHI_VOW_MAP_2, 'th':THAI_VOW_MAP_2, 'km':KHMER_VOW_MAP_2};
+const NON_DEVANAGARI_CONS_MAP = {'pa':GURMUKHI_CONS_MAP, 'bn':BENGALI_CONS_MAP, 'th':THAI_CONS_MAP, 'km':KHMER_CONS_MAP};
+const NON_DEVANAGARI_DOUBLE_MAP = {'pa':GURMUKHI_DOUBLE_MAP, 'bn':BENGALI_DOUBLE_MAP, 'th':THAI_DOUBLE_MAP, 'km':KHMER_DOUBLE_MAP};
+const NON_DEVANAGARI_VOW_MAP_1 = {'pa':GURMUKHI_VOW_MAP_1, 'bn':BENGALI_VOW_MAP_1, 'th':THAI_VOW_MAP_1, 'km':KHMER_VOW_MAP_1};
+const NON_DEVANAGARI_VOW_MAP_2 = {'pa':GURMUKHI_VOW_MAP_2, 'bn':BENGALI_VOW_MAP_2, 'th':THAI_VOW_MAP_2, 'km':KHMER_VOW_MAP_2};
 
 const URDU_CONS_MAP = {
     'k': 'ک', 'g': 'گ',
@@ -425,6 +454,10 @@ function nativeOrthography(word, lang) {
             word = word.replaceAll('n'+stop, 'M'+stop);
         for (const stop of ['p', 'b'])
             word = word.replaceAll('m'+stop, 'M'+stop);
+        if (lang === 'bn') {
+            for (const vow of ['a','ā','i','u','e','o'])
+                word = word.replaceAll(vow+'M', vow+'~');
+        }
         word = word.replaceAll('R','ř');
     } else {
         word = word.replaceAll('au','ò').replaceAll('ai','è');
@@ -500,6 +533,13 @@ function nativeOrthography(word, lang) {
             word = word.replaceAll('्', 'ฺ');
         } else if (scriptLang === 'km') {
             word = word.replaceAll('्', '្');
+        } else if (scriptLang === 'bn') {
+            word = word.replaceAll('्', '্');
+            word = word.replaceAll('Ř','ঢ়').replaceAll('ř','ড়');
+            for (let i = word.length-1; i > 0; i--) {
+                if (getAt(i) === 'য' && getAt(i-1) !== '্')
+                    word = word.substring(0, i) + 'য়' + word.substring(i+1);
+            }
         } else {
             word = word.replaceAll('Ř','ढ़').replaceAll('ř','ड़').replaceAll('L','ळ');
         }
@@ -571,6 +611,13 @@ function sanskritRomanOrthography(word, lang) {
         res = res.replaceAll('á','a');
         if (lang === 'mr' && SANSKRIT_CONS.has(getAt(res.length-2)) && getAt(res.length-1) === 'ṁ')
             res = res.substring(0, res.length-1) + 'a';
+        if (lang === 'bn') {
+            res = res.replaceAll('ṣ','ś');
+            for (let i = res.length-1; i >= 0; i--) {
+                if (getAt(i) === 's' && !contains(['t','n','r','l'], getAt(i+1)))
+                    res = res.substring(0, i) + 'ś' + res.substring(i+1);
+            }
+        }
         res = res.replaceAll('ś','sh');
         if (lang === 'mr') {
             res = res.replaceAll('ī','i').replaceAll('ū','u');
@@ -580,10 +627,34 @@ function sanskritRomanOrthography(word, lang) {
             if (res.endsWith('āṁv'))
                 res = res.substring(0, res.length-3) + 'āõṁ';
             res = res.replaceAll('cch','CCH').replaceAll('cc','CCH').replaceAll('c','ch').replaceAll('CCH','cch');
+        }
+        if (lang !== 'mr' && lang !== 'bn') {
             res = res.replaceAll('āṁ','ãṁ').replaceAll('īṁ','ĩṁ').replaceAll('ūṁ','ũṁ')
             .replaceAll('eṁ','ẽṁ').replaceAll('oṁ','õṁ');
         }
         res = res.replaceAll('è','ai').replaceAll('ò','au');
+        if (lang === 'bn') {
+            for (let i = res.length-2; i > 0; i--) {
+                if (contains(['n','ṁ','ñ','ṅ','ṇ','m'], getAt(i)) && VOWELS.has(getAt(i-1))
+                    && SANSKRIT_STOP_CONS.has(getAt(i+1)) && !(getAt(i) === 'm' && !contains(['p','b'], getAt(i+1))))
+                    res = res.substring(0, i) + '\u0303' + res.substring(i+1);
+            }
+            res = res.replace(/ṁ$/, '\u0303');
+            if (res.startsWith('y'))
+                res = 'j' + res.substring(1);
+            // ai, au > oi, ou; a > ɔ (written ô), or o before i, u in the next syllable
+            res = res.replaceAll('ai','oi').replaceAll('au','ou');
+            for (let i = res.length-1; i >= 0; i--) {
+                if (getAt(i) !== 'a')
+                    continue;
+                let next = i+1;
+                while (next < res.length && !VOWELS.has(getAt(next)))
+                    next++;
+                const raised = contains(['i','u'], getAt(next));
+                res = res.substring(0, i) + (raised ? 'o' : 'ô') + res.substring(i+1);
+            }
+            res = res.replaceAll('ā','a'); // no vowel length, and short a is now ô
+        }
         if (res.endsWith('ṁ') && contains(['ã','ẽ','ĩ','õ','ũ'], res.substring(res.length-2,res.length-1))) {
             res = res.substring(0, res.length-1);
         }

@@ -1192,7 +1192,10 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     } else {
         word.replaceAll(['aya','ava'], ['è','ò']);
     }
-    word.replaceAt('aH','o',word.length-2);
+    if (lang === 'bn')
+        word.replaceAt('aH','e',word.length-2);
+    else
+        word.replaceAt('aH','o',word.length-2);
     word.replace('H','');
     word.joinAspirate();
 
@@ -1314,6 +1317,8 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     word.replaceAll(['hn','hN','hm','hl','vh'],['nh','Nh','mh','lh','BB']);
     if (lang !== 'pi') {
         word.replaceAll(['hv', 'yh', 'hy'], ['BB', 'JJ', 'JJ']);
+        if (lang === 'bn')
+            word.replaceAt('y','Y',0);
         word.replace('y','j');
     } else {
         word.replaceAll(['hv', 'hy'], ['vh', 'yh']);
@@ -1431,7 +1436,7 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
         word.replaceAt('v','b',0);
         // word.replace('v','b');
     }
-    if (lang !== 'mr') {
+    if (lang !== 'mr' && lang !== 'bn') {
         if (word.sub(word.length-3,word.length) === 'āya') {
             word.w = word.sub(0,-2) + 'Mv';
         }
@@ -1478,7 +1483,7 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     }
     if (word.endsWith('a') || word.endsWith('i')) {
         if (
-        (tripleCluster !== null && lang !== 'mr' && !contains(noTripleGeminates, tripleCluster)) ||
+        (tripleCluster !== null && lang !== 'mr' && lang !== 'bn' && !contains(noTripleGeminates, tripleCluster)) ||
         (nasals.has(word.at(-3)) && word.at(-2) === 'h')) {
             word.w = word.sub(0, -1) + {'a':'Á','i':'Í'}[word.at(-1)];
         }
@@ -1500,11 +1505,12 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
             // do not lengthen the last vowel, unless there is only one vowel 
             let noLengthen = (i === word.getLastVowel() && word.numVowels() !== 1)
                 || (new Set(['ā','e','è','ī','o','ò','ū']).has(word.at(word.getNextVowel(i))));
-            if (lang !== 'mr' && noLengthen) {
+            if (lang !== 'mr' && lang !== 'bn' && noLengthen) {
                 continue;
             }
-            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && (word.at(i+1) !== 'M' || lang === 'mr' || word.at(i) === 'a')
-                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || lang === 'mr')
+            const mrBn = (lang === 'mr' || lang === 'bn');
+            if (cons.has(word.at(i+1)) && cons.has(word.at(i+2)) && (word.at(i+1) !== 'M' || mrBn || word.at(i) === 'a')
+                && ( !( cons.has(word.at(i+3)) && word.at(i+3) === word.at(i+2) && word.at(i+2) === word.at(i+1) )  || mrBn)
                 && lengthen[word.at(i)]) {
                 word.replaceAt(word.at(i), lengthen[word.at(i)], i);
                 if (lang === 'mr') {
@@ -1578,7 +1584,7 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     word.replaceAll(['eā'], ['iā']);
     if (lang === 'mr') {
         word.replaceAll(['iā', 'ia', 'ie', 'io','āvu', 'āya'], ['ivā', 'iva', 'ive', 'ivo','āū', 'āva']);
-    } else if (lang === 'hi' || lang === 'ur') {
+    } else if (lang === 'hi' || lang === 'ur' || lang === 'bn') {
         word.replaceAll(['iā', 'ivā', 'ia', 'ie', 'io', 'iu', 'iū', 'īvā'], ['iyā', 'iyā', 'iya', 'iye', 'iyo', 'iyu', 'iyū', 'iyā']);
     }
     if (lang !== 'mr') {
@@ -1605,12 +1611,14 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
     // lose final aspirates
     word.replaceAt('mh','m',word.length-2);
     word.replaceAt('nh','n',word.length-2);
-    if (lang === 'mr') {
-        if (contains(['t','T'], word.at(-2)) && word.at(-1) === 'h')
+    if (lang === 'mr' || lang === 'bn') {
+        if (contains(['t','T'], word.at(-2)) && word.at(-1) === 'h' && (lang === 'mr' || vow.has(word.at(-3))))
             word.cutAt(word.length-1);
+    }
+    if (lang === 'mr') {
         word.replaceAll(['Mv'], ['v']);
     }
-    if (lang === 'pa') {
+    if (lang === 'pa' || lang === 'bn') {
         word.replaceIntervocal('Mv','V');
         word.replaceAll(['Mv'], ['M']);
         word.replace('V', 'Mv');
@@ -1645,6 +1653,30 @@ function sanskrit_to_lang(sanskritWord, lang, mapStage=null) {
 
     if (lengthen[word.at(-1)])
         word.replaceAt(word.at(-1), lengthen[word.at(-1)], word.length-1);
+
+    if (lang === 'bn') {
+        word.replaceAt('v','b',0);
+        for (let i = word.length-1; i > 0; i--) {
+            if (word.at(i) !== 'v')
+                continue;
+            if (cons.has(word.at(i-1)) && word.at(i-1) !== 'M')
+                word.replaceAt('v','o',i);
+            else if (i < word.length-1)
+                word.replaceAt('v','y',i);
+            else if (contains(['o','ò'], word.at(i-1)))
+                word.cutAt(i);
+            else
+                word.replaceAt('v','o',i);
+        }
+        word.replaceAll(['ī','ū'], ['i','u']); // no vowel length
+        // hiatus after i, u, o is filled with য়
+        for (let i = word.length-2; i >= 0; i--) {
+            if (contains(['i','u','o'], word.at(i)) && contains(['a','ā','e','o'], word.at(i+1)) && word.at(i) !== word.at(i+1))
+                word.w = word.sub(0, i+1) + 'y' + word.sub(i+1);
+        }
+        word.replaceAt('iM','i',word.length-2);
+        word.replaceAt('uM','u',word.length-2);
+    }
 
     mapStage("NIA", word.w);
     return word.w;

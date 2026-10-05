@@ -409,6 +409,12 @@ const samples = [
     {'name':'thief', 'in':'tvam dina rajanii graama caurika karo param karma na karo', 'langs':['hi']},
     {'name':'misc', 'in':'mraksaNa naama prastara satya pipaasa', 'langs':['pa']},
 
+    {'name':'numbers', 'in':'sapta aSTa panca laksa', 'langs':['bn']},
+    {'name':'body parts', 'in':'hasta karNa danta jihvaa', 'langs':['bn']},
+    {'name':'food', 'in':'bhakta matsya dugdha aamra guDa tila', 'langs':['bn']},
+    {'name':'time', 'in':'raatri adya kaalya sandhyaa', 'langs':['bn']},
+    {'name':'misc', 'in':'yaH saH karma kaarya graama candra karpaasa', 'langs':['bn']},
+
     {'name':'Eightfold Path', 'in':'dRSTi saMkalpa vaac karmaanta aajiiva vyaayaama smRti samaadhi', 'langs':['pi']},
     {'name':'Ten Perfections', 'in':'daana shiila naiSkraamya prajnaa viirya ksaanti satya adhiSThaana maitrii upeksaa', 'langs':['pi']},
     {'name':'misc', 'in':'bhiksu shramaNa tathaagata dharma tripiTaka', 'langs':['pi']},
