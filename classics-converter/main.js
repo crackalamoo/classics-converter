@@ -4,6 +4,59 @@ const outputChoices = document.getElementById("output-lang");
 const orthography = document.getElementById("orthography");
 const orthography2 = document.getElementById("out-orthography");
 
+const I18N = {
+    'en': {
+        'placeholder': 'Type in $1',
+        'hindiUrdu': 'Hindi/Urdu',
+        'stageNote': "<b>Note:</b> Intermediate stages are a compromise between orthography and phonology, and aren't fully accurate for either.",
+        'clickMe': 'Click me!',
+        'examplesShown': 'Examples [-]',
+        'examplesHidden': 'Examples [+]',
+        'stages': {},
+        'samples': {},
+    },
+    'es': {
+        'placeholder': 'Escribe en $1',
+        'hindiUrdu': 'Hindi/urdu',
+        'stageNote': '<b>Nota:</b> Las etapas intermedias son un término medio entre la ortografía y la fonología, y no reflejan con exactitud ni una ni otra.',
+        'clickMe': '¡Haz clic!',
+        'examplesShown': 'Ejemplos [-]',
+        'examplesHidden': 'Ejemplos [+]',
+        'stages': {
+            'Latin': 'Latín',
+            'Proto-Romance': 'Protorromance',
+            'Western Romance': 'Romance occidental',
+            'French': 'Francés',
+            'Spanish': 'Español',
+            'Portuguese': 'Portugués',
+            'Italian': 'Italiano',
+            'OIA': 'IAA',
+            'MIA': 'IAM',
+            'NIA': 'IAN',
+        },
+        'samples': {
+            'animals': 'animales',
+            'body parts': 'partes del cuerpo',
+            'cloud': 'nube',
+            'Eightfold Path': 'Noble Óctuple Sendero',
+            'food': 'comida',
+            'merchant': 'mercader',
+            'misc': 'varios',
+            'moon': 'luna',
+            'negation': 'negación',
+            'numbers': 'números',
+            'pronouns': 'pronombres',
+            'Ten Perfections': 'Diez Perfecciones',
+            'thief': 'ladrón',
+            'time': 'tiempo',
+        },
+    },
+};
+const T = I18N[PAGE_LANG];
+function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function getText() {
     let text = inputBox.value;
     return text;
@@ -55,11 +108,11 @@ function refreshOutput() {
     let stageBox = document.getElementById("stage-outputs");
     stageBox.innerHTML = '';
     if (inputLang === 'la' && Object.keys(stages).length > 0) {
-        stageBox.innerHTML = "<b>Note:</b> Intermediate stages are a compromise between orthography and phonology, and aren't fully accurate for either.";
+        stageBox.innerHTML = T['stageNote'];
     }
     for (const stage in stages) {
         const stageDiv = document.createElement('div');
-        stageDiv.innerHTML = '<b>' + stage + '</b>: ' + stages[stage].join(' ');
+        stageDiv.innerHTML = '<b>' + (T['stages'][stage] ?? stage) + '</b>: ' + stages[stage].join(' ');
         stageBox.appendChild(stageDiv);
     }
 }
@@ -112,7 +165,7 @@ const updateInputLang = (l) => {
     if (l !== inputLang)
         inputBox.value = '';
     inputLang = l;
-    inputBox.placeholder = 'Type in ' + langNames[inputLang];
+    inputBox.placeholder = T['placeholder'].replace('$1', langNames[inputLang]);
     outputChoices.innerHTML = '';
     if (outputLangs[l].indexOf(outputLang) === -1) {
         outputLang = outputLangs[l][0];
@@ -121,9 +174,9 @@ const updateInputLang = (l) => {
         const li = document.createElement('li');
         li.dataset.lang = lang;
         if (lang === 'hi')
-            li.innerHTML = 'Hindi/Urdu';
+            li.innerHTML = T['hindiUrdu'];
         else
-            li.innerHTML = langNames[lang];
+            li.innerHTML = capitalize(langNames[lang]);
         if (lang === outputLang)
             li.classList.add('active');
         outputChoices.appendChild(li);
@@ -157,10 +210,10 @@ function showSample(name) {
 function populateExamples() {
     const examplesBox = document.querySelector('.examples-box');
     const langSamples = getSampleNames(outputLang);
-    examplesBox.innerHTML = '<div style="margin:5px;padding:5px 10px;">Click me!</div>';
+    examplesBox.innerHTML = '<div style="margin:5px;padding:5px 10px;">' + T['clickMe'] + '</div>';
     for (const sampleName of langSamples) {
         const button = document.createElement('button');
-        button.innerHTML = sampleName;
+        button.innerHTML = T['samples'][sampleName] ?? sampleName;
         button.className = 'groupButton';
         button.addEventListener('click', () => showSample(sampleName));
         examplesBox.appendChild(button);
@@ -171,10 +224,10 @@ const examplesButton = document.getElementById("examples-button");
 examplesButton.addEventListener("click", () => {
     const examplesBox = document.querySelector('.examples-box');
     if (examplesBox.style.display === 'none') {
-        examplesButton.innerHTML = 'Examples [-]';
+        examplesButton.innerHTML = T['examplesShown'];
         examplesBox.style.display = '';
     } else {
-        examplesButton.innerHTML = 'Examples [+]';
+        examplesButton.innerHTML = T['examplesHidden'];
         examplesBox.style.display = 'none';
     }
 });

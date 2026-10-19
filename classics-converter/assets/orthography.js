@@ -2,7 +2,14 @@ const outputLangs = {
     'la': ['es','fr','pt','it'],
     'sa': ['hi','bn','pa','mr','pi']
 };
-const langNames = {
+const langNames = PAGE_LANG === 'es' ?
+{
+    'es':'español', 'fr':'francés', 'pt': 'portugués', 'it':'italiano',
+    'hi':'hindi', 'ur':'urdu', 'pa':'panyabí', 'mr':'maratí',
+    'bn':'bengalí', 'pi':'pali',
+    'la':'latín', 'sa':'sánscrito'
+} :
+{
     'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
     'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
     'bn':'Bengali', 'pi':'Pali',

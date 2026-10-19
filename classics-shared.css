@@ -96,3 +96,8 @@ ul.choose-lang li.active {
 ul.choose-lang li.inactive {
     display: none;
 }
+#lang-switch {
+    text-align: right;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
