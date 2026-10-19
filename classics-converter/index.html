@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Classics Converter">
-    <meta property="og:description" content="An online tool using historical phonology to predict words in modern languages from Latin and Sanskrit">
+    <meta property="og:title" content="Classics Converter" data-i18n-content="title">
+    <meta property="og:description" content="An online tool using historical phonology to predict words in modern languages from Latin and Sanskrit" data-i18n-content="description">
     <meta property="og:image" content="https://www.harysdalvi.com/sub/projects/classics-converter/img/Romance_languages.jpg">
     <link rel="stylesheet" href="https://www.harysdalvi.com/main.css">
-    <title>Classics Converter</title>
-    <meta name="description" content="An online tool using historical phonology to predict words in modern languages from Latin and Sanskrit">
+    <title data-i18n="title">Classics Converter</title>
+    <meta name="description" content="An online tool using historical phonology to predict words in modern languages from Latin and Sanskrit" data-i18n-content="description">
     <link rel="stylesheet" href="https://www.harysdalvi.com/sub/projects/classics-converter/classics-shared.css">
     <link rel="stylesheet" href="https://www.harysdalvi.com/fonts/arabic.css">
     <link rel="stylesheet" href="https://www.harysdalvi.com/fonts/devanagari.css">
@@ -76,12 +76,12 @@
 <body>
 <section class="before-main">
 <div class="page-intro">
-    <h1 class="title">Classics Converter</h1>
+    <h1 class="title" data-i18n="title">Classics Converter</h1>
     <p class="author"><a href="https://www.harysdalvi.com">Harys Dalvi</a></p>
-    <p class="date">October 2024</p>
+    <p class="date" data-i18n="date">October 2024</p>
 </div>
 <nav id="lang-switch">
-    English | <a href="https://www.harysdalvi.com/es/classics-converter">Español</a>
+    English | <a href="https://www.harysdalvi.com/es/classics-converter/">Español</a>
 </nav>
 <div class="box-container">
     <div class="box-container-column has-box">
@@ -92,50 +92,50 @@
             </div>
         </div>
         <ul class="choose-lang" id="input-lang">
-            <li data-lang="la" class="active">Latin</li>
-            <li data-lang="sa">Sanskrit</li>
+            <li data-lang="la" class="active" data-i18n="lang.la">Latin</li>
+            <li data-lang="sa" data-i18n="lang.sa">Sanskrit</li>
         </ul>
         <div class="examples-container">
-            <button class="groupButton" id="examples-button">Examples [-]</button>
+            <button class="groupButton" id="examples-button" data-i18n="examples">Examples [-]</button>
             <div class="examples-box"></div>
         </div>
         <aside id="input-instructions">
             <div data-lang="la">
                 <p>
-                    Input:
+                    <span data-i18n="la.input">Input:</span>
                     <ul>
-                        <li>Indicate all long vowels.</li>
-                        <li>Double to lengthen vowels: aa, ee, ii, oo, uu, yy → <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
-                        <li>No need to input diphthong ligatures: ae, oe → <span class="smallcaps">æ, œ</span></li>
-                        <li>Use an apostrophe to override a substitution. (radi'ii → <span class="smallcaps">radiī</span>)</li>
-                        <li>U/V are distinct, but I may be used for J.</li>
+                        <li data-i18n="la.tip.long">Indicate all long vowels.</li>
+                        <li data-i18n="la.tip.double">Double to lengthen vowels: aa, ee, ii, oo, uu, yy → <span class="smallcaps">ā, ē, ī, ō, ū, ȳ</span></li>
+                        <li data-i18n="la.tip.ligatures">No need to input diphthong ligatures: ae, oe → <span class="smallcaps">æ, œ</span></li>
+                        <li data-i18n="la.tip.apostrophe">Use an apostrophe to override a substitution. (radi'ii → <span class="smallcaps">radiī</span>)</li>
+                        <li data-i18n="la.tip.uv">U/V are distinct, but I may be used for J.</li>
                     </ul>
                 </p>
             </div>
             <div data-lang="sa">
                 <p>
-                    Input may be in Devanagari, IAST romanization, or ASCII. For ASCII:
+                    <span data-i18n="sa.input">Input may be in Devanagari, IAST romanization, or ASCII. For ASCII:</span>
                     <ul>
-                        <li>Double to lengthen vowels: aa, ii, uu → ā, ī, ū (आ, ई, ऊ)</li>
-                        <li>Other vowels: ai, au, R, aM, aH → ऐ, औ, ऋ, अं, अः</li>
-                        <li>Use capitals for retroflex: T, Th, D, Dh, N, S → ट, ठ, ड, ढ, ण, ष</li>
-                        <li>Consonant digraphs: ks, sh, ny, ng, jn → क्ष, श, ञ, ङ, ज्ञ</li>
-                        <li>Nasals changed before stops: n(k/g), n(c/j) → ङ, ञ</li>
-                        <li>Use an apostrophe to override a substitution. (an'ya → अन्य)</li>
+                        <li data-i18n="sa.tip.double">Double to lengthen vowels: aa, ii, uu → ā, ī, ū (आ, ई, ऊ)</li>
+                        <li data-i18n="sa.tip.vowels">Other vowels: ai, au, R, aM, aH → ऐ, औ, ऋ, अं, अः</li>
+                        <li data-i18n="sa.tip.retroflex">Use capitals for retroflex: T, Th, D, Dh, N, S → ट, ठ, ड, ढ, ण, ष</li>
+                        <li data-i18n="sa.tip.digraphs">Consonant digraphs: ks, sh, ny, ng, jn → क्ष, श, ञ, ङ, ज्ञ</li>
+                        <li data-i18n="sa.tip.nasals">Nasals changed before stops: n(k/g), n(c/j) → ङ, ञ</li>
+                        <li data-i18n="sa.tip.apostrophe">Use an apostrophe to override a substitution. (an'ya → अन्य)</li>
                     </ul>
                 </p>
             </div>
-            <p data-lang="la">For best results:</p>
-            <p data-lang="sa">For best results:</p>
-            <p data-lang="la">Generally use the accusative case for nouns and adjectives.
+            <p data-lang="la" data-i18n="la.best">For best results:</p>
+            <p data-lang="sa" data-i18n="sa.best">For best results:</p>
+            <p data-lang="la" data-i18n="la.accusative">Generally use the accusative case for nouns and adjectives.
                 <span data-lang="fr">There are some exceptions: e.g. <span class="smallcaps">corpus</span> → corps</span></p>
-            <p data-lang="la">Generally use the infinitive for verbs. Sometimes other conjugations work too.
+            <p data-lang="la"><span data-i18n="la.infinitive">Generally use the infinitive for verbs. Sometimes other conjugations work too.</span>
                 <span data-lang="es">(<span class="smallcaps">probāre</span> → probar, <span class="smallcaps">probō</span> → pruebo)</span>
                 <span data-lang="fr">(<span class="smallcaps">clamāre</span> → clamer)</span>
                 <span data-lang="pt">(<span class="smallcaps">clamāre</span> → chamar)</span>
                 <span data-lang="it">(<span class="smallcaps">clamāre</span> → chiamare)</span>
             </p>
-            <p data-lang="sa">Generally use the stem for nouns, verbs, and adjectives.
+            <p data-lang="sa"><span data-i18n="sa.stem">Generally use the stem for nouns, verbs, and adjectives.</span>
                 <span data-lang="hi">(<span lang="sa">दन्त</span> → <span lang="hi">दांत</span>)</span>
                 <span data-lang="ur">(<span lang="sa">दन्त</span> → <span lang="ur">دانت</span>)</span>
                 <span data-lang="pa">(danta → danda)</span>
@@ -162,33 +162,33 @@
                 <div data-lang="hi ur">
                     <form name="hi_ur_settings" action="javascript:void(0)">
                         <input type="radio" name="hi_ur_script" value="hindi" id="hindi" checked>
-                        <label for="hindi">Hindi</label>
+                        <label for="hindi" data-i18n="script.hindi">Hindi</label>
                         <input type="radio" name="hi_ur_script" value="urdu" id="urdu">
-                        <label for="urdu">Urdu</label>
+                        <label for="urdu" data-i18n="script.urdu">Urdu</label>
                     </form>
                 </div>
                 <div data-lang="pa">
                     <form name="pa_settings" action="javascript:void(0)">
                         <input type="radio" name="pa_script" value="gurmukhi" id="gurmukhi" checked>
-                        <label for="gurmukhi">Gurmukhi</label>
+                        <label for="gurmukhi" data-i18n="script.gurmukhi">Gurmukhi</label>
                         <input type="radio" name="pa_script" value="shahmukhi" id="shahmukhi">
-                        <label for="shahmukhi">Shahmukhi</label>
+                        <label for="shahmukhi" data-i18n="script.shahmukhi">Shahmukhi</label>
                     </form>
                 </div>
                 <div data-lang="hi ur pa">
                     <form name="ur_pa_settings" action="javascript:void(0)">
                         <input type="checkbox" name="vowel_marks" id="vowel_marks" checked>
-                        <label for="vowel_marks">Vowel marks <span lang="ur">(زیر، زَبَر، پیش، تَشدِید)</span></label>
+                        <label for="vowel_marks" data-i18n="vowel-marks">Vowel marks <span lang="ur">(زیر، زَبَر، پیش، تَشدِید)</span></label>
                     </form>
                 </div>
                 <div data-lang="pi">
                     <form name="pi_settings" action="javascript:void(0)">
                         <input type="radio" name="pi_script" value="sa" id="devanagari" checked>
-                        <label for="devanagari">Devanagari</label>
+                        <label for="devanagari" data-i18n="script.devanagari">Devanagari</label>
                         <input type="radio"name="pi_script" value="th" id="thai">
-                        <label for="thai">Thai</label>
+                        <label for="thai" data-i18n="script.thai">Thai</label>
                         <input type="radio"name="pi_script" value="km" id="khmer">
-                        <label for="khmer">Khmer</label>
+                        <label for="khmer" data-i18n="script.khmer">Khmer</label>
                     </form>
                 </div>
             </div>
@@ -196,7 +196,7 @@
                 <br>
                 <form name="stage_settings" action="javascript:void(0)">
                     <input type="checkbox" name="stage" id="stage" checked>
-                    <label for="stage">Show intermediate stages</label>
+                    <label for="stage" data-i18n="stages">Show intermediate stages</label>
                 </form>
                 <div id="stage-outputs"></div>
             </div>
@@ -207,15 +207,15 @@
 </section>
 
 <article class="main">
-    <h2 id="what-is-this">What is this?</h2>
-    <p>This is <strong>not a translator</strong> from Latin or Sanskrit to other languages.
+    <h2 id="what-is-this" data-i18n="about.heading">What is this?</h2>
+    <p data-i18n="about.intro">This is <strong>not a translator</strong> from Latin or Sanskrit to other languages.
         Instead, this is a <em>predictive model</em>: it takes
         words in Latin or Sanskrit (what I'll call <strong>&ldquo;classical&rdquo;</strong> languages)
         and <strong>predicts their descendants, through the natural evolution
         of language,</strong> in modern languages. (Plus Pali,
         which we'll get to later.)
     </p>
-    <p>Over time, languages change. These changes are sometimes unpredictable, but more often
+    <p data-i18n="about.rules">Over time, languages change. These changes are sometimes unpredictable, but more often
         than not, they actually follow well-defined rules. In theory, these rules can be
         programmed into a computer, which is what you're seeing here. For example,
         a stressed <span lang="la"><strong>o</strong></span> in Latin tends to become
@@ -223,56 +223,55 @@
         becoming <i lang="es">j<u><b>ue</b></u>go</i>.[<a data-cite="spanish"></a>] There are many more such rules,
         often much more complicated.
     </p>
-    <p>There are at least five ways this tool could fail to predict a translation:[<a data-cite="1"></a>]</p>
+    <p data-i18n="about.failures">There are at least five ways this tool could fail to predict a translation:[<a data-cite="1"></a>]</p>
         <ul>
-            <li>The descendent language <strong>borrowed a word directly from the classical one</strong>.
+            <li data-i18n="failure.learned">The descendent language <strong>borrowed a word directly from the classical one</strong>.
                 We might think <i lang="es">óculo</i>
                 in Spanish evolved from Latin <span lang="la">oculus</span> (eye).
                 In fact, the descendant of <span lang="la">oculus</span> in Spanish is <i lang="es">ojo</i> (eye).
                 <i lang="es">Óculo</i> is a specific architectural term,
                 and was not inherited but was consciously brought into Spanish by people who knew the Latin word.<a data-footnotes="1"></a></li>
-            <li>The descendent language <strong>borrowed a related word from another language</strong>.
+            <li data-i18n="failure.loan">The descendent language <strong>borrowed a related word from another language</strong>.
                 We might expect the descendant of Sanskrit
                 <span lang="sa">म्रक्षण</span> <i>mrakṣaṇa</i> (oil, ointment) in Hindi/Urdu to be
                 <span lang="hi">माखन</span> <span lang="ur">ماکھن</span> <i>mākhan</i>.
                 Instead, the word is <span lang="hi">मक्खन</span> <span lang="ur">مکھن</span> <i>makkhan</i> (butter),
                 which is a loan from Punjabi. <i>mākhan</i> is a mostly obsolete term
                 used in only a few contexts.</li>
-            <li>The <strong>meaning of a word has changed over time</strong>. The Portuguese word <i lang="pt">relha</i>,
+            <li data-i18n="failure.meaning">The <strong>meaning of a word has changed over time</strong>. The Portuguese word <i lang="pt">relha</i>,
             descended from Latin <span lang="la">rēgula</span> (rule), actually means
             plowshare.</li>
-            <li>The evolution is an <strong>exception to the rule</strong>. We would expect the descendant of
+            <li data-i18n="failure.exception">The evolution is an <strong>exception to the rule</strong>. We would expect the descendant of
                 <span lang="sa">युष्मान्</span> <i>yuṣmān</i> (you, plural) in Marathi to be something like
                 <span lang="mr">*जूम्हा</span> <i>*zūmhā</i>. Instead, we see <span lang="mr">तुम्ही</span> <i>tumhī</i>
                 with initial <i>t-</i>, indicating that <span lang="sa">युष्मान्</span> <i>yuṣmān</i> took on
                 <i>tv-</i> in analogy to <span lang="sa">त्वम्</span> <i>tvam</i> (you, singular) in the course of its evolution.</li>
-            <li>The descendent language uses a completely <strong>unrelated word</strong>.
+            <li data-i18n="failure.unrelated">The descendent language uses a completely <strong>unrelated word</strong>.
                 Spanish <i lang="es">aceite</i> (oil) comes from Arabic
                 and is unrelated to the Latin <span lang="la">oleum</span>.</li>
         </ul>
-        <p>And of course, there is the fact that <strong>this tool is not perfect</strong>. I know I've made <em>many</em> mistakes with this tool,
+        <p data-i18n="about.imperfect">And of course, there is the fact that <strong>this tool is not perfect</strong>. I know I've made <em>many</em> mistakes with this tool,
         and there are many more mistakes yet to be discovered. If you'd like to contribute to the Classics Converter, or just check out the source code,
         the GitHub is at <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
         Thanks to Kyle Feng for contributing fixes to the French phonological rules.</p>
-    </p>
-    <p>If you like this tool, you might also like
+    <p data-i18n="about.related">If you like this tool, you might also like
         <a href="https://www.harysdalvi.com/aljamiado">Aljamiado</a>
         and <a href="https://www.harysdalvi.com/futhorc">Futhorc</a>.
     </p>
 
-    <h2 id="historical-background">Historical Background</h2>
-    <p><strong>Sanskrit</strong> dates back to around 1500 BCE, the time of the Rigveda. While it was not written at this time,
+    <h2 id="historical-background" data-i18n="history.heading">Historical Background</h2>
+    <p data-i18n="history.sanskrit"><strong>Sanskrit</strong> dates back to around 1500 BCE, the time of the Rigveda. While it was not written at this time,
         it was preserved orally so that we know what this early stage of the language was like.
         Sanskrit was standardized much later, around 500 BCE (give or take a few hundred years), by Pāṇini
         in his <cite>Aṣṭādhyāyī</cite>. This standardized form is known as <strong>Classical Sanskrit</strong>.[<a data-cite="2"></a>]</p>
-    <p>While Sanskrit is a dead language, its spoken dialects evolved into various <strong>Prakrits</strong>,[<a data-cite="5"></a>]
+    <p data-i18n="history.prakrits">While Sanskrit is a dead language, its spoken dialects evolved into various <strong>Prakrits</strong>,[<a data-cite="5"></a>]
         from which the modern <strong>Indo-Aryan languages</strong> descend. These include
         languages such as Hindi/Urdu, Punjabi, Marathi, and Bengali, mostly found in North India and nearby countries like Pakistan
         and Bangladesh.[<a data-cite="3"></a>][<a data-cite="masica"></a>] There's also <strong>Pali</strong>, another dead language
         which continues to be used as the liturgical language of Theravada Buddhism. Pali
         dates to around 200 BCE, the time of the Prakrits.[<a data-cite="4"></a>]
     </p>
-    <p>The situation for <strong>Latin</strong> is similar.
+    <p data-i18n="history.latin">The situation for <strong>Latin</strong> is similar.
         Old Latin dates to around 753 BCE (the traditional founding date of Rome), while <strong>Classical Latin</strong>
         dates to around 75 BCE. Classical Latin was not the creation of one person like
         Classical Sanskrit, but was developed by various writers who wrote the classics of
@@ -281,7 +280,7 @@
         Unfortunately, this form of Latin was rarely written, so we have limited
         knowledge of what it was like.[<a data-cite="6"></a>]
     </p>
-    <p>Like Sanskrit, Latin is now a dead language. However, over the centuries,
+    <p data-i18n="history.romance">Like Sanskrit, Latin is now a dead language. However, over the centuries,
         the various dialects of Vulgar Latin evolved differently and formed modern languages
         such as Spanish, French,
         Portuguese, and Italian. The languages descended from
@@ -289,77 +288,77 @@
         <strong>Romance languages</strong>.[<a data-cite="spanish"></a>][<a data-cite="6"></a>]
     </p>
     <figure class="twoside">
-        <img src="./img/Indo-Aryan_language_map.svg.jpg" alt="A map of the Indo-Aryan languages in South Asia, covering the northern half of the subcontinent, most of Sri Lanka, and adjacent areas.">
-        <img src="./img/Romance_languages.jpg" alt="A map of the Romance languages in Europe, covering most of Western Europe and Romania in Eastern Europe.">
-        <p class="caption">Indo-Aryan languages in South Asia. Image source:
+        <img src="./img/Indo-Aryan_language_map.svg.jpg" alt="A map of the Indo-Aryan languages in South Asia, covering the northern half of the subcontinent, most of Sri Lanka, and adjacent areas." data-i18n-alt="history.map-indo-aryan">
+        <img src="./img/Romance_languages.jpg" alt="A map of the Romance languages in Europe, covering most of Western Europe and Romania in Eastern Europe." data-i18n-alt="history.map-romance">
+        <p class="caption" data-i18n="history.caption">Indo-Aryan languages in South Asia. Image source:
             <a href="https://commons.wikimedia.org/wiki/File:Indo-Aryan_language_map.svg" target="_blank">Mikeanand, Wikimedia</a> (based on Uwe Dedering), <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" target="_blank">CC BY-SA 3.0</a>.
             <br>
             Romance languages in Europe. Image source:
             <a href="https://commons.wikimedia.org/wiki/File:Romance_languages.png" target="_blank">Yuri B. Koryakov, <cite>Atlas of Romance languages</cite></a>,
             <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a>.
     </figure>
-    <p>Thus we can make a rough analogy:
+    <p><span data-i18n="history.analogy">Thus we can make a rough analogy:</span>
         <table>
             <tr>
-                <th>Latin</th>
-                <th>Sanskrit</th>
+                <th data-i18n="table.latin">Latin</th>
+                <th data-i18n="table.sanskrit">Sanskrit</th>
             </tr>
             <tr>
-                <td>Old Latin</td>
-                <td>Vedic Sanskrit</td>
+                <td data-i18n="table.old-latin">Old Latin</td>
+                <td data-i18n="table.vedic-sanskrit">Vedic Sanskrit</td>
             </tr>
             <tr>
-                <td>Classical Latin</td>
-                <td>Classical Sanskrit</td>
+                <td data-i18n="table.classical-latin">Classical Latin</td>
+                <td data-i18n="table.classical-sanskrit">Classical Sanskrit</td>
             </tr>
             <tr>
-                <td>Vulgar Latin</td>
-                <td>Prakrits</td>
+                <td data-i18n="table.vulgar-latin">Vulgar Latin</td>
+                <td data-i18n="table.prakrits">Prakrits</td>
             </tr>
             <tr>
-                <td>N/A<a data-footnotes="2"></a></td>
-                <td>Pali</td>
+                <td data-i18n="table.none">N/A<a data-footnotes="2"></a></td>
+                <td data-i18n="table.pali">Pali</td>
             </tr>
             <tr>
-                <td>Romance languages</td>
-                <td>Modern Indo-Aryan languages</td>
+                <td data-i18n="table.romance">Romance languages</td>
+                <td data-i18n="table.indo-aryan">Modern Indo-Aryan languages</td>
             </tr>
         </table>
     </p>
-    <p>This is a little complicated, and I'm glossing over a lot of important differences between the two,
+    <p data-i18n="history.simplification">This is a little complicated, and I'm glossing over a lot of important differences between the two,
         but the takeaway is this: in general, you can enter words in Classical Latin or Classical Sanskrit
         and get a rough idea of what they might look like in modern languages.
         In a few cases, you may have to adjust the input to match an unattested Vulgar Latin or Old Indo-Aryan dialect to get the best results.
     </p>
-    <p>An interesting fact: Latin and Sanskrit are related, as both descend from Proto Indo-European.
+    <p data-i18n="history.cognates">An interesting fact: Latin and Sanskrit are related, as both descend from Proto Indo-European.
         An example cognate is <span lang="sa">पाद</span> <i>pāda</i> in Sanskrit and <span lang="la">pedem</span>
         in Latin, both meaning foot. This makes French <i lang="fr">pied</i> and Urdu <span lang="ur">پاؤں</span> <i>pāõ</i>
         distantly related, along with English <i>foot</i> which had a <i>p-</i> to <i>f-</i> change.[<a data-cite="1"></a>]
     </p>
-    <h3 id="why-latin-and-sanskrit">Why Latin and Sanskrit?</h3>
-    <p>So why choose Latin and Sanskrit as the source languages for a &ldquo;classics converter&rdquo;?
+    <h3 id="why-latin-and-sanskrit" data-i18n="why.heading">Why Latin and Sanskrit?</h3>
+    <p><span data-i18n="why.intro">So why choose Latin and Sanskrit as the source languages for a &ldquo;classics converter&rdquo;?
         They have a number of really attractive qualities that make a &ldquo;classics converter&rdquo;
-        work well.
+        work well.</span>
         <ul>
-            <li>Both are millenia old,<a data-footnotes="3"></a> and have extensive literature we can use to source words.</li>
-            <li>Both evolved into not just one but many modern languages, and many of these are
+            <li data-i18n="why.old">Both are millenia old,<a data-footnotes="3"></a> and have extensive literature we can use to source words.</li>
+            <li data-i18n="why.descendants">Both evolved into not just one but many modern languages, and many of these are
                 widely spoken and have their own extensive literatures.</li>
-            <li>Both used some kind of phonetic writing,
+            <li data-i18n="why.phonetic">Both used some kind of phonetic writing,
                 so we have a good idea of what they sounded like. (Panini even described
                 the sound system of Sanskrit in linguistic terms.)</li>
         </ul>
     </p>
-    <p>As far as I can tell, these are among the only languages that fit these criteria.</p>
+    <p data-i18n="why.criteria">As far as I can tell, these are among the only languages that fit these criteria.</p>
         <ul>
-            <li>The only widely-spoken descendant of Ancient Greek is Modern Greek.
+            <li data-i18n="why.greek">The only widely-spoken descendant of Ancient Greek is Modern Greek.
                 Likewise for Old English, Persian, and Malay.
             </li>
-            <li>Classical Chinese used Chinese characters, making it difficult to tell
+            <li data-i18n="why.chinese">Classical Chinese used Chinese characters, making it difficult to tell
                 how it was pronounced.</li>
-            <li>Modern Arabic dialects are widely spoken, but not widely written,
+            <li data-i18n="why.arabic">Modern Arabic dialects are widely spoken, but not widely written,
                 as people write in <i>Fus'ha</i> instead.</li>
         </ul>
-        <p>Maybe Tamil, Ge'ez, and Tibetan would be good candidates to add, but they may suffer from a lack
+        <p data-i18n="why.others">Maybe Tamil, Ge'ez, and Tibetan would be good candidates to add, but they may suffer from a lack
         of resources: Latin and Sanskrit, and their relations to modern languages,
         have been studied extensively. Still, it would be cool to see more languages in this tool,
         both more source languages besides these two and more modern languages to convert into.
@@ -367,40 +366,40 @@
 
     <hr>
     <section class="references">
-    <h2 id="ref">References</span></h2>
-    <p>The rules applied in the converter code, while not necessarily referenced in the main article,
-        mostly came from:
+    <h2 id="ref" data-i18n="refs.heading">References</h2>
+    <p><span data-i18n="refs.intro">The rules applied in the converter code, while not necessarily referenced in the main article,
+        mostly came from:</span>
         <ul>
-            <li>For Latin: <a data-cite="spanish"></a>, <a data-cite="1"></a>, <a data-cite="french"></a>, <a data-cite="portuguese"></a>, <a data-cite="italian"></a>,
+            <li data-i18n="refs.latin">For Latin: <a data-cite="spanish"></a>, <a data-cite="1"></a>, <a data-cite="french"></a>, <a data-cite="portuguese"></a>, <a data-cite="italian"></a>,
                 <a data-cite="proto-romance"></a>, <a data-cite="spanish-history"></a>.
             </li>
-            <li>For Sanskrit: <a data-cite="1"></a>, <a data-cite="masica"></a>, <a data-cite="4"></a>.</li>
+            <li data-i18n="refs.sanskrit">For Sanskrit: <a data-cite="1"></a>, <a data-cite="masica"></a>, <a data-cite="4"></a>.</li>
         </ul>
     </p>
     <ol id="reflist">
-        <li><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Sanskrit" target="_blank">Sanskrit</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Indo-Aryan_languages" target="_blank">Indo-Aryan languages</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Pali" target="_blank">Pali</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Prakrit" target="_blank">Prakrit</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Latin" target="_blank">Latin</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="spanish"><a href="https://www.staff.ncl.ac.uk/i.e.mackenzie/intro.htm" target="_blank">The Linguistics of Spanish</a>
+        <li data-i18n="refs.wiktionary"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
+        <li data-i18n="refs.wikipedia-sanskrit"><a href="https://en.wikipedia.org/wiki/Sanskrit" target="_blank">Sanskrit</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-i18n="refs.wikipedia-indo-aryan"><a href="https://en.wikipedia.org/wiki/Indo-Aryan_languages" target="_blank">Indo-Aryan languages</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-i18n="refs.wikipedia-pali"><a href="https://en.wikipedia.org/wiki/Pali" target="_blank">Pali</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-i18n="refs.wikipedia-prakrit"><a href="https://en.wikipedia.org/wiki/Prakrit" target="_blank">Prakrit</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-i18n="refs.wikipedia-latin"><a href="https://en.wikipedia.org/wiki/Latin" target="_blank">Latin</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="spanish" data-i18n="refs.spanish"><a href="https://www.staff.ncl.ac.uk/i.e.mackenzie/intro.htm" target="_blank">The Linguistics of Spanish</a>
             (Ian Mackenzie, Newcastle University, 1999&ndash;2022) <a data-cite="up">^</a></li>
-        <li data-cite="masica"><a href="https://books.google.com/books?id=J3RSHWePhXwC&pg=PA1&source=gbs_selected_pages&cad=1#v=onepage&q&f=false" target="_blank">The Indo-Aryan Languages</a>
+        <li data-cite="masica" data-i18n="refs.masica"><a href="https://books.google.com/books?id=J3RSHWePhXwC&pg=PA1&source=gbs_selected_pages&cad=1#v=onepage&q&f=false" target="_blank">The Indo-Aryan Languages</a>
             (Colin P. Masica, University of Chicago, 1991) <a data-cite="up">^</a></li>
-        <li data-cite="french"><a href="https://en.wikipedia.org/wiki/Phonological_history_of_French" target="_blank">Phonological history of French</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="portuguese"><a href="https://en.wikipedia.org/wiki/Comparison_of_Portuguese_and_Spanish" target="_blank">Comparison of Portuguese and Spanish</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="italian"><a href="https://damyanlissitchkov.wordpress.com/2013/03/23/how-latin-became-italian/" target="_blank">How Latin Became Italian</a> (Damyan Lissitchkov, 2013) <a data-cite="up">^</a></li>
-        <li data-cite="proto-romance"><a href="https://en.wikipedia.org/wiki/Phonological_changes_from_Classical_Latin_to_Proto-Romance" target="_blank">Phonological changes from Classical Latin to Proto-Romance</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="spanish-history"><a href="https://en.wikipedia.org/wiki/History_of_the_Spanish_language" target="_blank">History of the Spanish language</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="french" data-i18n="refs.french"><a href="https://en.wikipedia.org/wiki/Phonological_history_of_French" target="_blank">Phonological history of French</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="portuguese" data-i18n="refs.portuguese"><a href="https://en.wikipedia.org/wiki/Comparison_of_Portuguese_and_Spanish" target="_blank">Comparison of Portuguese and Spanish</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="italian" data-i18n="refs.italian"><a href="https://damyanlissitchkov.wordpress.com/2013/03/23/how-latin-became-italian/" target="_blank">How Latin Became Italian</a> (Damyan Lissitchkov, 2013) <a data-cite="up">^</a></li>
+        <li data-cite="proto-romance" data-i18n="refs.proto-romance"><a href="https://en.wikipedia.org/wiki/Phonological_changes_from_Classical_Latin_to_Proto-Romance" target="_blank">Phonological changes from Classical Latin to Proto-Romance</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="spanish-history" data-i18n="refs.spanish-history"><a href="https://en.wikipedia.org/wiki/History_of_the_Spanish_language" target="_blank">History of the Spanish language</a> (Wikipedia) <a data-cite="up">^</a></li>
     </ol>
-    <h2>Footnotes</h2>
+    <h2 data-i18n="footnotes.heading">Footnotes</h2>
     <ul id="footnotes">
-        <li>This type of borrowing has a special name in Sanskrit: <span lang="sa">तत्सम</span> <i>tatsama</i>.
+        <li data-i18n="footnotes.tatsama">This type of borrowing has a special name in Sanskrit: <span lang="sa">तत्सम</span> <i>tatsama</i>.
             Inherited terms are called <span lang="sa">तद्भव</span> <i>tadbhava</i>. <a data-footnotes="up">^</a></li>
-        <li>Pali is a literary language related to Prakrit, corresponding to Vulgar Latin in our analogy.
+        <li data-i18n="footnotes.pali">Pali is a literary language related to Prakrit, corresponding to Vulgar Latin in our analogy.
             This would be like if Vulgar Latin had a standardized written form separate from Classical Latin. <a data-footnotes="up">^</a></li>
-        <li>The question of how &ldquo;old&rdquo; a language is is politicized and not very well-defined.
+        <li data-i18n="footnotes.old">The question of how &ldquo;old&rdquo; a language is is politicized and not very well-defined.
             Here I just mean that both Sanskrit and Latin have attestation from millenia ago. <a data-footnotes="up">^</a></li>
     </ul>
     </section>

@@ -5,6 +5,7 @@ The **Classics Converter** project is a collection of fun tools for historical l
 ## Contents
 1. [Classics Converter](#classics-converter)
 2. [Aljamiado](#aljamiado)
+3. [Translations](#translations)
 
 ## Classics Converter
 Rather than translating between languages, this tool relies on phonological changes
@@ -36,5 +37,7 @@ This is a tool to write Spanish, Malay, and Turkish in their historical Arabic s
 * For Malay, the Jawi script widely used in the Malay Archipelago from the 15th century until the 20th century, and still used occasionally.
 * For Turkish, the Ottoman Turkish script used during the Ottoman Empire and then in Republican Turkey until 1928.
 
-The tool is available in both English and Spanish.
 ![Poema de Yuçuf](aljamiado/img/Poema_de_Yusuf.jpg)
+
+## Translations
+Translated pages are generated from the English `index.html` and `i18n/<lang>.json`. After changing either, run `python3 tools/build_i18n.py`.

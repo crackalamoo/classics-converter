@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Aljamiado">
-    <meta property="og:description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts">
+    <meta property="og:title" content="Aljamiado" data-i18n-content="title">
+    <meta property="og:description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts" data-i18n-content="description">
     <meta property="og:image" content="https://www.harysdalvi.com/sub/projects/classics-converter/aljamiado/img/Poema_de_Yusuf.jpg">
     <link rel="stylesheet" href="https://www.harysdalvi.com/main.css">
-    <title>Aljamiado</title>
-    <meta name="description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts">
+    <title data-i18n="title">Aljamiado</title>
+    <meta name="description" content="An online tool to write Spanish, Malay, and Turkish in their historical Arabic scripts" data-i18n-content="description">
     <link rel="stylesheet" href="https://www.harysdalvi.com/sub/projects/classics-converter/classics-shared.css">
     <link rel="stylesheet" href="https://www.harysdalvi.com/fonts/arabic.css">
     <style>
@@ -50,39 +50,39 @@
 <body>
 <section class="before-main">
 <section class="page-intro">
-    <h1 class="title">Aljamiado</h1>
+    <h1 class="title" data-i18n="title">Aljamiado</h1>
     <p class="author"><a href="https://www.harysdalvi.com">Harys Dalvi</a></p>
-    <p class="date">April 2025</p>
+    <p class="date" data-i18n="date">April 2025</p>
 </section>
 <nav id="lang-switch">
-    English | <a href="https://www.harysdalvi.com/es/aljamiado">Español</a>
+    English | <a href="https://www.harysdalvi.com/es/aljamiado/">Español</a>
 </nav>
 <div class="box-container">
     <div class="box-container-column has-box">
         <div class="text-box">
-            <textarea id="input-box" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Type in Spanish"></textarea>
+            <textarea id="input-box" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Type in Spanish" data-i18n-placeholder="placeholder"></textarea>
         </div>
         <div id="special-chars"></div>
         <ul class="choose-lang" id="input-lang">
-            <li data-lang="es" class="active">Spanish</li>
-            <li data-lang="ms">Malay</li>
-            <li data-lang="tr">Turkish</li>
-            <li data-lang="zh">Chinese</li>
+            <li data-lang="es" class="active" data-i18n="lang.es">Spanish</li>
+            <li data-lang="ms" data-i18n="lang.ms">Malay</li>
+            <li data-lang="tr" data-i18n="lang.tr">Turkish</li>
+            <li data-lang="zh" data-i18n="lang.zh">Chinese</li>
         </ul>
         <aside id="input-settings">
             <div data-lang="es">
                 <form name="es_input" action="javascript:void(0)">
                     <input type="radio" name="era" value="modern" id="modern" checked>
-                    <label for="modern">Modern Spanish</label><br>
+                    <label for="modern" data-i18n="es.modern">Modern Spanish</label><br>
                     <input type="radio" name="era" value="old" id="old">
-                    <label for="old">Old Spanish</label>
+                    <label for="old" data-i18n="es.old">Old Spanish</label>
                 </form>
             </div>
         </aside>
         <aside id="input-instructions">
             <div data-lang="es">
                 <p>
-                    Changes from Old Spanish to Modern Spanish:
+                    <span data-i18n="es.changes">Changes from Old Spanish to Modern Spanish:</span>
                     <ul>
                         <li>z, ç, c[e/i] → z, c[e/i]</li>
                         <li>ss, s → s</li>
@@ -93,17 +93,17 @@
             <div data-lang="ms">
                 <p>
                     <ul>
-                        <li>Always use é for e taling: mérah</li>
-                        <li>Use e for e pepet: kecil/kĕcil</li>
+                        <li data-i18n="ms.taling">Always use é for e taling: mérah</li>
+                        <li data-i18n="ms.pepet">Use e for e pepet: kecil/kĕcil</li>
                     </ul>
                 </p>
             </div>
             <div data-lang="zh">
                 <p>
                     <ul>
-                        <li>Enter pinyin, with words separated by spaces, and syllables within a word separated by apostrophes (&apos;)</li>
+                        <li data-i18n="zh.pinyin">Enter pinyin, with words separated by spaces, and syllables within a word separated by apostrophes (&apos;)</li>
                         <ul>
-                            <li>e.g.: Enter 中国 as zhong'guo, 西安 as Xi'an, 名字 as ming'zi, 公园 as gong'yuan</li>
+                            <li data-i18n="zh.example">e.g.: Enter 中国 as zhong'guo, 西安 as Xi'an, 名字 as ming'zi, 公园 as gong'yuan</li>
                         </ul>
                     </ul>
                 </p>
@@ -118,34 +118,34 @@
             <div id="output-box"></div>
         </div>
         <div id="output-buttons">
-            <button onclick="copyOutput()">Copy</button>
-            <button onclick="clearOutput()">Clear</button>
+            <button onclick="copyOutput()" data-i18n="copy">Copy</button>
+            <button onclick="clearOutput()" data-i18n="clear">Clear</button>
         </div>
         <!-- <ul class="choose-lang" id="output-lang">
         </ul> -->
         <aside id="output-settings">
             <div data-lang="es">
-                <b>Aljamía</b>
+                <b data-i18n="script.es">Aljamía</b>
             </div>
             <div data-lang="ms">
-                <b>Jawi</b>
+                <b data-i18n="script.ms">Jawi</b>
             </div>
             <div data-lang="tr">
-                <b>Ottoman Turkish</b>
+                <b data-i18n="script.tr">Ottoman Turkish</b>
             </div>
             <div data-lang="zh">
-                <b>Xiao'erjing</b>
+                <b data-i18n="script.zh">Xiao'erjing</b>
             </div>
-            Note: this conversion may have errors.
+            <span data-i18n="note">Note: this conversion may have errors.</span>
             <div data-lang="es">
                 <form name="es_output" action="javascript:void(0)">
                     <input type="checkbox" name="abbr" value="abbr" id="abbr" checked>
-                    <label for="abbr">Common word combinations (e.g. el gato → elgato)</label><br>
+                    <label for="abbr" data-i18n="es.abbr">Common word combinations (e.g. el gato → elgato)</label><br>
                     <input type="checkbox" name="arabic" value="arabic" id="arabic" checked>
-                    <label for="arabic">Arabic spellings for common Arabic-origin words (e.g. almohada, sandía)</label><br>
+                    <label for="arabic" data-i18n="es.arabic">Arabic spellings for common Arabic-origin words (e.g. almohada, sandía)</label><br>
                     <input type="checkbox" name="maghrebi" value="maghrebi" id="maghrebi">
-                    <label for="maghrebi">Maghrebi Kufic script (ڢ ڧ)</label>
-                    <p>These were common in Aljamiado texts.</p>
+                    <label for="maghrebi" data-i18n="es.maghrebi">Maghrebi Kufic script (ڢ ڧ)</label>
+                    <p data-i18n="es.maghrebi-note">These were common in Aljamiado texts.</p>
                 </form>
             </div>
         </aside>
@@ -155,61 +155,61 @@
 </section>
 
 <article class="main">
-    <h2 id="what-is-this">What is this?</h2>
-    <p>This is a tool to write Spanish, Malay,
+    <h2 id="what-is-this" data-i18n="about.heading">What is this?</h2>
+    <p data-i18n="about.intro">This is a tool to write Spanish, Malay,
         and Turkish in their historical Arabic scripts.
         These historical Arabic scripts are:</p>
         <ul>
-            <li>For Spanish, the <strong>Aljamiado script</strong>
+            <li data-i18n="about.es">For Spanish, the <strong>Aljamiado script</strong>
                 used first during Muslim rule of Spain, and then secretly for some time after
                 the Reconquista.[<a data-cite="aljamiado"></a>][<a data-cite="morisco"></a>]
                 (In Spanish, the script itself is called aljamía; aljamiado is
                 an adjective.[<a data-cite="aragon"></a>])</li>
-            <li>For Malay, the <strong>Jawi script</strong>
+            <li data-i18n="about.ms">For Malay, the <strong>Jawi script</strong>
                 widely used in the Malay Archipelago from the 15th century until the 20th century,
                 and still used occasionally.[<a data-cite="jawi"></a>]</li>
-            <li>For Turkish, the <strong>Ottoman Turkish script</strong>
+            <li data-i18n="about.tr">For Turkish, the <strong>Ottoman Turkish script</strong>
                 used during the Ottoman Empire and then Republican Turkey until 1928.[<a data-cite="ottoman"></a>][<a data-cite="turkish"></a>]</li>
         </ul>
-    <p>
+    <p data-i18n="about.conventions">
         Although the Arabic script plays an important role in the history of each of these languages,
             it was not always used the same way. Conventions differ between authors and time periods.
             In addition, these languages all had a tendency to keep Arabic loanwords spelled the same,
             even if it wasn't phonetic. For these reasons and more, you might find some
             transcriptions that are not completely faithful to historical manuscripts.
     </p>
-    <p>The Ottoman Turkish script is especially likely to have mistakes because of the
+    <p data-i18n="about.mistakes">The Ottoman Turkish script is especially likely to have mistakes because of the
         large number of Arabic and Persian loanwords, the many variations in spelling,
         and the difficulty of using the script for the Turkish language.
     </p>
-    <p>If you like this tool, you might also like
+    <p data-i18n="about.related">If you like this tool, you might also like
         <a href="https://www.harysdalvi.com/classics-converter/">Classics Converter</a>
         and <a href="https://www.harysdalvi.com/futhorc">Futhorc</a>.
     </p>
 
-    <h2 id="historical-background">Historical Background</h2>
+    <h2 id="historical-background" data-i18n="history.heading">Historical Background</h2>
     <figure class="bigimg">
-        <img src="./img/Poema_de_Yusuf.jpg" alt="Poema de Yusuf">
-        <figcaption>An Aljamiado manuscript of Poema de Yuçuf, a 14th-century poem about the story of Joseph in the Qur'an.
+        <img src="./img/Poema_de_Yusuf.jpg" alt="Poema de Yusuf" data-i18n-alt="history.yusuf-alt">
+        <figcaption data-i18n="history.yusuf-caption">An Aljamiado manuscript of Poema de Yuçuf, a 14th-century poem about the story of Joseph in the Qur'an.
             The language is Aragonese strongly influenced by Castilian.[<a data-cite="yusuf"></a>]</figcaption>
     </figure>
-    <p>Romance languages like <strong>Spanish</strong> (Castilian) were first written in the Arabic script in the 14th
+    <p data-i18n="history.aljamia">Romance languages like <strong>Spanish</strong> (Castilian) were first written in the Arabic script in the 14th
         century, towards the end of Muslim rule in Spain. This was known as <strong>Aljamía</strong>.[<a data-cite="aljamiado"></a>]</p>
     <figure class="endfloat">
-        <img src="./img/arevalo.jpg" alt="Aljamiado text by Mancebo de Arévalo, 16th century">
-        <figcaption>An Aljamiado text by Mancebo de Arévalo, 16th century.
+        <img src="./img/arevalo.jpg" alt="Aljamiado text by Mancebo de Arévalo, 16th century" data-i18n-alt="history.arevalo-alt">
+        <figcaption data-i18n="history.arevalo-caption">An Aljamiado text by Mancebo de Arévalo, 16th century.
             The text is in Spanish. It encourages Moriscos to continue practicing Islam despite
             the laws against it, while outwardly showing faith in Christianity in public.<a data-footnotes="aljamiado"></a>[<a data-cite="arevalo"></a>]
         </figcaption>
     </figure>
-    <p>
+    <p data-i18n="history.reconquista">
         After the Christians reconquered Spain in
         1492, they put an increasing emphasis on Christianity and worked to erase Arab and Islamic culture from
         the peninsula. By 1526, Muslims were forced to convert to Christianity or leave Spain.
         By 1564, the Spanish crown had ordered Arabic books to be burned,
         and banned the Arabic language entirely, giving the former Muslims just three years to learn Spanish.[<a data-cite="nuria"></a>]
     </p>
-    <p>
+    <p data-i18n="history.moriscos">
         Although the Arabic language &mdash; which was widely used in Spain during Muslim rule &mdash;
         gradually died out, the remaining Muslims, now called Moriscos,
         continued to practice Islam in secret.
@@ -221,43 +221,43 @@
         Aljamiado manuscripts were often hidden in
         ceilings and walls, and were only discovered centuries later.[<a data-cite="nuria"></a>]
     </p>
-    <p>Aljamía fell out of use hundreds of years ago, and Aljamiado texts were archaic
+    <p data-i18n="history.archaic">Aljamía fell out of use hundreds of years ago, and Aljamiado texts were archaic
         even for their time: 16th-century texts often use language closer to the 13th or 14th centuries.[<a data-cite="nuria"></a>]
         Therefore, the language used is not actually modern Spanish, but Old Spanish, Old Aragonese,
         and other Romance languages. In this tool, you can choose between Old Spanish and Modern Spanish:
         the two have different sounds and different spellings, but I've tried to keep the Modern Spanish
         spellings as close as possible to what they would be in Old Spanish.
     </p>
-    <p>Arabic has only three written vowels, while Spanish has five. Aljamía came up with an unusual solution:
+    <p data-i18n="history.vowels">Arabic has only three written vowels, while Spanish has five. Aljamía came up with an unusual solution:
         the vowel E is written with the Arabic alif, which in Arabic is used for a long A sound.
         A, I, and O are written with vowel markings that are almost never used in written Arabic.
         U is written the same as O.[<a data-cite="aljamiado"></a>]
     </p>
     <figure class="endfloat">
-        <img src="./img/jawi.jpg" alt="Jawi script">
-        <figcaption>A letter in Jawi script from William Farquhar to Sultan Muhammad Kanzul Alam, the sultan of Brunei, dated 28 November 1819.[<a data-cite="jawi"></a>]</figcaption>
+        <img src="./img/jawi.jpg" alt="Jawi script" data-i18n-alt="history.jawi-alt">
+        <figcaption data-i18n="history.jawi-caption">A letter in Jawi script from William Farquhar to Sultan Muhammad Kanzul Alam, the sultan of Brunei, dated 28 November 1819.[<a data-cite="jawi"></a>]</figcaption>
     </figure>
-    <p>The <strong>Jawi script</strong> has been used for <strong>Malay</strong> for over 700 years.
+    <p data-i18n="history.jawi">The <strong>Jawi script</strong> has been used for <strong>Malay</strong> for over 700 years.
         It emerged in the 14th century,
         replacing earlier Indian-derived scripts. Although it was replaced by the Latin script during
         British and Dutch colonial rule, it is still co-official in Brunei and parts of Malaysia.[<a data-cite="malay"></a>]
     </p>
-    <p>Unlike the earlier scripts for Malay, Jawi was adopted by all classes of society, not just the rulers and monks.
+    <p data-i18n="history.jawi-adoption">Unlike the earlier scripts for Malay, Jawi was adopted by all classes of society, not just the rulers and monks.
         It also added new letters to effectively represent Malay sounds not found in Arabic.
         Combined with its association with the spread of Islam, these factors quickly made Jawi the primary
         script for Malay and allowed it to develop a rich literature.[<a data-cite="jawi"></a>]
     </p>
-    <p>While the Latin script is now the most common script for Malay, Jawi is still used in
+    <p data-i18n="history.jawi-today">While the Latin script is now the most common script for Malay, Jawi is still used in
         religious and cultural contexts in Malaysia, Brunei, and parts of Indonesia and Thailand.
         The script has continued evolving, and became standardized over the course of the 20th century,
         with the most recent reform in 1986.[<a data-cite="jawi"></a>]
     </p>
     <br clear="all">
     <figure class="endfloat">
-        <img src="./img/ottoman.jpg" alt="Ottoman Turkish script">
-        <figcaption>A poem about Rumi in Ottoman Turkish.[<a data-cite="ottoman-rumi"></a>]</figcaption>
+        <img src="./img/ottoman.jpg" alt="Ottoman Turkish script" data-i18n-alt="history.ottoman-alt">
+        <figcaption data-i18n="history.ottoman-caption">A poem about Rumi in Ottoman Turkish.[<a data-cite="ottoman-rumi"></a>]</figcaption>
     </figure>
-    <p>During the Ottoman Empire, from 1299 to 1928, <strong>Turkish</strong> was written in the Arabic script.
+    <p data-i18n="history.ottoman">During the Ottoman Empire, from 1299 to 1928, <strong>Turkish</strong> was written in the Arabic script.
         In particular, the Ottomans used a Persian origin version of the Arabic script,
         with extra letters to represent Persian words. A peculiar feature of Ottoman Turkish is that
         when writing words from Arabic and Persian, the <em>consonants</em> used in those languages
@@ -265,20 +265,20 @@
         were sometimes represented by choosing different consonants with the same sound.
         This was one factor that made the Ottoman Turkish alphabet quite difficult.[<a data-cite="ottoman"></a>]
     </p>
-    <p>Today Azerbaijani, closely related to Turkish, is still written in the Arabic script in Iran.
+    <p data-i18n="history.azerbaijani">Today Azerbaijani, closely related to Turkish, is still written in the Arabic script in Iran.
         However, vowel diacritics now help distinguish between Azerbaijani vowels,
         making it easier than the Ottoman Turkish script.[<a data-cite="ottoman"></a>]
     </p>
-    <p>
+    <p data-i18n="history.ataturk">
         On the other hand, Turkey took the approach of completely replacing the Arabic script with a Latin-based
         one. <strong>Mustafa Kemal Atatürk</strong>, the President of Turkey, believed the new alphabet would help create a secular, literate, and modernized Turkey.
         He led the development of a new phonetic Latin script for Turkish which became official in 1928.[<a data-cite="turkish"></a>][<a data-cite="reform"></a>]
     </p>
     <figure class="endfloat">
         <img src="./img/ataturk.jpg" alt="">
-        <figcaption>Mustafa Kemal Atatürk introducing the new Turkish alphabet to the people of Kayseri. September 20, 1928[<a data-cite="ataturk"></a>]</figcaption>
+        <figcaption data-i18n="history.ataturk-caption">Mustafa Kemal Atatürk introducing the new Turkish alphabet to the people of Kayseri. September 20, 1928[<a data-cite="ataturk"></a>]</figcaption>
     </figure>
-    <p>
+    <p data-i18n="history.literacy">
         It's debatable how much the script itself held back literacy in Turkey &mdash; poor education,
         cultural attitudes, and differences between spoken and written Turkish were important underlying issues.
         Regardless, promotion of the new system did help raise literacy.
@@ -288,11 +288,11 @@
     </p>
     <br clear="all">
     <figure class="endfloat">
-        <img src="./img/xiaoerjing.jpg" alt="Xiao'erjing script">
-        <figcaption>A Chinese-Arabic-Xiao'erjing dictionary[<a data-cite="xiaoerjing-dict"></a>]</figcaption>
+        <img src="./img/xiaoerjing.jpg" alt="Xiao'erjing script" data-i18n-alt="history.xiaoerjing-alt">
+        <figcaption data-i18n="history.xiaoerjing-caption">A Chinese-Arabic-Xiao'erjing dictionary[<a data-cite="xiaoerjing-dict"></a>]</figcaption>
     </figure>
-    <p>The <strong>Xiao'erjing script</strong> has been used by certain groups of Chinese Muslim minorities like the <strong>Hui</strong> people in northwestern China, along with Dongxiang and Salar people. It was also formerly used by the Dungan people near Kazakhstan and Kyrgyzstan.</p>
-    <p>
+    <p data-i18n="history.xiaoerjing">The <strong>Xiao'erjing script</strong> has been used by certain groups of Chinese Muslim minorities like the <strong>Hui</strong> people in northwestern China, along with Dongxiang and Salar people. It was also formerly used by the Dungan people near Kazakhstan and Kyrgyzstan.</p>
+    <p data-i18n="history.xiaoerjing-origin">
         Islam was introduced to China during the 7th century in the Tang dynasty by Arabic and Persian traders who arrived via the Silk Road.
 				Over the centuries, some of these traders assimilated with the local Han Chinese, and came to speak varieties of Northern Chinese/Mandarin in their daily life. The Hui people today are descendants of those assimilated traders.
 				Due to this language shift, Hui Muslim students who studied Classical Arabic or the Qur'an would have a better understanding of spoken Chinese, but would often have only a very basic understanding of Chinese characters.
@@ -304,47 +304,48 @@
     <hr>
 
     <section class="references">
-    <h2 id="ref">References</h2>
-    <p>The rules applied in the converter code, while not necessarily referenced in the main article,
-        mostly came from:
+    <h2 id="ref" data-i18n="refs.heading">References</h2>
+    <p><span data-i18n="refs.intro">The rules applied in the converter code, while not necessarily referenced in the main article,
+        mostly came from:</span>
         <ul>
-            <li>For Spanish: <a data-cite="aljamiado"></a>, <a data-cite="morisco"></a>, <a data-cite="aragon"></a>,
+            <li data-i18n="refs.es">For Spanish: <a data-cite="aljamiado"></a>, <a data-cite="morisco"></a>, <a data-cite="aragon"></a>,
                 <a data-cite="nuria"></a>, <a data-cite="nuria2"></a>, and from manuscripts referenced by these.
             </li>
-            <li>For Malay: <a data-cite="jawi"></a>, <a data-cite="malay"></a>, <a data-cite="wiktionary"></a>.</li>
-            <li>For Turkish: <a data-cite="ottoman"></a>, <a data-cite="turkish"></a>, <a data-cite="wiktionary"></a>.</li>
+            <li data-i18n="refs.ms">For Malay: <a data-cite="jawi"></a>, <a data-cite="malay"></a>, <a data-cite="wiktionary"></a>.</li>
+            <li data-i18n="refs.tr">For Turkish: <a data-cite="ottoman"></a>, <a data-cite="turkish"></a>, <a data-cite="wiktionary"></a>.</li>
         </ul>
     </p>
-    <p>The GitHub for this project is at
+    <p data-i18n="refs.github">The GitHub for this project is at
         <a href="https://github.com/crackalamoo/classics-converter" target="_blank">crackalamoo/classics-converter</a>.
         Thanks to Kyle Feng for contributing the Xiao'erjing conversion.
     </p>
     <ol id="reflist">
-        <li data-cite="wiktionary"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
-        <li data-cite="aljamiado"><a href="https://en.wikipedia.org/wiki/Aljamiado" target="_blank">Aljamiado</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="morisco"><a href="https://www.omniglot.com/writing/aljamiado.htm" target="_blank">Morisco alphabet</a> (Omniglot) <a data-cite="up">^</a></li>
-        <li data-cite="jawi"><a href="https://en.wikipedia.org/wiki/Jawi_script" target="_blank">Jawi script</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="malay"><a href="https://www.omniglot.com/writing/malay.htm" target="_blank">Malay (Bahasa Melayu / بهاس ملايو)</a> (Omniglot) <a data-cite="up">^</a></li>
-        <li data-cite="ottoman"><a href="https://en.wikipedia.org/wiki/Ottoman_Turkish_alphabet" target="_blank">Ottoman Turkish alphabet</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="ottoman-rumi"><a href="https://commons.wikimedia.org/wiki/File:Poem_about_Rumi_in_Ottoman_Turkish.jpg" target="_blank">Poem about Rumi in Ottoman Turkish</a> (Wikimedia) <a data-cite="up">^</a></li>
-        <li data-cite="turkish"><a href="https://www.omniglot.com/writing/turkish.htm" target="_blank">Turkish (Türkçe)</a> (Omniglot) <a data-cite="up">^</a></li>
-        <li data-cite="aragon"><a href="https://ifc.dpz.es/recursos/publicaciones/23/31/ebook2431_4.pdf" target="_blank">La aljamía: una voz islámica en Aragón</a>
+        <li data-cite="wiktionary" data-i18n="refs.wiktionary"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page" target="_blank">English Wiktionary</a> <a data-cite="up">^</a></li>
+        <li data-cite="aljamiado" data-i18n="refs.aljamiado"><a href="https://en.wikipedia.org/wiki/Aljamiado" target="_blank">Aljamiado</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="morisco" data-i18n="refs.morisco"><a href="https://www.omniglot.com/writing/aljamiado.htm" target="_blank">Morisco alphabet</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="jawi" data-i18n="refs.jawi"><a href="https://en.wikipedia.org/wiki/Jawi_script" target="_blank">Jawi script</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="malay" data-i18n="refs.malay"><a href="https://www.omniglot.com/writing/malay.htm" target="_blank">Malay (Bahasa Melayu / بهاس ملايو)</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman" data-i18n="refs.ottoman"><a href="https://en.wikipedia.org/wiki/Ottoman_Turkish_alphabet" target="_blank">Ottoman Turkish alphabet</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="ottoman-rumi" data-i18n="refs.ottoman-rumi"><a href="https://commons.wikimedia.org/wiki/File:Poem_about_Rumi_in_Ottoman_Turkish.jpg" target="_blank">Poem about Rumi in Ottoman Turkish</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="turkish" data-i18n="refs.turkish"><a href="https://www.omniglot.com/writing/turkish.htm" target="_blank">Turkish (Türkçe)</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="aragon" data-i18n="refs.aragon"><a href="https://ifc.dpz.es/recursos/publicaciones/23/31/ebook2431_4.pdf" target="_blank">La aljamía: una voz islámica en Aragón</a>
             (Alberto Montaner, University of Zaragoza, 2003; in Spanish) <a data-cite="up">^</a></li>
-        <li data-cite="yusuf"><a href="https://es.wikipedia.org/wiki/Poema_de_Yuçuf" target="_blank">Poema de Yuçuf</a> (Wikipedia; in Spanish) <a data-cite="up">^</a></li>
-        <li data-cite="arevalo"><a href="https://commons.wikimedia.org/wiki/File:Aljamiado.png" target="_blank">Aljamiado</a> (Wikimedia) <a data-cite="up">^</a></li>
-        <li data-cite="nuria"><a href="https://doi.org/10.1515/9783110639063-005" target="_blank">Uses and Written Practices in
+        <li data-cite="yusuf" data-i18n="refs.yusuf"><a href="https://es.wikipedia.org/wiki/Poema_de_Yuçuf" target="_blank">Poema de Yuçuf</a> (Wikipedia; in Spanish) <a data-cite="up">^</a></li>
+        <li data-cite="arevalo" data-i18n="refs.arevalo"><a href="https://commons.wikimedia.org/wiki/File:Aljamiado.png" target="_blank">Aljamiado</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="nuria" data-i18n="refs.nuria"><a href="https://doi.org/10.1515/9783110639063-005" target="_blank">Uses and Written Practices in
             Aljamiado Manuscripts</a> (Nuria de Castilla, <cite>Creating Standards: Interactions with Arabic script in 12 manuscript cultures</cite>, 2019) <a data-cite="up">^</a></li>
-        <li data-cite="nuria2"><a href="https://doi.org/10.3366/jqs.2020.0439" target="_blank">An Aljamiado Translation of the ‘Morisco Qur'an’ and its Arabic Text (c. 1609)</a>
+        <li data-cite="nuria2" data-i18n="refs.nuria2"><a href="https://doi.org/10.3366/jqs.2020.0439" target="_blank">An Aljamiado Translation of the ‘Morisco Qur'an’ and its Arabic Text (c. 1609)</a>
             (Nuria de Castilla, <cite>Journal of Qur'anic Studies</cite>, Volume 22 Issue 3, 2020) <a data-cite="up">^</a></li>
-        <li data-cite="reform"><a href="https://www.cambridge.org/core/journals/international-journal-of-middle-east-studies/article/learning-to-read-again-the-social-experiences-of-turkeys-1928-alphabet-reform/F313C1942EB18220E9FD9B2B417D5601" target="_blank">Learning
+        <li data-cite="reform" data-i18n="refs.reform"><a href="https://www.cambridge.org/core/journals/international-journal-of-middle-east-studies/article/learning-to-read-again-the-social-experiences-of-turkeys-1928-alphabet-reform/F313C1942EB18220E9FD9B2B417D5601" target="_blank">Learning
             to Read (Again): The Social Experiences of Turkey's 1928 Alphabet Reform</a> (Hale Yılmaz, Cambridge University Press, 2011) <a data-cite="up">^</a></li>
-        <li data-cite="ataturk"><a href="https://commons.wikimedia.org/wiki/File:Ataturk-September_20,_1928.jpg" target="_blank">Ataturk-September 20, 1928</a> (Wikimedia) <a data-cite="up">^</a></li>
-        <li data-cite="xiaoerjing"><a href="https://en.wikipedia.org/wiki/Xiao'erjing" target="_blank">Xiao'erjing</a> (Wikipedia) <a data-cite="up">^</a></li>
-        <li data-cite="xiaoerjing-dict"><a href="https://commons.wikimedia.org/wiki/File:Xiao-Er-Jin.jpg" target="_blank">Xiao'erjing</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="ataturk" data-i18n="refs.ataturk"><a href="https://commons.wikimedia.org/wiki/File:Ataturk-September_20,_1928.jpg" target="_blank">Ataturk-September 20, 1928</a> (Wikimedia) <a data-cite="up">^</a></li>
+        <li data-cite="xiaoerjing" data-i18n="refs.xiaoerjing"><a href="https://en.wikipedia.org/wiki/Xiao'erjing" target="_blank">Xiao'erjing</a> (Wikipedia) <a data-cite="up">^</a></li>
+        <li data-cite="xiaoerjing2" data-i18n="refs.xiaoerjing2"><a href="https://www.omniglot.com/chinese/xiaoerjing.htm" target="_blank">Xiao'erjing</a> (Omniglot) <a data-cite="up">^</a></li>
+        <li data-cite="xiaoerjing-dict" data-i18n="refs.xiaoerjing-dict"><a href="https://commons.wikimedia.org/wiki/File:Xiao-Er-Jin.jpg" target="_blank">Xiao'erjing</a> (Wikimedia) <a data-cite="up">^</a></li>
     </ol>
-    <h2>Footnotes</h2>
+    <h2 data-i18n="footnotes.heading">Footnotes</h2>
     <ul id="footnotes">
-        <li data-footnotes="aljamiado">The text in Old Spanish reads:[<a data-cite="arevalo"></a>]
+        <li data-footnotes="aljamiado"><span data-i18n="footnotes.aljamiado">The text in Old Spanish reads:</span>[<a data-cite="arevalo"></a>]
             <blockquote>Dixo un alim [=ulema] d'este rreyno hablando de nuestro<br>
                 encerramiento: «Yo bien conozco que somos en una temporada<br>
                 de grande espanto, mas no por eso dexara Allah de darnos cautori-<br>
