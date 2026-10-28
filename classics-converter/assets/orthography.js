@@ -2,19 +2,21 @@ const outputLangs = {
     'la': ['es','fr','pt','it'],
     'sa': ['hi','bn','pa','mr','pi']
 };
-const langNames = PAGE_LANG === 'es' ?
-{
-    'es':'español', 'fr':'francés', 'pt': 'portugués', 'it':'italiano',
-    'hi':'hindi', 'ur':'urdu', 'pa':'panyabí', 'mr':'maratí',
-    'bn':'bengalí', 'pi':'pali',
-    'la':'latín', 'sa':'sánscrito'
-} :
-{
-    'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
-    'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
-    'bn':'Bengali', 'pi':'Pali',
-    'la':'Latin', 'sa':'Sanskrit'
+const LANG_NAMES = {
+    'en': {
+        'es':'Spanish', 'fr':'French', 'pt': 'Portuguese', 'it':'Italian',
+        'hi':'Hindi', 'ur':'Urdu', 'pa':'Punjabi', 'mr':'Marathi',
+        'bn':'Bengali', 'pi':'Pali',
+        'la':'Latin', 'sa':'Sanskrit'
+    },
+    'es': {
+        'es':'español', 'fr':'francés', 'pt': 'portugués', 'it':'italiano',
+        'hi':'hindi', 'ur':'urdu', 'pa':'panyabí', 'mr':'maratí',
+        'bn':'bengalí', 'pi':'pali',
+        'la':'latín', 'sa':'sánscrito'
+    },
 };
+const langNames = LANG_NAMES[PAGE_LANG];
 
 const SHORT_VOWELS = new Set(['a','e','i','o','u']);
 const VOWELS = new Set(['a','e','i','o','u','ā','ē','ī','ō','ū',
@@ -686,6 +688,10 @@ function devanagari_to_roman(word) {
     for (const [rom, dev] of Object.entries(SANSKRIT_VOW_MAP_2)) {
         vow_map_2[dev] = rom;
     }
+    // The result goes through sanskritOrthography, which applies the ASCII input
+    // shortcuts (ny → ñ, ks → kS, aa → ā, ...). An apostrophe wherever two letters
+    // were written separately keeps e.g. न्य from being read as ञ.
+    const vowels = new Set(['a','ā','i','ī','u','ū','e','è','o','ò','R']);
     let res = '';
     let i = 0;
     while (i < word.length) {
@@ -700,10 +706,14 @@ function devanagari_to_roman(word) {
                 i += 1;
             } else if (next_c === '्') {
                 i += 1;
+                if (cons_map[word.substring(i+1,i+2)])
+                    res += "'";
             } else {
                 res += 'a';
             }
         } else if (vow_map_2[c]) {
+            if (vowels.has(vow_map_2[c]) && vowels.has(res.substring(res.length-1)))
+                res += "'";
             res += vow_map_2[c];
         } else {
             res += c;

@@ -87,20 +87,18 @@ function refreshOutput() {
     orthography2.innerHTML = output2.replaceAll('\n',' <br>');
     if (inputLang === 'sa') {
         const isGurmukhi = (outputLang === 'pa' && document.pa_settings.pa_script.value === 'gurmukhi');
+        // Punjabi is tagged with its script so the site fonts can tell Shahmukhi from Gurmukhi.
+        const nativeLang = outputLang === 'pa' ? (isGurmukhi ? 'pa-Guru' : 'pa-Arab') : outputLang;
         if (isRoman(text)) {
             orthography.lang = 'sa';
             inputBox.lang = 'sa-Latn';
-            orthography2.lang = outputLang;
-            if (isGurmukhi)
-                orthography2.lang += '-Guru';
+            orthography2.lang = nativeLang;
             outputBox.lang = outputLang+'-Latn';
         } else {
             orthography.lang = 'sa-Latn';
             inputBox.lang = 'sa';
             orthography2.lang = outputLang+'-Latn';
-            outputBox.lang = outputLang;
-            if (isGurmukhi)
-                outputBox.lang += '-Guru';
+            outputBox.lang = nativeLang;
         }
     } else {
         inputBox.lang = '';
